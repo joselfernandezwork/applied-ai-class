@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mini Lesson 2: Neural Networks & LLMs</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&family=JetBrains+Mono:wght@400;700&display=swap');
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:#0F172A;color:#F1F5F9;font-family:'Inter',sans-serif;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:30px 20px;}
+  .lesson-header{text-align:center;margin-bottom:40px;}
+  .lesson-tag{background:rgba(168,85,247,0.15);border:1px solid #A855F7;color:#A855F7;padding:6px 18px;border-radius:20px;font-size:13px;font-weight:600;letter-spacing:1px;display:inline-block;margin-bottom:16px;}
+  h1{font-size:2.2rem;font-weight:900;background:linear-gradient(135deg,#A855F7,#FB923C);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:8px;}
+  .subtitle{color:#94A3B8;font-size:1rem;}
+  .stage{background:#1E293B;border:1px solid #334155;border-radius:16px;padding:32px;max-width:900px;width:100%;margin-bottom:28px;position:relative;overflow:hidden;}
+  .stage-num{position:absolute;top:16px;right:20px;font-size:4rem;font-weight:900;color:rgba(255,255,255,0.04);line-height:1;}
+  .stage-label{font-size:11px;font-weight:700;letter-spacing:2px;color:#A855F7;text-transform:uppercase;margin-bottom:12px;}
+  .stage h2{font-size:1.3rem;font-weight:700;margin-bottom:18px;}
+  .progress{display:flex;gap:8px;align-items:center;margin-bottom:32px;}
+  .progress-dot{width:10px;height:10px;border-radius:50%;background:#1E293B;border:2px solid #334155;}
+  .progress-dot.active{background:#A855F7;border-color:#A855F7;box-shadow:0 0 8px #A855F7;}
+  .progress-dot.done{background:#34D399;border-color:#34D399;}
+  .btn{padding:12px 24px;border-radius:8px;font-size:0.9rem;font-weight:600;cursor:pointer;text-decoration:none;transition:all 0.2s;}
+  .btn-primary{background:linear-gradient(135deg,#A855F7,#FB923C);color:#0F172A;border:none;}
+  .btn-secondary{background:transparent;color:#94A3B8;border:1px solid #334155;}
+  .btn:hover{transform:translateY(-2px);filter:brightness(1.1);}
+  .nav{display:flex;gap:14px;margin-top:10px;}
+
+  /* Neural net canvas area */
+  .nn-container{position:relative;width:100%;height:220px;margin:16px 0;}
+  .nn-svg{width:100%;height:100%;}
+
+  /* Transformer block */
+  .transformer-block{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-top:16px;}
+  .tf-part{background:#0F172A;border:1px solid #334155;border-radius:10px;padding:16px;position:relative;overflow:hidden;}
+  .tf-part::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:3px 3px 0 0;}
+  .tf-part:nth-child(1)::before{background:#38BDF8;}
+  .tf-part:nth-child(2)::before{background:#34D399;}
+  .tf-part:nth-child(3)::before{background:#FB923C;}
+  .tf-part:nth-child(4)::before{background:#A855F7;}
+  .tf-part-name{font-size:0.85rem;font-weight:700;margin-bottom:6px;}
+  .tf-part:nth-child(1) .tf-part-name{color:#38BDF8;}
+  .tf-part:nth-child(2) .tf-part-name{color:#34D399;}
+  .tf-part:nth-child(3) .tf-part-name{color:#FB923C;}
+  .tf-part:nth-child(4) .tf-part-name{color:#A855F7;}
+  .tf-part-text{font-size:0.8rem;color:#94A3B8;line-height:1.5;}
+
+  /* Analogy */
+  .analogy{background:rgba(52,211,153,0.08);border:1px solid rgba(52,211,153,0.3);border-radius:12px;padding:20px;margin:16px 0;}
+  .analogy-title{font-size:0.85rem;font-weight:700;color:#34D399;margin-bottom:8px;text-transform:uppercase;letter-spacing:1px;}
+  .analogy-text{font-size:0.9rem;color:#F1F5F9;line-height:1.6;}
+
+  /* Scale comparison */
+  .scale-row{display:flex;align-items:center;gap:14px;margin-bottom:12px;padding:12px 16px;background:#0F172A;border-radius:8px;}
+  .scale-model{font-weight:700;font-size:0.9rem;color:#F1F5F9;width:120px;flex-shrink:0;}
+  .scale-bar-wrap{flex:1;background:#1E293B;border-radius:4px;height:18px;overflow:hidden;}
+  .scale-bar{height:100%;border-radius:4px;animation:growRight 1.2s cubic-bezier(0.175,0.885,0.32,1.275) both;}
+  .scale-bar.gpt4{width:100%;background:linear-gradient(90deg,#38BDF8,#A855F7);animation-delay:0.2s;}
+  .scale-bar.claude{width:12%;background:#FB923C;animation-delay:0.4s;}
+  .scale-bar.llama{width:4%;background:#34D399;animation-delay:0.6s;}
+  .scale-val{font-family:'JetBrains Mono',monospace;font-size:0.82rem;color:#94A3B8;width:80px;text-align:right;flex-shrink:0;}
+
+  .info-box{background:rgba(252,211,77,0.08);border:1px solid rgba(252,211,77,0.3);border-radius:10px;padding:16px 20px;margin-bottom:28px;max-width:900px;width:100%;}
+
+  @keyframes fadeIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+  @keyframes growRight{from{width:0!important;}to{}}
+  @keyframes pulse-glow{0%,100%{filter:drop-shadow(0 0 3px currentColor);}50%{filter:drop-shadow(0 0 8px currentColor);}}
+  @keyframes signal-flow{0%{stroke-dashoffset:100;}100%{stroke-dashoffset:0;}}
+</style>
+</head>
+<body>
+<div class="lesson-header">
+  <div class="lesson-tag">📚 MINI LESSON 2 OF 4</div>
+  <h1>Neural Networks & LLMs</h1>
+  <p class="subtitle">The architecture behind every AI model you use today</p>
+</div>
+
+<div class="progress">
+  <div class="progress-dot done"></div>
+  <div class="progress-dot done"></div>
+  <div class="progress-dot active"></div>
+  <div class="progress-dot"></div>
+  <span style="font-size:12px;color:#475569;margin-left:8px;">Step 2 of 4: Neural Networks</span>
+</div>
+
+<!-- What is a neural network -->
+<div class="stage">
+  <div class="stage-num">01</div>
+  <div class="stage-label">Neural Networks: The Basics</div>
+  <h2>A network of mathematical functions that transform inputs into outputs</h2>
+
+  <div class="analogy">
+    <div class="analogy-title">🧠 Human analogy</div>
+    <div class="analogy-text">
+      Think of a neural network like a team of specialists in an assembly line. Each "neuron" receives a signal, decides how important it is, and passes it forward — weighted by how much it should matter. The team was trained on billions of examples until it got very good at its job.
+    </div>
+  </div>
+
+  <!-- SVG Neural Net Diagram -->
+  <div class="nn-container">
+    <svg class="nn-svg" viewBox="0 0 800 200">
+      <!-- Connection lines -->
+      <!-- Input → Hidden1 -->
+      <g stroke="#1E3A5F" stroke-width="0.8" opacity="0.6">
+        <!-- Node positions: Input: x=80, y=40,80,120,160; Hidden1: x=250, y=30,65,100,135,165; etc -->
+        <line x1="92" y1="48" x2="238" y2="38"/><line x1="92" y1="48" x2="238" y2="73"/>
+        <line x1="92" y1="48" x2="238" y2="108"/><line x1="92" y1="48" x2="238" y2="143"/>
+        <line x1="92" y1="48" x2="238" y2="168"/>
+        <line x1="92" y1="88" x2="238" y2="38"/><line x1="92" y1="88" x2="238" y2="73"/>
+        <line x1="92" y1="88" x2="238" y2="108"/><line x1="92" y1="88" x2="238" y2="143"/>
+        <line x1="92" y1="88" x2="238" y2="168"/>
+        <line x1="92" y1="128" x2="238" y2="38"/><line x1="92" y1="128" x2="238" y2="73"/>
+        <line x1="92" y1="128" x2="238" y2="108"/><line x1="92" y1="128" x2="238" y2="143"/>
+        <line x1="92" y1="128" x2="238" y2="168"/>
+        <line x1="92" y1="168" x2="238" y2="38"/><line x1="92" y1="168" x2="238" y2="73"/>
+        <line x1="92" y1="168" x2="238" y2="108"/><line x1="92" y1="168" x2="238" y2="143"/>
+        <line x1="92" y1="168" x2="238" y2="168"/>
+      </g>
+      <!-- Hidden1 → Hidden2 -->
+      <g stroke="#1E3A5F" stroke-width="0.8" opacity="0.6">
+        <line x1="250" y1="38" x2="408" y2="38"/><line x1="250" y1="38" x2="408" y2="73"/>
+        <line x1="250" y1="38" x2="408" y2="108"/><line x1="250" y1="38" x2="408" y2="143"/>
+        <line x1="250" y1="38" x2="408" y2="168"/>
+        <line x1="250" y1="73" x2="408" y2="38"/><line x1="250" y1="73" x2="408" y2="73"/>
+        <line x1="250" y1="73" x2="408" y2="108"/><line x1="250" y1="73" x2="408" y2="143"/>
+        <line x1="250" y1="73" x2="408" y2="168"/>
+        <line x1="250" y1="108" x2="408" y2="38"/><line x1="250" y1="108" x2="408" y2="73"/>
+        <line x1="250" y1="108" x2="408" y2="108"/><line x1="250" y1="108" x2="408" y2="143"/>
+        <line x1="250" y1="108" x2="408" y2="168"/>
+        <line x1="250" y1="143" x2="408" y2="38"/><line x1="250" y1="143" x2="408" y2="73"/>
+        <line x1="250" y1="143" x2="408" y2="108"/>
+        <line x1="250" y1="168" x2="408" y2="108"/>
+      </g>
+      <!-- Hidden2 → Output -->
+      <g stroke="#1E3A5F" stroke-width="0.8" opacity="0.6">
+        <line x1="420" y1="38" x2="570" y2="68"/><line x1="420" y1="38" x2="570" y2="108"/>
+        <line x1="420" y1="38" x2="570" y2="148"/>
+        <line x1="420" y1="73" x2="570" y2="68"/><line x1="420" y1="73" x2="570" y2="108"/>
+        <line x1="420" y1="73" x2="570" y2="148"/>
+        <line x1="420" y1="108" x2="570" y2="68"/><line x1="420" y1="108" x2="570" y2="108"/>
+        <line x1="420" y1="108" x2="570" y2="148"/>
+        <line x1="420" y1="143" x2="570" y2="68"/><line x1="420" y1="143" x2="570" y2="108"/>
+        <line x1="420" y1="143" x2="570" y2="148"/>
+        <line x1="420" y1="168" x2="570" y2="108"/>
+      </g>
+      <!-- Output → decoded -->
+      <g stroke="#1E3A5F" stroke-width="0.8" opacity="0.4">
+        <line x1="582" y1="68" x2="700" y2="100"/><line x1="582" y1="108" x2="700" y2="100"/>
+        <line x1="582" y1="148" x2="700" y2="100"/>
+      </g>
+
+      <!-- Input nodes -->
+      <g>
+        <circle cx="80" cy="48" r="12" fill="#34D399" filter="url(#glow-g)"/>
+        <circle cx="80" cy="88" r="12" fill="#34D399"/>
+        <circle cx="80" cy="128" r="12" fill="#34D399"/>
+        <circle cx="80" cy="168" r="12" fill="#34D399"/>
+      </g>
+      <!-- Hidden1 nodes -->
+      <g>
+        <circle cx="250" cy="38" r="12" fill="#38BDF8"/>
+        <circle cx="250" cy="73" r="12" fill="#38BDF8"/>
+        <circle cx="250" cy="108" r="12" fill="#38BDF8"/>
+        <circle cx="250" cy="143" r="12" fill="#38BDF8"/>
+        <circle cx="250" cy="168" r="12" fill="#38BDF8"/>
+      </g>
+      <!-- Hidden2 nodes -->
+      <g>
+        <circle cx="420" cy="38" r="12" fill="#A855F7"/>
+        <circle cx="420" cy="73" r="12" fill="#A855F7"/>
+        <circle cx="420" cy="108" r="12" fill="#A855F7"/>
+        <circle cx="420" cy="143" r="12" fill="#A855F7"/>
+        <circle cx="420" cy="168" r="12" fill="#A855F7"/>
+      </g>
+      <!-- Output nodes -->
+      <g>
+        <circle cx="570" cy="68" r="12" fill="#FB923C"/>
+        <circle cx="570" cy="108" r="12" fill="#FB923C"/>
+        <circle cx="570" cy="148" r="12" fill="#FB923C"/>
+      </g>
+      <!-- Final output -->
+      <rect x="680" y="82" width="100" height="36" rx="8" fill="#1E293B" stroke="#FCD34D" stroke-width="1.5"/>
+      <text x="730" y="105" text-anchor="middle" font-family="JetBrains Mono" font-size="12" fill="#FCD34D">"hello"</text>
+
+      <!-- Labels -->
+      <text x="80" y="195" text-anchor="middle" font-family="Inter" font-size="11" fill="#94A3B8">Input</text>
+      <text x="250" y="195" text-anchor="middle" font-family="Inter" font-size="11" fill="#94A3B8">Hidden</text>
+      <text x="420" y="195" text-anchor="middle" font-family="Inter" font-size="11" fill="#94A3B8">Hidden</text>
+      <text x="570" y="195" text-anchor="middle" font-family="Inter" font-size="11" fill="#94A3B8">Output</text>
+      <text x="730" y="195" text-anchor="middle" font-family="Inter" font-size="11" fill="#FCD34D">Token!</text>
+
+      <!-- "×96 in GPT-4" label -->
+      <rect x="310" y="10" width="160" height="20" rx="6" fill="rgba(56,189,248,0.1)" stroke="#38BDF8" stroke-width="0.5"/>
+      <text x="390" y="24" text-anchor="middle" font-family="Inter" font-size="10" fill="#38BDF8">× 120 blocks in GPT-4</text>
+    </svg>
+  </div>
+  <p style="color:#475569;font-size:0.8rem;text-align:center;">Each arrow carries a learned weight. The network was trained to adjust these weights until outputs improved. GPT-4 has ~1.8 trillion of them.</p>
+</div>
+
+<!-- Transformer block -->
+<div class="stage">
+  <div class="stage-num">02</div>
+  <div class="stage-label">The Transformer: The Key Innovation (2017)</div>
+  <h2>Inside one "Transformer Block" — repeated 80–120 times in a modern LLM</h2>
+  <div class="transformer-block">
+    <div class="tf-part">
+      <div class="tf-part-name">🔍 Multi-Head Self-Attention</div>
+      <div class="tf-part-text">Each token looks at every other token and decides how much to "attend" to it. When processing "bank," it figures out from context: river bank or financial institution? This happens in parallel across 12–96 attention heads simultaneously.</div>
+    </div>
+    <div class="tf-part">
+      <div class="tf-part-name">🔢 Feed-Forward Network</div>
+      <div class="tf-part-text">After attention, two linear transformations with a non-linear activation. This is where factual knowledge is stored — facts learned during training live here as learned weight patterns.</div>
+    </div>
+    <div class="tf-part">
+      <div class="tf-part-name">⚖️ Layer Normalization</div>
+      <div class="tf-part-text">Rescales activations to keep numbers stable during training. Without this, signals either explode to infinity or vanish to zero in very deep networks. Critical for models with 100+ layers.</div>
+    </div>
+    <div class="tf-part">
+      <div class="tf-part-name">➕ Residual Connections</div>
+      <div class="tf-part-text">The original input is added back after each sub-layer (x = x + attention(x)). This "skip connection" lets gradients flow backward during training without getting lost. It's why deep models actually learn.</div>
+    </div>
+  </div>
+</div>
+
+<!-- Scale -->
+<div class="stage">
+  <div class="stage-num">03</div>
+  <div class="stage-label">Scale: Why Bigger Models Work Better</div>
+  <h2>Model parameters (weights) vs. capability</h2>
+  <div style="margin:16px 0;">
+    <div class="scale-row">
+      <div class="scale-model">GPT-4</div>
+      <div class="scale-bar-wrap"><div class="scale-bar gpt4"></div></div>
+      <div class="scale-val">~1.8T params</div>
+    </div>
+    <div class="scale-row">
+      <div class="scale-model">Claude 3.5</div>
+      <div class="scale-bar-wrap"><div class="scale-bar claude"></div></div>
+      <div class="scale-val">~200B params</div>
+    </div>
+    <div class="scale-row">
+      <div class="scale-model">Llama 3 70B</div>
+      <div class="scale-bar-wrap"><div class="scale-bar llama"></div></div>
+      <div class="scale-val">70B params</div>
+    </div>
+  </div>
+  <div style="padding:14px 16px;background:#0F172A;border-radius:8px;font-size:0.82rem;color:#94A3B8;line-height:1.6;">
+    ⚡ <strong style="color:#F1F5F9;">Bigger ≠ Always Better:</strong> Smaller, well-tuned models (like Claude Haiku or GPT-4o mini) often outperform larger ones on specific tasks — and cost 10–100× less to run. Modern AI is about the right model for the right job.
+  </div>
+</div>
+
+<!-- What makes an LLM special -->
+<div class="stage">
+  <div class="stage-num">04</div>
+  <div class="stage-label">What Makes LLMs Different from Earlier AI</div>
+  <h2>The shift from narrow AI to general-purpose language models</h2>
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:8px;">
+    <div style="background:#0F172A;border-radius:10px;padding:16px;border-top:3px solid #34D399;">
+      <div style="font-size:1.4rem;margin-bottom:8px;">📚</div>
+      <div style="font-size:0.85rem;font-weight:700;color:#34D399;margin-bottom:6px;">Pre-trained on Everything</div>
+      <div style="font-size:0.8rem;color:#94A3B8;line-height:1.5;">Trained on hundreds of billions of words from books, websites, code, and scientific papers. They "know" most of what humans have written.</div>
+    </div>
+    <div style="background:#0F172A;border-radius:10px;padding:16px;border-top:3px solid #38BDF8;">
+      <div style="font-size:1.4rem;margin-bottom:8px;">🎯</div>
+      <div style="font-size:0.85rem;font-weight:700;color:#38BDF8;margin-bottom:6px;">Fine-tuned on Behavior</div>
+      <div style="font-size:0.8rem;color:#94A3B8;line-height:1.5;">After pre-training, human raters give feedback on outputs. RLHF (Reinforcement Learning from Human Feedback) shapes the model to be helpful, harmless, and honest.</div>
+    </div>
+    <div style="background:#0F172A;border-radius:10px;padding:16px;border-top:3px solid #A855F7;">
+      <div style="font-size:1.4rem;margin-bottom:8px;">🔮</div>
+      <div style="font-size:0.85rem;font-weight:700;color:#A855F7;margin-bottom:6px;">Emergent Abilities</div>
+      <div style="font-size:0.8rem;color:#94A3B8;line-height:1.5;">At sufficient scale, LLMs develop abilities they weren't explicitly trained for: reasoning, analogical thinking, code generation, and multi-step planning.</div>
+    </div>
+  </div>
+</div>
+
+<div class="info-box">
+  <p>🎯 <strong>Key Takeaway:</strong> An LLM is a very deep neural network (Transformer architecture) trained to predict the next token. At scale, this simple objective produces something that can write, reason, code, analyze, and create. You don't need to understand the math — but knowing the architecture helps you use the tools better.</p>
+</div>
+
+<div class="nav">
+  <a href="video_1_tokenization.html" class="btn btn-secondary">← Back: Tokenization</a>
+  <a href="video_3_how_to_prompt.html" class="btn btn-primary">Next: How to Prompt →</a>
+</div>
+
+<p style="color:#334155;font-size:12px;margin-top:30px;">Applied AI Class · Cornell 2026 · Mini Lesson 2 of 4</p>
+</body>
+</html>

@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Applied AI Class — All Materials</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap');
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:#0F172A;color:#F1F5F9;font-family:'Inter',sans-serif;min-height:100vh;padding:40px 20px;}
+  .container{max-width:1000px;margin:0 auto;}
+  .header{text-align:center;margin-bottom:56px;}
+  .badge{background:rgba(56,189,248,0.15);border:1px solid #38BDF8;color:#38BDF8;padding:6px 20px;border-radius:20px;font-size:12px;font-weight:700;letter-spacing:2px;display:inline-block;margin-bottom:20px;text-transform:uppercase;}
+  h1{font-size:3rem;font-weight:900;background:linear-gradient(135deg,#F1F5F9,#38BDF8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:12px;line-height:1.1;}
+  .subtitle{color:#94A3B8;font-size:1.1rem;max-width:600px;margin:0 auto 32px;}
+  .meta{display:flex;justify-content:center;gap:24px;font-size:0.85rem;color:#475569;}
+  .meta span{display:flex;align-items:center;gap:6px;}
+
+  .section-title{font-size:11px;font-weight:700;letter-spacing:3px;color:#38BDF8;text-transform:uppercase;margin-bottom:20px;}
+  .section{margin-bottom:48px;}
+
+  /* Main deliverables */
+  .main-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-bottom:48px;}
+  .main-card{background:#1E293B;border:1px solid #334155;border-radius:16px;padding:28px;transition:all 0.2s;text-decoration:none;display:block;}
+  .main-card:hover{transform:translateY(-4px);border-color:#38BDF8;box-shadow:0 8px 30px rgba(56,189,248,0.15);}
+  .main-card-icon{font-size:2.5rem;margin-bottom:16px;}
+  .main-card-title{font-size:1.1rem;font-weight:700;color:#F1F5F9;margin-bottom:6px;}
+  .main-card-desc{font-size:0.82rem;color:#94A3B8;line-height:1.5;margin-bottom:14px;}
+  .main-card-detail{font-size:0.78rem;color:#475569;}
+  .card-tag{display:inline-block;padding:3px 10px;border-radius:10px;font-size:10px;font-weight:700;margin-top:10px;}
+
+  /* Mini videos */
+  .video-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;}
+  .video-card{background:#1E293B;border:1px solid #334155;border-radius:12px;padding:22px;display:flex;gap:16px;align-items:flex-start;text-decoration:none;transition:all 0.2s;}
+  .video-card:hover{transform:translateY(-2px);border-color:#A855F7;box-shadow:0 4px 20px rgba(168,85,247,0.15);}
+  .video-num{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;font-weight:900;flex-shrink:0;}
+  .video-title{font-size:0.95rem;font-weight:700;color:#F1F5F9;margin-bottom:4px;}
+  .video-desc{font-size:0.8rem;color:#94A3B8;line-height:1.4;}
+  .video-time{font-size:10px;color:#475569;margin-top:6px;}
+
+  /* Tools quick links */
+  .tools-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:12px;}
+  .tool-pill{background:#0F172A;border:1px solid #334155;border-radius:10px;padding:14px;text-align:center;text-decoration:none;transition:all 0.2s;}
+  .tool-pill:hover{border-color:var(--c);background:rgba(255,255,255,0.03);}
+  .tool-pill-icon{font-size:1.5rem;margin-bottom:6px;}
+  .tool-pill-name{font-size:0.82rem;font-weight:700;color:#F1F5F9;margin-bottom:2px;}
+  .tool-pill-url{font-size:0.72rem;color:#475569;}
+
+  /* Slide topics */
+  .slide-list{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
+  .slide-item{background:#0F172A;border:1px solid #1E293B;border-radius:8px;padding:12px;display:flex;gap:10px;align-items:center;}
+  .slide-n{width:24px;height:24px;border-radius:6px;background:#1E293B;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#94A3B8;flex-shrink:0;}
+  .slide-t{font-size:0.78rem;color:#94A3B8;}
+
+  /* Footer */
+  .footer{text-align:center;margin-top:60px;padding-top:30px;border-top:1px solid #1E293B;}
+  .footer p{color:#334155;font-size:12px;line-height:1.8;}
+
+  @media(max-width:700px){
+    .main-grid{grid-template-columns:1fr;}
+    .video-grid{grid-template-columns:1fr;}
+    .tools-grid{grid-template-columns:repeat(2,1fr);}
+    .slide-list{grid-template-columns:1fr;}
+    h1{font-size:2rem;}
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <div class="badge">Cornell · Applied AI Class · 2026</div>
+    <h1>Applied AI<br>Class Materials</h1>
+    <p class="subtitle">Everything you need — slides, mini-lessons, and your student guide — all in one place. Start with any resource below.</p>
+    <div class="meta">
+      <span>👥 27 Students</span>
+      <span>🛠️ 8+ Tools Covered</span>
+      <span>📚 25 Slides</span>
+      <span>🎬 4 Mini Lessons</span>
+    </div>
+  </div>
+
+  <!-- MAIN DELIVERABLES -->
+  <div class="section">
+    <div class="section-title">📦 Main Deliverables</div>
+    <div class="main-grid">
+      <a href="Applied_AI_Class_Slides.pptx" class="main-card">
+        <div class="main-card-icon">📊</div>
+        <div class="main-card-title">Class Slide Deck</div>
+        <div class="main-card-desc">25 slides covering AI basics, tokenization, neural networks, LLM architecture, and hands-on walkthroughs for 8+ AI tools.</div>
+        <div class="main-card-detail">Applied_AI_Class_Slides.pptx · 947KB</div>
+        <div class="card-tag" style="background:rgba(52,211,153,0.15);color:#34D399;border:1px solid rgba(52,211,153,0.3);">PowerPoint Slides</div>
+      </a>
+      <a href="Applied_AI_Student_Guide.docx" class="main-card">
+        <div class="main-card-icon">📖</div>
+        <div class="main-card-title">Student Guide</div>
+        <div class="main-card-desc">Comprehensive Word document: CRAFT prompting framework, step-by-step tool walkthroughs, all resource links, 30-day action plan, and career-path recommendations.</div>
+        <div class="main-card-detail">Applied_AI_Student_Guide.docx · 25KB</div>
+        <div class="card-tag" style="background:rgba(56,189,248,0.15);color:#38BDF8;border:1px solid rgba(56,189,248,0.3);">Word Document</div>
+      </a>
+      <a href="video_4_tools_guide.html" class="main-card">
+        <div class="main-card-icon">🔗</div>
+        <div class="main-card-title">All Tool Links</div>
+        <div class="main-card-desc">Interactive guide with every AI tool, direct links, step-by-step instructions, and the full recommended stack — categorized and searchable.</div>
+        <div class="main-card-detail">video_4_tools_guide.html · Live Links</div>
+        <div class="card-tag" style="background:rgba(168,85,247,0.15);color:#A855F7;border:1px solid rgba(168,85,247,0.3);">Interactive HTML</div>
+      </a>
+    </div>
+  </div>
+
+  <!-- MINI LESSONS -->
+  <div class="section">
+    <div class="section-title">🎬 Mini Lessons (Interactive Explainers)</div>
+    <div class="video-grid">
+      <a href="video_1_tokenization.html" class="video-card">
+        <div class="video-num" style="background:rgba(56,189,248,0.15);color:#38BDF8;">1</div>
+        <div>
+          <div class="video-title">Tokenization: How AI Reads Text</div>
+          <div class="video-desc">Visualizes how your words become tokens, then IDs, then vectors — with animated examples and the practical implications for your work.</div>
+          <div class="video-time">⏱ 5–8 min · Beginner</div>
+        </div>
+      </a>
+      <a href="video_2_neural_networks.html" class="video-card">
+        <div class="video-num" style="background:rgba(168,85,247,0.15);color:#A855F7;">2</div>
+        <div>
+          <div class="video-title">Neural Networks & LLM Architecture</div>
+          <div class="video-desc">Interactive neural net diagram, Transformer block explainer, and model scale comparison (GPT-4 vs Claude vs Llama).</div>
+          <div class="video-time">⏱ 8–10 min · Beginner–Intermediate</div>
+        </div>
+      </a>
+      <a href="video_3_how_to_prompt.html" class="video-card">
+        <div class="video-num" style="background:rgba(252,211,77,0.15);color:#FCD34D;">3</div>
+        <div>
+          <div class="video-title">Prompting Like a Pro</div>
+          <div class="video-desc">The CRAFT framework, three real before/after examples from finance, sales, and consulting, plus 5 advanced techniques.</div>
+          <div class="video-time">⏱ 8–10 min · All Levels</div>
+        </div>
+      </a>
+      <a href="video_4_tools_guide.html" class="video-card">
+        <div class="video-num" style="background:rgba(52,211,153,0.15);color:#34D399;">4</div>
+        <div>
+          <div class="video-title">Your Complete AI Toolkit</div>
+          <div class="video-desc">All 9 tools with step-by-step instructions, direct clickable links, master comparison table, and recommended stack by budget tier.</div>
+          <div class="video-time">⏱ 10–15 min · Reference Guide</div>
+        </div>
+      </a>
+    </div>
+  </div>
+
+  <!-- QUICK TOOL LINKS -->
+  <div class="section">
+    <div class="section-title">⚡ Quick Tool Access</div>
+    <div class="tools-grid">
+      <a href="https://chatgpt.com" target="_blank" class="tool-pill" style="--c:#34D399;">
+        <div class="tool-pill-icon">💬</div>
+        <div class="tool-pill-name">ChatGPT</div>
+        <div class="tool-pill-url">chatgpt.com</div>
+      </a>
+      <a href="https://claude.ai" target="_blank" class="tool-pill" style="--c:#FB923C;">
+        <div class="tool-pill-icon">🤖</div>
+        <div class="tool-pill-name">Claude</div>
+        <div class="tool-pill-url">claude.ai</div>
+      </a>
+      <a href="https://copilot.microsoft.com" target="_blank" class="tool-pill" style="--c:#38BDF8;">
+        <div class="tool-pill-icon">💼</div>
+        <div class="tool-pill-name">Copilot</div>
+        <div class="tool-pill-url">copilot.microsoft.com</div>
+      </a>
+      <a href="https://gemini.google.com" target="_blank" class="tool-pill" style="--c:#A855F7;">
+        <div class="tool-pill-icon">🔮</div>
+        <div class="tool-pill-name">Gemini</div>
+        <div class="tool-pill-url">gemini.google.com</div>
+      </a>
+      <a href="https://perplexity.ai" target="_blank" class="tool-pill" style="--c:#34D399;">
+        <div class="tool-pill-icon">🔍</div>
+        <div class="tool-pill-name">Perplexity</div>
+        <div class="tool-pill-url">perplexity.ai</div>
+      </a>
+      <a href="https://notebooklm.google.com" target="_blank" class="tool-pill" style="--c:#34D399;">
+        <div class="tool-pill-icon">📓</div>
+        <div class="tool-pill-name">NotebookLM</div>
+        <div class="tool-pill-url">notebooklm.google.com</div>
+      </a>
+      <a href="https://midjourney.com" target="_blank" class="tool-pill" style="--c:#A855F7;">
+        <div class="tool-pill-icon">🎨</div>
+        <div class="tool-pill-name">Midjourney</div>
+        <div class="tool-pill-url">midjourney.com</div>
+      </a>
+      <a href="https://replit.com" target="_blank" class="tool-pill" style="--c:#FB923C;">
+        <div class="tool-pill-icon">⚡</div>
+        <div class="tool-pill-name">Replit</div>
+        <div class="tool-pill-url">replit.com</div>
+      </a>
+      <a href="https://aistudio.google.com" target="_blank" class="tool-pill" style="--c:#38BDF8;">
+        <div class="tool-pill-icon">🔬</div>
+        <div class="tool-pill-name">AI Studio</div>
+        <div class="tool-pill-url">aistudio.google.com</div>
+      </a>
+      <a href="https://elevenlabs.io" target="_blank" class="tool-pill" style="--c:#FCD34D;">
+        <div class="tool-pill-icon">🎙️</div>
+        <div class="tool-pill-name">ElevenLabs</div>
+        <div class="tool-pill-url">elevenlabs.io</div>
+      </a>
+      <a href="https://runwayml.com" target="_blank" class="tool-pill" style="--c:#F472B6;">
+        <div class="tool-pill-icon">🎬</div>
+        <div class="tool-pill-name">Runway ML</div>
+        <div class="tool-pill-url">runwayml.com</div>
+      </a>
+      <a href="https://cursor.com" target="_blank" class="tool-pill" style="--c:#38BDF8;">
+        <div class="tool-pill-icon">✏️</div>
+        <div class="tool-pill-name">Cursor</div>
+        <div class="tool-pill-url">cursor.com</div>
+      </a>
+      <a href="https://gamma.app" target="_blank" class="tool-pill" style="--c:#A855F7;">
+        <div class="tool-pill-icon">✨</div>
+        <div class="tool-pill-name">Gamma AI</div>
+        <div class="tool-pill-url">gamma.app</div>
+      </a>
+      <a href="https://canva.com" target="_blank" class="tool-pill" style="--c:#00C4CC;">
+        <div class="tool-pill-icon">🎨</div>
+        <div class="tool-pill-name">Canva AI</div>
+        <div class="tool-pill-url">canva.com</div>
+      </a>
+      <a href="https://synthesia.io" target="_blank" class="tool-pill" style="--c:#F472B6;">
+        <div class="tool-pill-icon">🎬</div>
+        <div class="tool-pill-name">Synthesia</div>
+        <div class="tool-pill-url">synthesia.io</div>
+      </a>
+      <a href="https://heygen.com" target="_blank" class="tool-pill" style="--c:#FB923C;">
+        <div class="tool-pill-icon">📹</div>
+        <div class="tool-pill-name">HeyGen</div>
+        <div class="tool-pill-url">heygen.com</div>
+      </a>
+      <a href="https://otter.ai" target="_blank" class="tool-pill" style="--c:#38BDF8;">
+        <div class="tool-pill-icon">🎤</div>
+        <div class="tool-pill-name">Otter.ai</div>
+        <div class="tool-pill-url">otter.ai</div>
+      </a>
+      <a href="https://fireflies.ai" target="_blank" class="tool-pill" style="--c:#34D399;">
+        <div class="tool-pill-icon">🔥</div>
+        <div class="tool-pill-name">Fireflies.ai</div>
+        <div class="tool-pill-url">fireflies.ai</div>
+      </a>
+      <a href="https://notion.so/product/ai" target="_blank" class="tool-pill" style="--c:#F1F5F9;">
+        <div class="tool-pill-icon">📝</div>
+        <div class="tool-pill-name">Notion AI</div>
+        <div class="tool-pill-url">notion.so/ai</div>
+      </a>
+      <a href="https://bolt.new" target="_blank" class="tool-pill" style="--c:#FCD34D;">
+        <div class="tool-pill-icon">⚡</div>
+        <div class="tool-pill-name">Bolt.new</div>
+        <div class="tool-pill-url">bolt.new</div>
+      </a>
+    </div>
+  </div>
+
+  <!-- SLIDE OVERVIEW -->
+  <div class="section">
+    <div class="section-title">📊 Slide Deck Contents (28 Slides)</div>
+    <div class="slide-list">
+      <div class="slide-item"><div class="slide-n">01</div><div class="slide-t">Title: Applied AI Class</div></div>
+      <div class="slide-item"><div class="slide-n">02</div><div class="slide-t">Who's in the Room (27 students)</div></div>
+      <div class="slide-item"><div class="slide-n">03</div><div class="slide-t">What Is AI? 60-Second Update</div></div>
+      <div class="slide-item"><div class="slide-n">04</div><div class="slide-t">The Modern AI Landscape (6 categories)</div></div>
+      <div class="slide-item"><div class="slide-n">05</div><div class="slide-t">Tokenization: How AI Reads Text</div></div>
+      <div class="slide-item"><div class="slide-n">06</div><div class="slide-t">Vector Databases & Meaning</div></div>
+      <div class="slide-item"><div class="slide-n">07</div><div class="slide-t">Neural Networks: The Engine</div></div>
+      <div class="slide-item"><div class="slide-n">08</div><div class="slide-t">Inside an LLM: Architecture</div></div>
+      <div class="slide-item"><div class="slide-n">09</div><div class="slide-t">LLM Code Composition (Python)</div></div>
+      <div class="slide-item"><div class="slide-n">10</div><div class="slide-t">What Does an LLM Actually Do?</div></div>
+      <div class="slide-item"><div class="slide-n">11</div><div class="slide-t">Prompting 101: CRAFT Framework</div></div>
+      <div class="slide-item"><div class="slide-n">12</div><div class="slide-t">Tool Deep Dive: ChatGPT</div></div>
+      <div class="slide-item"><div class="slide-n">13</div><div class="slide-t">Tool Deep Dive: Claude</div></div>
+      <div class="slide-item"><div class="slide-n">14</div><div class="slide-t">Tool Deep Dive: Copilot</div></div>
+      <div class="slide-item"><div class="slide-n">15</div><div class="slide-t">Tool Deep Dive: Gemini</div></div>
+      <div class="slide-item"><div class="slide-n">16</div><div class="slide-t">Tool Deep Dive: Perplexity</div></div>
+      <div class="slide-item"><div class="slide-n">17</div><div class="slide-t">Tool Deep Dive: Midjourney</div></div>
+      <div class="slide-item"><div class="slide-n">18</div><div class="slide-t">Tool Deep Dive: Replit (Vibe Coding)</div></div>
+      <div class="slide-item"><div class="slide-n" style="color:#A855F7;">19</div><div class="slide-t"><strong style="color:#A855F7;">NEW</strong> Gamma AI & Canva AI</div></div>
+      <div class="slide-item"><div class="slide-n" style="color:#F472B6;">20</div><div class="slide-t"><strong style="color:#F472B6;">NEW</strong> Synthesia & HeyGen: AI Video</div></div>
+      <div class="slide-item"><div class="slide-n" style="color:#34D399;">21</div><div class="slide-t"><strong style="color:#34D399;">NEW</strong> Notion AI · Otter.ai · Fireflies</div></div>
+      <div class="slide-item"><div class="slide-n">22</div><div class="slide-t">Google AI Studio & NotebookLM</div></div>
+      <div class="slide-item"><div class="slide-n">23</div><div class="slide-t">AI Agents: The Next Frontier</div></div>
+      <div class="slide-item"><div class="slide-n">24</div><div class="slide-t">All Tools — Master Links (25 tools)</div></div>
+      <div class="slide-item"><div class="slide-n">25</div><div class="slide-t">AI by Career Path & Industry</div></div>
+      <div class="slide-item"><div class="slide-n">26</div><div class="slide-t">Build Your Personal AI Stack</div></div>
+      <div class="slide-item"><div class="slide-n">27</div><div class="slide-t">Common Mistakes to Avoid</div></div>
+      <div class="slide-item"><div class="slide-n">28</div><div class="slide-t">Your 30-Day Action Plan</div></div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <p>Applied AI Class · Cornell · 2026</p>
+    <p>joselfernandezwork@gmail.com</p>
+    <p style="margin-top:8px;">The people winning with AI are the most curious and consistent — not the most technical.<br>The tools are free. Start today.</p>
+  </div>
+
+</div>
+</body>
+</html>

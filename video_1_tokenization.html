@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mini Lesson 1: Tokenization — How AI Reads Text</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&family=JetBrains+Mono:wght@400;700&display=swap');
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:#0F172A;color:#F1F5F9;font-family:'Inter',sans-serif;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:30px 20px;}
+  .lesson-header{text-align:center;margin-bottom:40px;}
+  .lesson-tag{background:rgba(56,189,248,0.15);border:1px solid #38BDF8;color:#38BDF8;padding:6px 18px;border-radius:20px;font-size:13px;font-weight:600;letter-spacing:1px;display:inline-block;margin-bottom:16px;}
+  h1{font-size:2.2rem;font-weight:900;background:linear-gradient(135deg,#38BDF8,#A855F7);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:8px;}
+  .subtitle{color:#94A3B8;font-size:1rem;}
+  .stage{background:#1E293B;border:1px solid #334155;border-radius:16px;padding:32px;max-width:900px;width:100%;margin-bottom:28px;position:relative;overflow:hidden;}
+  .stage-num{position:absolute;top:16px;right:20px;font-size:4rem;font-weight:900;color:rgba(255,255,255,0.04);line-height:1;}
+  .stage-label{font-size:11px;font-weight:700;letter-spacing:2px;color:#38BDF8;text-transform:uppercase;margin-bottom:12px;}
+  .stage h2{font-size:1.3rem;font-weight:700;margin-bottom:18px;}
+
+  /* STAGE 1: Input */
+  .input-text{font-family:'JetBrains Mono',monospace;font-size:1.5rem;color:#FCD34D;background:#0F172A;padding:20px 28px;border-radius:10px;border-left:4px solid #FCD34D;animation:fadeIn 0.8s ease;}
+
+  /* STAGE 2: Token boxes */
+  .token-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:8px;}
+  .token{padding:10px 16px;border-radius:8px;font-family:'JetBrains Mono',monospace;font-size:1rem;font-weight:700;border:2px solid;animation:popIn 0.4s cubic-bezier(0.175,0.885,0.32,1.275) both;}
+  .token:nth-child(1){border-color:#38BDF8;color:#38BDF8;background:rgba(56,189,248,0.1);animation-delay:0.1s;}
+  .token:nth-child(2){border-color:#94A3B8;color:#94A3B8;background:rgba(148,163,184,0.1);animation-delay:0.2s;}
+  .token:nth-child(3){border-color:#A855F7;color:#A855F7;background:rgba(168,85,247,0.1);animation-delay:0.3s;}
+  .token:nth-child(4){border-color:#38BDF8;color:#38BDF8;background:rgba(56,189,248,0.1);animation-delay:0.4s;}
+  .token:nth-child(5){border-color:#34D399;color:#34D399;background:rgba(52,211,153,0.1);animation-delay:0.5s;}
+  .token:nth-child(6){border-color:#FB923C;color:#FB923C;background:rgba(251,146,60,0.1);animation-delay:0.6s;}
+  .token:nth-child(7){border-color:#F472B6;color:#F472B6;background:rgba(244,114,182,0.1);animation-delay:0.7s;}
+  .token-id-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px;}
+  .token-id{padding:8px 16px;border-radius:6px;font-family:'JetBrains Mono',monospace;font-size:0.95rem;background:#0A1120;border:1px solid #1E3A5F;animation:popIn 0.4s cubic-bezier(0.175,0.885,0.32,1.275) both;}
+  .token-id:nth-child(1){color:#38BDF8;animation-delay:0.9s;}
+  .token-id:nth-child(2){color:#94A3B8;animation-delay:1.0s;}
+  .token-id:nth-child(3){color:#A855F7;animation-delay:1.1s;}
+  .token-id:nth-child(4){color:#38BDF8;animation-delay:1.2s;}
+  .token-id:nth-child(5){color:#34D399;animation-delay:1.3s;}
+  .token-id:nth-child(6){color:#FB923C;animation-delay:1.4s;}
+  .token-id:nth-child(7){color:#F472B6;animation-delay:1.5s;}
+
+  /* STAGE 3: Vector */
+  .vector-display{font-family:'JetBrains Mono',monospace;font-size:1.1rem;color:#A855F7;background:#0A1120;padding:20px;border-radius:10px;border-left:4px solid #A855F7;animation:fadeIn 1s ease 0.5s both;}
+  .vector-bars{display:flex;align-items:flex-end;gap:6px;height:80px;margin-top:20px;padding:0 10px;}
+  .bar{border-radius:4px 4px 0 0;animation:growUp 0.8s cubic-bezier(0.175,0.885,0.32,1.275) both;}
+  .bar:nth-child(1){width:22px;height:60%;background:#38BDF8;animation-delay:0.2s;}
+  .bar:nth-child(2){width:22px;height:30%;background:#A855F7;animation-delay:0.3s;}
+  .bar:nth-child(3){width:22px;height:85%;background:#34D399;animation-delay:0.4s;}
+  .bar:nth-child(4){width:22px;height:45%;background:#FB923C;animation-delay:0.5s;}
+  .bar:nth-child(5){width:22px;height:70%;background:#38BDF8;animation-delay:0.6s;}
+  .bar:nth-child(6){width:22px;height:20%;background:#F472B6;animation-delay:0.7s;}
+  .bar:nth-child(7){width:22px;height:55%;background:#A855F7;animation-delay:0.8s;}
+  .bar:nth-child(8){width:22px;height:90%;background:#34D399;animation-delay:0.9s;}
+  .bar:nth-child(9){width:22px;height:40%;background:#FCD34D;animation-delay:1.0s;}
+  .bar:nth-child(10){width:22px;height:75%;background:#38BDF8;animation-delay:1.1s;}
+  .bar:nth-child(11){width:22px;height:15%;background:#94A3B8;animation-delay:1.2s;}
+  .bar:nth-child(12){width:22px;height:65%;background:#A855F7;animation-delay:1.3s;}
+  .bar-label{font-size:9px;color:#475569;text-align:center;margin-top:4px;}
+
+  /* STAGE 4: Real-world */
+  .why-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-top:8px;}
+  .why-card{background:#0F172A;border:1px solid #334155;border-radius:10px;padding:16px;}
+  .why-card-icon{font-size:1.5rem;margin-bottom:8px;}
+  .why-card-title{font-size:0.9rem;font-weight:700;color:#F1F5F9;margin-bottom:6px;}
+  .why-card-text{font-size:0.82rem;color:#94A3B8;line-height:1.5;}
+  .why-card:nth-child(1){border-top:2px solid #38BDF8;animation:fadeIn 0.6s ease 0.2s both;}
+  .why-card:nth-child(2){border-top:2px solid #A855F7;animation:fadeIn 0.6s ease 0.4s both;}
+  .why-card:nth-child(3){border-top:2px solid #34D399;animation:fadeIn 0.6s ease 0.6s both;}
+  .why-card:nth-child(4){border-top:2px solid #FB923C;animation:fadeIn 0.6s ease 0.8s both;}
+
+  .info-box{background:rgba(252,211,77,0.08);border:1px solid rgba(252,211,77,0.3);border-radius:10px;padding:16px 20px;margin-bottom:28px;max-width:900px;width:100%;}
+  .info-box p{color:#FCD34D;font-size:0.9rem;line-height:1.6;}
+  .nav{display:flex;gap:14px;margin-top:10px;}
+  .btn{padding:12px 24px;border-radius:8px;font-size:0.9rem;font-weight:600;cursor:pointer;text-decoration:none;transition:all 0.2s;}
+  .btn-primary{background:linear-gradient(135deg,#38BDF8,#A855F7);color:#0F172A;border:none;}
+  .btn-secondary{background:transparent;color:#94A3B8;border:1px solid #334155;}
+  .btn:hover{transform:translateY(-2px);filter:brightness(1.1);}
+  .progress{display:flex;gap:8px;align-items:center;margin-bottom:32px;}
+  .progress-dot{width:10px;height:10px;border-radius:50%;background:#1E293B;border:2px solid #334155;}
+  .progress-dot.active{background:#38BDF8;border-color:#38BDF8;box-shadow:0 0 8px #38BDF8;}
+  .progress-dot.done{background:#34D399;border-color:#34D399;}
+
+  @keyframes fadeIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+  @keyframes popIn{from{opacity:0;transform:scale(0.5);}to{opacity:1;transform:scale(1);}}
+  @keyframes growUp{from{height:0!important;}to{}}
+  @keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.5;}}
+</style>
+</head>
+<body>
+<div class="lesson-header">
+  <div class="lesson-tag">📚 MINI LESSON 1 OF 4</div>
+  <h1>Tokenization: How AI Reads Text</h1>
+  <p class="subtitle">The invisible first step that makes everything possible</p>
+</div>
+
+<div class="progress">
+  <div class="progress-dot done"></div>
+  <div class="progress-dot active"></div>
+  <div class="progress-dot"></div>
+  <div class="progress-dot"></div>
+  <span style="font-size:12px;color:#475569;margin-left:8px;">Step 1 of 4: Tokenization</span>
+</div>
+
+<!-- STAGE 1 -->
+<div class="stage">
+  <div class="stage-num">01</div>
+  <div class="stage-label">Step 1</div>
+  <h2>It starts with your words</h2>
+  <p style="color:#94A3B8;margin-bottom:16px;font-size:0.9rem;">When you type a message to an AI, here's exactly what it receives:</p>
+  <div class="input-text">"Hello, how are you today?"</div>
+  <p style="color:#475569;font-size:0.8rem;margin-top:12px;">→ The model doesn't "see" this the way you do. It needs to convert it.</p>
+</div>
+
+<!-- STAGE 2 -->
+<div class="stage">
+  <div class="stage-num">02</div>
+  <div class="stage-label">Step 2 — Splitting into Tokens</div>
+  <h2>Text gets sliced into "tokens" (word pieces)</h2>
+  <p style="color:#94A3B8;margin-bottom:16px;font-size:0.9rem;">Each token is roughly ¾ of a word. Punctuation often becomes its own token:</p>
+  <div class="token-row">
+    <div class="token">"Hello"</div>
+    <div class="token">","</div>
+    <div class="token">"how"</div>
+    <div class="token">"are"</div>
+    <div class="token">"you"</div>
+    <div class="token">"today"</div>
+    <div class="token">"?"</div>
+  </div>
+  <p style="color:#475569;font-size:0.8rem;margin-top:16px;">→ Each token is then assigned a unique numeric ID:</p>
+  <div class="token-id-row">
+    <div class="token-id">15496</div>
+    <div class="token-id">11</div>
+    <div class="token-id">4919</div>
+    <div class="token-id">389</div>
+    <div class="token-id">345</div>
+    <div class="token-id">1909</div>
+    <div class="token-id">30</div>
+  </div>
+  <div style="margin-top:18px;padding:12px 16px;background:#0F172A;border-radius:8px;font-size:0.82rem;color:#94A3B8;">
+    💡 <strong style="color:#FCD34D;">Scale check:</strong> GPT-4 processes up to <strong style="color:#F1F5F9;">128,000 tokens</strong> at once.
+    That's roughly a 96,000-word book — in a single conversation.
+  </div>
+</div>
+
+<!-- STAGE 3 -->
+<div class="stage">
+  <div class="stage-num">03</div>
+  <div class="stage-label">Step 3 — Embeddings (Meaning as Math)</div>
+  <h2>Each token ID becomes a vector — a list of numbers that encode meaning</h2>
+  <div class="vector-display">token "Hello" → [ 0.23, -0.45, 0.87, 0.12, -0.66, 0.34, 0.91, ... ] × 768 dimensions</div>
+  <div class="vector-bars">
+    <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
+    <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
+    <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
+  </div>
+  <p class="bar-label">↑ Each bar = one dimension of the embedding (768 total in GPT-2; up to 12,288 in GPT-4)</p>
+  <div style="margin-top:18px;padding:12px 16px;background:#0F172A;border-radius:8px;font-size:0.82rem;color:#94A3B8;">
+    🔮 <strong style="color:#A855F7;">The magic:</strong> Words with similar meanings land near each other in this 768-dimensional space.
+    "King" and "Queen" are close. "Dog" and "Cat" are close. "Dog" and "Democracy" are far apart.
+  </div>
+</div>
+
+<!-- STAGE 4 -->
+<div class="stage">
+  <div class="stage-num">04</div>
+  <div class="stage-label">Why This Matters for You</div>
+  <h2>Practical implications of tokenization</h2>
+  <div class="why-grid">
+    <div class="why-card">
+      <div class="why-card-icon">💰</div>
+      <div class="why-card-title">Tokens = Cost</div>
+      <div class="why-card-text">Every AI API charges per token (input + output). A 10-page document ≈ 5,000 tokens. Know your context window limits.</div>
+    </div>
+    <div class="why-card">
+      <div class="why-card-icon">✂️</div>
+      <div class="why-card-title">Context Window = Memory Limit</div>
+      <div class="why-card-text">If your conversation exceeds the limit, the AI "forgets" early parts. GPT-4: 128k. Claude: 200k. Gemini: 2M tokens.</div>
+    </div>
+    <div class="why-card">
+      <div class="why-card-icon">🌐</div>
+      <div class="why-card-title">Multilingual by Default</div>
+      <div class="why-card-text">The same tokenizer handles 100+ languages. Each language uses different token counts — English is most efficient.</div>
+    </div>
+    <div class="why-card">
+      <div class="why-card-icon">🔍</div>
+      <div class="why-card-title">Powers Semantic Search</div>
+      <div class="why-card-text">Embeddings enable "find documents about budget cuts" even when no doc says "budget cuts" exactly — meaning is matched, not keywords.</div>
+    </div>
+  </div>
+</div>
+
+<div class="info-box">
+  <p>🎯 <strong>Key Takeaway:</strong> Every word you type is converted into numbers before the AI ever processes it. The quality of that number representation — the embedding — is what determines how well the AI understands nuance, context, and meaning. When you write clearer prompts, you give the model better signals to work with.</p>
+</div>
+
+<div class="nav">
+  <a href="video_2_neural_networks.html" class="btn btn-primary">Next: Neural Networks →</a>
+  <a href="#" onclick="window.scrollTo(0,0);return false;" class="btn btn-secondary">↑ Back to Top</a>
+</div>
+
+<p style="color:#334155;font-size:12px;margin-top:30px;">Applied AI Class · Cornell 2026 · Mini Lesson 1 of 4</p>
+</body>
+</html>

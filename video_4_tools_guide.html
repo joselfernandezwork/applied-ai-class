@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mini Lesson 4: Your AI Toolkit — All Tools, All Links</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&family=JetBrains+Mono:wght@400;700&display=swap');
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:#0F172A;color:#F1F5F9;font-family:'Inter',sans-serif;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:30px 20px;}
+  .lesson-header{text-align:center;margin-bottom:40px;}
+  .lesson-tag{background:rgba(52,211,153,0.15);border:1px solid #34D399;color:#34D399;padding:6px 18px;border-radius:20px;font-size:13px;font-weight:600;letter-spacing:1px;display:inline-block;margin-bottom:16px;}
+  h1{font-size:2.2rem;font-weight:900;background:linear-gradient(135deg,#34D399,#38BDF8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:8px;}
+  .subtitle{color:#94A3B8;font-size:1rem;}
+  .stage{background:#1E293B;border:1px solid #334155;border-radius:16px;padding:32px;max-width:960px;width:100%;margin-bottom:28px;position:relative;overflow:hidden;}
+  .stage-label{font-size:11px;font-weight:700;letter-spacing:2px;color:#34D399;text-transform:uppercase;margin-bottom:12px;}
+  .stage h2{font-size:1.3rem;font-weight:700;margin-bottom:18px;}
+  .progress{display:flex;gap:8px;align-items:center;margin-bottom:32px;}
+  .progress-dot{width:10px;height:10px;border-radius:50%;background:#1E293B;border:2px solid #334155;}
+  .progress-dot.done{background:#34D399;border-color:#34D399;}
+  .progress-dot.active{background:#34D399;border-color:#34D399;box-shadow:0 0 8px #34D399;}
+  .btn{padding:12px 24px;border-radius:8px;font-size:0.9rem;font-weight:600;cursor:pointer;text-decoration:none;transition:all 0.2s;display:inline-block;}
+  .btn-primary{background:linear-gradient(135deg,#34D399,#38BDF8);color:#0F172A;border:none;}
+  .btn-secondary{background:transparent;color:#94A3B8;border:1px solid #334155;}
+  .btn-tool{display:inline-block;padding:8px 18px;border-radius:8px;font-size:0.85rem;font-weight:700;text-decoration:none;transition:all 0.2s;margin-top:10px;}
+  .btn:hover,.btn-tool:hover{transform:translateY(-2px);filter:brightness(1.1);}
+  .nav{display:flex;gap:14px;margin-top:10px;}
+  .info-box{background:rgba(52,211,153,0.08);border:1px solid rgba(52,211,153,0.3);border-radius:10px;padding:16px 20px;margin-bottom:28px;max-width:960px;width:100%;}
+
+  /* Tool cards grid */
+  .tools-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:18px;margin-top:8px;}
+  .tool-card{background:#0F172A;border:1px solid #334155;border-radius:12px;padding:22px;transition:border-color 0.2s,transform 0.2s;}
+  .tool-card:hover{transform:translateY(-3px);}
+  .tool-card-header{display:flex;align-items:center;gap:12px;margin-bottom:14px;}
+  .tool-icon{font-size:1.8rem;width:48px;height:48px;display:flex;align-items:center;justify-content:center;border-radius:12px;}
+  .tool-name{font-size:1.1rem;font-weight:700;}
+  .tool-tagline{font-size:0.78rem;color:#94A3B8;margin-top:2px;}
+  .tool-steps{list-style:none;margin-bottom:14px;}
+  .tool-steps li{font-size:0.82rem;color:#94A3B8;padding:5px 0;border-bottom:1px solid #1E293B;display:flex;align-items:flex-start;gap:8px;line-height:1.5;}
+  .tool-steps li:last-child{border-bottom:none;}
+  .step-num{background:#1E293B;color:#94A3B8;border-radius:50%;width:18px;height:18px;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;flex-shrink:0;margin-top:1px;}
+  .tool-tag{display:inline-block;padding:2px 8px;border-radius:8px;font-size:10px;font-weight:700;margin:3px 3px 3px 0;}
+
+  /* Decision matrix */
+  .matrix{width:100%;border-collapse:collapse;font-size:0.82rem;margin-top:8px;}
+  .matrix th{background:#0A1628;padding:10px 14px;text-align:left;font-weight:700;color:#94A3B8;font-size:0.78rem;text-transform:uppercase;letter-spacing:0.5px;}
+  .matrix td{padding:10px 14px;border-bottom:1px solid #1E293B;vertical-align:middle;}
+  .matrix tr:last-child td{border-bottom:none;}
+  .matrix tr:hover td{background:rgba(255,255,255,0.02);}
+  .check{color:#34D399;font-size:1rem;}
+  .cross{color:#EF4444;font-size:0.9rem;}
+  .partial{color:#FCD34D;font-size:0.9rem;}
+
+  /* Stack tiers */
+  .tier-card{border-radius:12px;padding:20px;margin-bottom:14px;border-left:4px solid;}
+  .tier-1{background:rgba(52,211,153,0.08);border-color:#34D399;}
+  .tier-2{background:rgba(56,189,248,0.08);border-color:#38BDF8;}
+  .tier-3{background:rgba(168,85,247,0.08);border-color:#A855F7;}
+  .tier-label{font-size:0.78rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;}
+  .tier-1 .tier-label{color:#34D399;}
+  .tier-2 .tier-label{color:#38BDF8;}
+  .tier-3 .tier-label{color:#A855F7;}
+  .tier-title{font-size:1rem;font-weight:700;color:#F1F5F9;margin-bottom:4px;}
+  .tier-tools{font-size:0.85rem;color:#F1F5F9;margin-bottom:6px;}
+  .tier-budget{font-size:0.8rem;color:#94A3B8;}
+
+  @keyframes fadeIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+</style>
+</head>
+<body>
+<div class="lesson-header">
+  <div class="lesson-tag">📚 MINI LESSON 4 OF 4</div>
+  <h1>Your Complete AI Toolkit</h1>
+  <p class="subtitle">Every tool, every link, every step — your live reference guide</p>
+</div>
+
+<div class="progress">
+  <div class="progress-dot done"></div>
+  <div class="progress-dot done"></div>
+  <div class="progress-dot done"></div>
+  <div class="progress-dot done"></div>
+  <span style="font-size:12px;color:#475569;margin-left:8px;">Final lesson: Tools & Resources</span>
+</div>
+
+<!-- Tool Cards -->
+<div class="stage">
+  <div class="stage-label">All Tools — Click to Visit</div>
+  <h2>Your AI toolkit — categorized by what they do best</h2>
+  <div class="tools-grid">
+
+    <!-- ChatGPT -->
+    <div class="tool-card" style="border-color:rgba(52,211,153,0.3);">
+      <div class="tool-card-header">
+        <div class="tool-icon" style="background:rgba(52,211,153,0.1);">💬</div>
+        <div>
+          <div class="tool-name" style="color:#34D399;">ChatGPT</div>
+          <div class="tool-tagline">Best all-rounder · OpenAI</div>
+        </div>
+      </div>
+      <ul class="tool-steps">
+        <li><span class="step-num">1</span>Sign up / log in at chatgpt.com</li>
+        <li><span class="step-num">2</span>Select model: GPT-4o (balanced), o1 (reasoning), mini (speed)</li>
+        <li><span class="step-num">3</span>Upload files, images, or paste URLs for analysis</li>
+        <li><span class="step-num">4</span>Use Projects to create persistent AI assistants</li>
+        <li><span class="step-num">5</span>Enable Web Search + Code Interpreter in the toolbar</li>
+      </ul>
+      <div>
+        <span class="tool-tag" style="background:rgba(52,211,153,0.15);color:#34D399;">Writing</span>
+        <span class="tool-tag" style="background:rgba(52,211,153,0.15);color:#34D399;">Analysis</span>
+        <span class="tool-tag" style="background:rgba(52,211,153,0.15);color:#34D399;">Coding</span>
+        <span class="tool-tag" style="background:rgba(52,211,153,0.15);color:#34D399;">Images</span>
+      </div>
+      <a href="https://chatgpt.com" target="_blank" class="btn-tool" style="background:rgba(52,211,153,0.15);color:#34D399;border:1px solid rgba(52,211,153,0.3);">→ Open ChatGPT</a>
+    </div>
+
+    <!-- Claude -->
+    <div class="tool-card" style="border-color:rgba(251,146,60,0.3);">
+      <div class="tool-card-header">
+        <div class="tool-icon" style="background:rgba(251,146,60,0.1);">🤖</div>
+        <div>
+          <div class="tool-name" style="color:#FB923C;">Claude</div>
+          <div class="tool-tagline">Best for long docs & reasoning · Anthropic</div>
+        </div>
+      </div>
+      <ul class="tool-steps">
+        <li><span class="step-num">1</span>Sign up at claude.ai</li>
+        <li><span class="step-num">2</span>Create a Project → upload reference docs (stays in context)</li>
+        <li><span class="step-num">3</span>Paste up to 200,000 tokens (entire books, contracts)</li>
+        <li><span class="step-num">4</span>Use Cowork mode on desktop for file automation</li>
+        <li><span class="step-num">5</span>Try extended thinking for complex analysis</li>
+      </ul>
+      <div>
+        <span class="tool-tag" style="background:rgba(251,146,60,0.15);color:#FB923C;">Long Docs</span>
+        <span class="tool-tag" style="background:rgba(251,146,60,0.15);color:#FB923C;">Reasoning</span>
+        <span class="tool-tag" style="background:rgba(251,146,60,0.15);color:#FB923C;">Coding</span>
+        <span class="tool-tag" style="background:rgba(251,146,60,0.15);color:#FB923C;">Agents</span>
+      </div>
+      <a href="https://claude.ai" target="_blank" class="btn-tool" style="background:rgba(251,146,60,0.15);color:#FB923C;border:1px solid rgba(251,146,60,0.3);">→ Open Claude</a>
+    </div>
+
+    <!-- Copilot -->
+    <div class="tool-card" style="border-color:rgba(56,189,248,0.3);">
+      <div class="tool-card-header">
+        <div class="tool-icon" style="background:rgba(56,189,248,0.1);">💼</div>
+        <div>
+          <div class="tool-name" style="color:#38BDF8;">Microsoft Copilot</div>
+          <div class="tool-tagline">Best for Microsoft 365 users</div>
+        </div>
+      </div>
+      <ul class="tool-steps">
+        <li><span class="step-num">1</span>Go to copilot.microsoft.com (free) or open Word/Excel</li>
+        <li><span class="step-num">2</span>In Word: click Copilot → "Draft a memo about..."</li>
+        <li><span class="step-num">3</span>In Excel: select data → "Show trends" or "Build a formula that..."</li>
+        <li><span class="step-num">4</span>In Teams: after meeting → ask for summary + action items</li>
+        <li><span class="step-num">5</span>In Outlook: draft email replies with one click</li>
+      </ul>
+      <div>
+        <span class="tool-tag" style="background:rgba(56,189,248,0.15);color:#38BDF8;">Word</span>
+        <span class="tool-tag" style="background:rgba(56,189,248,0.15);color:#38BDF8;">Excel</span>
+        <span class="tool-tag" style="background:rgba(56,189,248,0.15);color:#38BDF8;">PowerPoint</span>
+        <span class="tool-tag" style="background:rgba(56,189,248,0.15);color:#38BDF8;">Teams</span>
+      </div>
+      <a href="https://copilot.microsoft.com" target="_blank" class="btn-tool" style="background:rgba(56,189,248,0.15);color:#38BDF8;border:1px solid rgba(56,189,248,0.3);">→ Open Copilot</a>
+    </div>
+
+    <!-- Gemini -->
+    <div class="tool-card" style="border-color:rgba(168,85,247,0.3);">
+      <div class="tool-card-header">
+        <div class="tool-icon" style="background:rgba(168,85,247,0.1);">🔮</div>
+        <div>
+          <div class="tool-name" style="color:#A855F7;">Google Gemini</div>
+          <div class="tool-tagline">Best for deep research & Google Workspace</div>
+        </div>
+      </div>
+      <ul class="tool-steps">
+        <li><span class="step-num">1</span>Go to gemini.google.com</li>
+        <li><span class="step-num">2</span>Try Deep Research mode for comprehensive reports</li>
+        <li><span class="step-num">3</span>Create Gems (custom AI personas for specific tasks)</li>
+        <li><span class="step-num">4</span>Upload images, PDFs, or videos for multimodal analysis</li>
+        <li><span class="step-num">5</span>Use in Google Docs/Sheets via the Gemini button</li>
+      </ul>
+      <div>
+        <span class="tool-tag" style="background:rgba(168,85,247,0.15);color:#A855F7;">Research</span>
+        <span class="tool-tag" style="background:rgba(168,85,247,0.15);color:#A855F7;">Multimodal</span>
+        <span class="tool-tag" style="background:rgba(168,85,247,0.15);color:#A855F7;">Workspace</span>
+        <span class="tool-tag" style="background:rgba(168,85,247,0.15);color:#A855F7;">2M Context</span>
+      </div>
+      <a href="https://gemini.google.com" target="_blank" class="btn-tool" style="background:rgba(168,85,247,0.15);color:#A855F7;border:1px solid rgba(168,85,247,0.3);">→ Open Gemini</a>
+    </div>
+
+    <!-- Perplexity -->
+    <div class="tool-card" style="border-color:rgba(52,211,153,0.3);">
+      <div class="tool-card-header">
+        <div class="tool-icon" style="background:rgba(52,211,153,0.1);">🔍</div>
+        <div>
+          <div class="tool-name" style="color:#34D399;">Perplexity</div>
+          <div class="tool-tagline">Best for research with citations</div>
+        </div>
+      </div>
+      <ul class="tool-steps">
+        <li><span class="step-num">1</span>Go to perplexity.ai</li>
+        <li><span class="step-num">2</span>Ask your research question (current events = use Perplexity, not ChatGPT)</li>
+        <li><span class="step-num">3</span>Switch Focus: Academic / Reddit / YouTube / LinkedIn</li>
+        <li><span class="step-num">4</span>Click citations to verify sources</li>
+        <li><span class="step-num">5</span>Use Pro Search for multi-step research with clarifying questions</li>
+      </ul>
+      <div>
+        <span class="tool-tag" style="background:rgba(52,211,153,0.15);color:#34D399;">Research</span>
+        <span class="tool-tag" style="background:rgba(52,211,153,0.15);color:#34D399;">Citations</span>
+        <span class="tool-tag" style="background:rgba(52,211,153,0.15);color:#34D399;">Current Events</span>
+      </div>
+      <a href="https://perplexity.ai" target="_blank" class="btn-tool" style="background:rgba(52,211,153,0.15);color:#34D399;border:1px solid rgba(52,211,153,0.3);">→ Open Perplexity</a>
+    </div>
+
+    <!-- NotebookLM -->
+    <div class="tool-card" style="border-color:rgba(52,211,153,0.3);">
+      <div class="tool-card-header">
+        <div class="tool-icon" style="background:rgba(52,211,153,0.1);">📓</div>
+        <div>
+          <div class="tool-name" style="color:#34D399;">NotebookLM</div>
+          <div class="tool-tagline">AI reads YOUR docs only · Free</div>
+        </div>
+      </div>
+      <ul class="tool-steps">
+        <li><span class="step-num">1</span>Go to notebooklm.google.com</li>
+        <li><span class="step-num">2</span>Create a new Notebook → add sources (PDFs, Docs, URLs, YouTube)</li>
+        <li><span class="step-num">3</span>Ask questions — every answer cites the exact source</li>
+        <li><span class="step-num">4</span>Generate an "Audio Overview" — a podcast-style briefing</li>
+        <li><span class="step-num">5</span>Share your notebook with colleagues</li>
+      </ul>
+      <div>
+        <span class="tool-tag" style="background:rgba(52,211,153,0.15);color:#34D399;">No Hallucination</span>
+        <span class="tool-tag" style="background:rgba(52,211,153,0.15);color:#34D399;">Cited Answers</span>
+        <span class="tool-tag" style="background:rgba(52,211,153,0.15);color:#34D399;">Audio Podcast</span>
+      </div>
+      <a href="https://notebooklm.google.com" target="_blank" class="btn-tool" style="background:rgba(52,211,153,0.15);color:#34D399;border:1px solid rgba(52,211,153,0.3);">→ Open NotebookLM</a>
+    </div>
+
+    <!-- Midjourney -->
+    <div class="tool-card" style="border-color:rgba(168,85,247,0.3);">
+      <div class="tool-card-header">
+        <div class="tool-icon" style="background:rgba(168,85,247,0.1);">🎨</div>
+        <div>
+          <div class="tool-name" style="color:#A855F7;">Midjourney</div>
+          <div class="tool-tagline">Best AI image generation · $10/mo</div>
+        </div>
+      </div>
+      <ul class="tool-steps">
+        <li><span class="step-num">1</span>Sign up at midjourney.com</li>
+        <li><span class="step-num">2</span>Click Create → describe your image in detail</li>
+        <li><span class="step-num">3</span>Add parameters: --ar 16:9 --style raw --v 6</li>
+        <li><span class="step-num">4</span>Click U1–U4 to upscale the best result to HD</li>
+        <li><span class="step-num">5</span>Download → use in PowerPoint, Word, or social media</li>
+      </ul>
+      <div>
+        <span class="tool-tag" style="background:rgba(168,85,247,0.15);color:#A855F7;">Images</span>
+        <span class="tool-tag" style="background:rgba(168,85,247,0.15);color:#A855F7;">Marketing</span>
+        <span class="tool-tag" style="background:rgba(168,85,247,0.15);color:#A855F7;">Presentations</span>
+      </div>
+      <a href="https://midjourney.com" target="_blank" class="btn-tool" style="background:rgba(168,85,247,0.15);color:#A855F7;border:1px solid rgba(168,85,247,0.3);">→ Open Midjourney</a>
+    </div>
+
+    <!-- Replit -->
+    <div class="tool-card" style="border-color:rgba(251,146,60,0.3);">
+      <div class="tool-card-header">
+        <div class="tool-icon" style="background:rgba(251,146,60,0.1);">⚡</div>
+        <div>
+          <div class="tool-name" style="color:#FB923C;">Replit</div>
+          <div class="tool-tagline">Build apps with AI — no code needed</div>
+        </div>
+      </div>
+      <ul class="tool-steps">
+        <li><span class="step-num">1</span>Go to replit.com and sign up (free tier available)</li>
+        <li><span class="step-num">2</span>Click "Replit Agent" (not Create Repl)</li>
+        <li><span class="step-num">3</span>Describe your app: "Build an expense tracker with pie chart"</li>
+        <li><span class="step-num">4</span>Watch it code, test, and fix automatically</li>
+        <li><span class="step-num">5</span>Click Deploy → get a live URL to share</li>
+      </ul>
+      <div>
+        <span class="tool-tag" style="background:rgba(251,146,60,0.15);color:#FB923C;">No-Code</span>
+        <span class="tool-tag" style="background:rgba(251,146,60,0.15);color:#FB923C;">Apps</span>
+        <span class="tool-tag" style="background:rgba(251,146,60,0.15);color:#FB923C;">Dashboards</span>
+        <span class="tool-tag" style="background:rgba(251,146,60,0.15);color:#FB923C;">Automation</span>
+      </div>
+      <a href="https://replit.com" target="_blank" class="btn-tool" style="background:rgba(251,146,60,0.15);color:#FB923C;border:1px solid rgba(251,146,60,0.3);">→ Open Replit</a>
+    </div>
+
+    <!-- AI Studio -->
+    <div class="tool-card" style="border-color:rgba(56,189,248,0.3);">
+      <div class="tool-card-header">
+        <div class="tool-icon" style="background:rgba(56,189,248,0.1);">🔬</div>
+        <div>
+          <div class="tool-name" style="color:#38BDF8;">Google AI Studio</div>
+          <div class="tool-tagline">Free API sandbox · 1M+ context</div>
+        </div>
+      </div>
+      <ul class="tool-steps">
+        <li><span class="step-num">1</span>Go to aistudio.google.com (free)</li>
+        <li><span class="step-num">2</span>Select Gemini 2.5 Pro for the best capability</li>
+        <li><span class="step-num">3</span>Upload massive files (PDFs, video, audio) for analysis</li>
+        <li><span class="step-num">4</span>Set System Instructions to customize behavior</li>
+        <li><span class="step-num">5</span>Get API key to use Gemini in your own apps</li>
+      </ul>
+      <div>
+        <span class="tool-tag" style="background:rgba(56,189,248,0.15);color:#38BDF8;">Free</span>
+        <span class="tool-tag" style="background:rgba(56,189,248,0.15);color:#38BDF8;">API</span>
+        <span class="tool-tag" style="background:rgba(56,189,248,0.15);color:#38BDF8;">Video/Audio</span>
+        <span class="tool-tag" style="background:rgba(56,189,248,0.15);color:#38BDF8;">Dev</span>
+      </div>
+      <a href="https://aistudio.google.com" target="_blank" class="btn-tool" style="background:rgba(56,189,248,0.15);color:#38BDF8;border:1px solid rgba(56,189,248,0.3);">→ Open AI Studio</a>
+    </div>
+
+    <!-- Gamma AI -->
+    <div class="tool-card" style="border-color:rgba(168,85,247,0.3);">
+      <div class="tool-card-header">
+        <div class="tool-icon" style="background:rgba(168,85,247,0.1);">✨</div>
+        <div>
+          <div class="tool-name" style="color:#A855F7;">Gamma AI</div>
+          <div class="tool-tagline">AI presentation builder · gamma.app</div>
+        </div>
+      </div>
+      <ul class="tool-steps">
+        <li><span class="step-num">1</span>Go to gamma.app → click "Create New" → "Generate"</li>
+        <li><span class="step-num">2</span>Paste your outline or just a topic + choose card count</li>
+        <li><span class="step-num">3</span>Pick a theme (try "Stratos" for tech, dark aesthetic)</li>
+        <li><span class="step-num">4</span>Edit any card: click → ask AI to rewrite or expand</li>
+        <li><span class="step-num">5</span>Share via link OR export to PPTX/PDF</li>
+      </ul>
+      <div>
+        <span class="tool-tag" style="background:rgba(168,85,247,0.15);color:#A855F7;">Slides</span>
+        <span class="tool-tag" style="background:rgba(168,85,247,0.15);color:#A855F7;">Presentations</span>
+        <span class="tool-tag" style="background:rgba(168,85,247,0.15);color:#A855F7;">AI Design</span>
+      </div>
+      <a href="https://gamma.app" target="_blank" class="btn-tool" style="background:rgba(168,85,247,0.15);color:#A855F7;border:1px solid rgba(168,85,247,0.3);">→ Open Gamma</a>
+    </div>
+
+    <!-- Canva AI -->
+    <div class="tool-card" style="border-color:rgba(0,196,204,0.3);">
+      <div class="tool-card-header">
+        <div class="tool-icon" style="background:rgba(0,196,204,0.1);">🎨</div>
+        <div>
+          <div class="tool-name" style="color:#00C4CC;">Canva AI</div>
+          <div class="tool-tagline">Design everything with AI · canva.com</div>
+        </div>
+      </div>
+      <ul class="tool-steps">
+        <li><span class="step-num">1</span>Go to canva.com → "Create a design" → pick template type</li>
+        <li><span class="step-num">2</span>Use Magic Write: click any text box → describe what you need</li>
+        <li><span class="step-num">3</span>Generate AI images: Add element → "AI Image Generator"</li>
+        <li><span class="step-num">4</span>Try Background Remover on any photo (1 click)</li>
+        <li><span class="step-num">5</span>Try "Presentations AI": describe topic → full deck instantly</li>
+      </ul>
+      <div>
+        <span class="tool-tag" style="background:rgba(0,196,204,0.15);color:#00C4CC;">Design</span>
+        <span class="tool-tag" style="background:rgba(0,196,204,0.15);color:#00C4CC;">Slides</span>
+        <span class="tool-tag" style="background:rgba(0,196,204,0.15);color:#00C4CC;">Social Media</span>
+        <span class="tool-tag" style="background:rgba(0,196,204,0.15);color:#00C4CC;">Video</span>
+      </div>
+      <a href="https://canva.com" target="_blank" class="btn-tool" style="background:rgba(0,196,204,0.15);color:#00C4CC;border:1px solid rgba(0,196,204,0.3);">→ Open Canva</a>
+    </div>
+
+    <!-- Synthesia -->
+    <div class="tool-card" style="border-color:rgba(244,114,182,0.3);">
+      <div class="tool-card-header">
+        <div class="tool-icon" style="background:rgba(244,114,182,0.1);">🎬</div>
+        <div>
+          <div class="tool-name" style="color:#F472B6;">Synthesia</div>
+          <div class="tool-tagline">AI avatar videos · synthesia.io</div>
+        </div>
+      </div>
+      <ul class="tool-steps">
+        <li><span class="step-num">1</span>Go to synthesia.io → "New video" (3 min free trial)</li>
+        <li><span class="step-num">2</span>Choose from 120+ photorealistic AI avatars</li>
+        <li><span class="step-num">3</span>Paste your script → AI avatar reads it in your chosen language</li>
+        <li><span class="step-num">4</span>Add slides or screen content as backdrop</li>
+        <li><span class="step-num">5</span>Generate → download MP4 (ready in ~10 min)</li>
+      </ul>
+      <div>
+        <span class="tool-tag" style="background:rgba(244,114,182,0.15);color:#F472B6;">AI Video</span>
+        <span class="tool-tag" style="background:rgba(244,114,182,0.15);color:#F472B6;">Training</span>
+        <span class="tool-tag" style="background:rgba(244,114,182,0.15);color:#F472B6;">Multilingual</span>
+      </div>
+      <a href="https://synthesia.io" target="_blank" class="btn-tool" style="background:rgba(244,114,182,0.15);color:#F472B6;border:1px solid rgba(244,114,182,0.3);">→ Open Synthesia</a>
+    </div>
+
+    <!-- HeyGen -->
+    <div class="tool-card" style="border-color:rgba(251,146,60,0.3);">
+      <div class="tool-card-header">
+        <div class="tool-icon" style="background:rgba(251,146,60,0.1);">📹</div>
+        <div>
+          <div class="tool-name" style="color:#FB923C;">HeyGen</div>
+          <div class="tool-tagline">Clone yourself · heygen.com</div>
+        </div>
+      </div>
+      <ul class="tool-steps">
+        <li><span class="step-num">1</span>Go to heygen.com → record a 2-min selfie video to clone yourself</li>
+        <li><span class="step-num">2</span>Clone your voice with 30 seconds of audio</li>
+        <li><span class="step-num">3</span>Write your script → your AI avatar reads it with lip sync</li>
+        <li><span class="step-num">4</span>Translate to any language in 1 click (with lip sync)</li>
+        <li><span class="step-num">5</span>Export MP4 or share via HeyGen link</li>
+      </ul>
+      <div>
+        <span class="tool-tag" style="background:rgba(251,146,60,0.15);color:#FB923C;">AI Avatar</span>
+        <span class="tool-tag" style="background:rgba(251,146,60,0.15);color:#FB923C;">Voice Clone</span>
+        <span class="tool-tag" style="background:rgba(251,146,60,0.15);color:#FB923C;">Translation</span>
+      </div>
+      <a href="https://heygen.com" target="_blank" class="btn-tool" style="background:rgba(251,146,60,0.15);color:#FB923C;border:1px solid rgba(251,146,60,0.3);">→ Open HeyGen</a>
+    </div>
+
+    <!-- Notion AI -->
+    <div class="tool-card" style="border-color:rgba(241,245,249,0.3);">
+      <div class="tool-card-header">
+        <div class="tool-icon" style="background:rgba(241,245,249,0.1);">📝</div>
+        <div>
+          <div class="tool-name" style="color:#F1F5F9;">Notion AI</div>
+          <div class="tool-tagline">AI-powered workspace · notion.so/ai</div>
+        </div>
+      </div>
+      <ul class="tool-steps">
+        <li><span class="step-num">1</span>Go to notion.so → open any page → press Space or type /AI</li>
+        <li><span class="step-num">2</span>Ask it to draft proposals, meeting notes, or project plans</li>
+        <li><span class="step-num">3</span>Use AI to summarize any page or database entries</li>
+        <li><span class="step-num">4</span>Build AI-powered templates: fill with one command</li>
+        <li><span class="step-num">5</span>Connect Slack/Gmail → Notion syncs and organizes for you</li>
+      </ul>
+      <div>
+        <span class="tool-tag" style="background:rgba(241,245,249,0.1);color:#F1F5F9;">Workspace</span>
+        <span class="tool-tag" style="background:rgba(241,245,249,0.1);color:#F1F5F9;">Notes</span>
+        <span class="tool-tag" style="background:rgba(241,245,249,0.1);color:#F1F5F9;">Project Mgmt</span>
+      </div>
+      <a href="https://notion.so/product/ai" target="_blank" class="btn-tool" style="background:rgba(241,245,249,0.1);color:#F1F5F9;border:1px solid rgba(241,245,249,0.2);">→ Open Notion AI</a>
+    </div>
+
+    <!-- Otter.ai -->
+    <div class="tool-card" style="border-color:rgba(56,189,248,0.3);">
+      <div class="tool-card-header">
+        <div class="tool-icon" style="background:rgba(56,189,248,0.1);">🎤</div>
+        <div>
+          <div class="tool-name" style="color:#38BDF8;">Otter.ai</div>
+          <div class="tool-tagline">Real-time meeting notes · otter.ai</div>
+        </div>
+      </div>
+      <ul class="tool-steps">
+        <li><span class="step-num">1</span>Connect Otter to your Zoom/Google Meet/Teams calendar</li>
+        <li><span class="step-num">2</span>Otter automatically joins calls and transcribes in real-time</li>
+        <li><span class="step-num">3</span>After the call: AI summary + action items delivered instantly</li>
+        <li><span class="step-num">4</span>Chat with the transcript: ask anything about what was said</li>
+        <li><span class="step-num">5</span>Share transcript or summary via link with your team</li>
+      </ul>
+      <div>
+        <span class="tool-tag" style="background:rgba(56,189,248,0.15);color:#38BDF8;">Transcription</span>
+        <span class="tool-tag" style="background:rgba(56,189,248,0.15);color:#38BDF8;">Meeting AI</span>
+        <span class="tool-tag" style="background:rgba(56,189,248,0.15);color:#38BDF8;">Free tier</span>
+      </div>
+      <a href="https://otter.ai" target="_blank" class="btn-tool" style="background:rgba(56,189,248,0.15);color:#38BDF8;border:1px solid rgba(56,189,248,0.3);">→ Open Otter.ai</a>
+    </div>
+
+    <!-- Fireflies.ai -->
+    <div class="tool-card" style="border-color:rgba(52,211,153,0.3);">
+      <div class="tool-card-header">
+        <div class="tool-icon" style="background:rgba(52,211,153,0.1);">🔥</div>
+        <div>
+          <div class="tool-name" style="color:#34D399;">Fireflies.ai</div>
+          <div class="tool-tagline">Meeting intelligence · fireflies.ai</div>
+        </div>
+      </div>
+      <ul class="tool-steps">
+        <li><span class="step-num">1</span>Add Fred (Fireflies bot) to any calendar invite</li>
+        <li><span class="step-num">2</span>Fred joins every call and records across all platforms</li>
+        <li><span class="step-num">3</span>Get full transcript + smart summary + topic tracker</li>
+        <li><span class="step-num">4</span>Search across ALL your past meetings by keyword</li>
+        <li><span class="step-num">5</span>Auto-push summaries to Slack, HubSpot, or Salesforce</li>
+      </ul>
+      <div>
+        <span class="tool-tag" style="background:rgba(52,211,153,0.15);color:#34D399;">Meetings</span>
+        <span class="tool-tag" style="background:rgba(52,211,153,0.15);color:#34D399;">CRM Sync</span>
+        <span class="tool-tag" style="background:rgba(52,211,153,0.15);color:#34D399;">Search</span>
+      </div>
+      <a href="https://fireflies.ai" target="_blank" class="btn-tool" style="background:rgba(52,211,153,0.15);color:#34D399;border:1px solid rgba(52,211,153,0.3);">→ Open Fireflies</a>
+    </div>
+
+    <!-- Bolt.new -->
+    <div class="tool-card" style="border-color:rgba(252,211,77,0.3);">
+      <div class="tool-card-header">
+        <div class="tool-icon" style="background:rgba(252,211,77,0.1);">⚡</div>
+        <div>
+          <div class="tool-name" style="color:#FCD34D;">Bolt.new</div>
+          <div class="tool-tagline">Build full-stack apps instantly · bolt.new</div>
+        </div>
+      </div>
+      <ul class="tool-steps">
+        <li><span class="step-num">1</span>Go to bolt.new → describe your app in plain English</li>
+        <li><span class="step-num">2</span>Watch AI build a complete app with frontend + backend</li>
+        <li><span class="step-num">3</span>Edit by chatting: "add a dark mode button" or "fix the form"</li>
+        <li><span class="step-num">4</span>Connect a database, auth, or API with a few prompts</li>
+        <li><span class="step-num">5</span>Deploy to a live URL in one click</li>
+      </ul>
+      <div>
+        <span class="tool-tag" style="background:rgba(252,211,77,0.15);color:#FCD34D;">Full-Stack</span>
+        <span class="tool-tag" style="background:rgba(252,211,77,0.15);color:#FCD34D;">No-Code</span>
+        <span class="tool-tag" style="background:rgba(252,211,77,0.15);color:#FCD34D;">Deploy</span>
+      </div>
+      <a href="https://bolt.new" target="_blank" class="btn-tool" style="background:rgba(252,211,77,0.15);color:#FCD34D;border:1px solid rgba(252,211,77,0.3);">→ Open Bolt.new</a>
+    </div>
+
+  </div>
+</div>
+
+<!-- Master links table -->
+<div class="stage">
+  <div class="stage-label">Complete Resource Links</div>
+  <h2>Every tool and resource — bookmark this page</h2>
+  <table class="matrix">
+    <tr>
+      <th>Tool</th><th>Link</th><th>Free?</th><th>Best Use</th>
+    </tr>
+    <tr><td style="color:#34D399;font-weight:700;">ChatGPT</td><td><a href="https://chatgpt.com" target="_blank" style="color:#38BDF8;">chatgpt.com</a></td><td class="check">✓ Free tier</td><td style="color:#94A3B8;">Writing, analysis, coding, images</td></tr>
+    <tr><td style="color:#FB923C;font-weight:700;">Claude</td><td><a href="https://claude.ai" target="_blank" style="color:#38BDF8;">claude.ai</a></td><td class="check">✓ Free tier</td><td style="color:#94A3B8;">Long docs, reasoning, coding, agents</td></tr>
+    <tr><td style="color:#38BDF8;font-weight:700;">Copilot</td><td><a href="https://copilot.microsoft.com" target="_blank" style="color:#38BDF8;">copilot.microsoft.com</a></td><td class="check">✓ Free</td><td style="color:#94A3B8;">Microsoft 365 (Word, Excel, Teams)</td></tr>
+    <tr><td style="color:#A855F7;font-weight:700;">Gemini</td><td><a href="https://gemini.google.com" target="_blank" style="color:#38BDF8;">gemini.google.com</a></td><td class="check">✓ Free tier</td><td style="color:#94A3B8;">Deep research, Google Workspace, vision</td></tr>
+    <tr><td style="color:#34D399;font-weight:700;">Perplexity</td><td><a href="https://perplexity.ai" target="_blank" style="color:#38BDF8;">perplexity.ai</a></td><td class="check">✓ Free tier</td><td style="color:#94A3B8;">Research with citations, current events</td></tr>
+    <tr><td style="color:#34D399;font-weight:700;">NotebookLM</td><td><a href="https://notebooklm.google.com" target="_blank" style="color:#38BDF8;">notebooklm.google.com</a></td><td class="check">✓ Free</td><td style="color:#94A3B8;">Q&A over your own documents</td></tr>
+    <tr><td style="color:#A855F7;font-weight:700;">Gamma AI</td><td><a href="https://gamma.app" target="_blank" style="color:#38BDF8;">gamma.app</a></td><td class="partial">~ Free (400 credits)</td><td style="color:#94A3B8;">AI-first presentation builder, instant decks</td></tr>
+    <tr><td style="color:#00C4CC;font-weight:700;">Canva AI</td><td><a href="https://canva.com" target="_blank" style="color:#38BDF8;">canva.com</a></td><td class="check">✓ Free tier</td><td style="color:#94A3B8;">Design, social media, slides, AI images</td></tr>
+    <tr><td style="color:#F472B6;font-weight:700;">Synthesia</td><td><a href="https://synthesia.io" target="_blank" style="color:#38BDF8;">synthesia.io</a></td><td class="partial">~ 3 min free trial</td><td style="color:#94A3B8;">AI avatar videos, training & explainers</td></tr>
+    <tr><td style="color:#FB923C;font-weight:700;">HeyGen</td><td><a href="https://heygen.com" target="_blank" style="color:#38BDF8;">heygen.com</a></td><td class="partial">~ 3 free credits</td><td style="color:#94A3B8;">Clone your face/voice, multilingual videos</td></tr>
+    <tr><td style="color:#F1F5F9;font-weight:700;">Notion AI</td><td><a href="https://notion.so/product/ai" target="_blank" style="color:#38BDF8;">notion.so/ai</a></td><td class="partial">~ Free tier</td><td style="color:#94A3B8;">AI workspace: writing, planning, summaries</td></tr>
+    <tr><td style="color:#38BDF8;font-weight:700;">Otter.ai</td><td><a href="https://otter.ai" target="_blank" style="color:#38BDF8;">otter.ai</a></td><td class="check">✓ Free tier</td><td style="color:#94A3B8;">Real-time meeting transcription + AI summary</td></tr>
+    <tr><td style="color:#34D399;font-weight:700;">Fireflies.ai</td><td><a href="https://fireflies.ai" target="_blank" style="color:#38BDF8;">fireflies.ai</a></td><td class="check">✓ Free tier</td><td style="color:#94A3B8;">Meeting intelligence, CRM sync, search</td></tr>
+    <tr><td style="color:#A855F7;font-weight:700;">Midjourney</td><td><a href="https://midjourney.com" target="_blank" style="color:#38BDF8;">midjourney.com</a></td><td class="cross">✗ $10/mo</td><td style="color:#94A3B8;">Best-in-class AI image generation</td></tr>
+    <tr><td style="color:#FB923C;font-weight:700;">Replit</td><td><a href="https://replit.com" target="_blank" style="color:#38BDF8;">replit.com</a></td><td class="partial">~ Free tier</td><td style="color:#94A3B8;">Build apps without coding (vibe coding)</td></tr>
+    <tr><td style="color:#FCD34D;font-weight:700;">Bolt.new</td><td><a href="https://bolt.new" target="_blank" style="color:#38BDF8;">bolt.new</a></td><td class="partial">~ Free tier</td><td style="color:#94A3B8;">Full-stack app builder, instant deploy</td></tr>
+    <tr><td style="color:#38BDF8;font-weight:700;">Google AI Studio</td><td><a href="https://aistudio.google.com" target="_blank" style="color:#38BDF8;">aistudio.google.com</a></td><td class="check">✓ Free</td><td style="color:#94A3B8;">API access, 1M+ context, multimodal</td></tr>
+    <tr><td style="color:#FCD34D;font-weight:700;">ElevenLabs</td><td><a href="https://elevenlabs.io" target="_blank" style="color:#38BDF8;">elevenlabs.io</a></td><td class="partial">~ Free tier</td><td style="color:#94A3B8;">AI voice cloning, text-to-speech</td></tr>
+    <tr><td style="color:#F472B6;font-weight:700;">Runway ML</td><td><a href="https://runwayml.com" target="_blank" style="color:#38BDF8;">runwayml.com</a></td><td class="partial">~ Free tier</td><td style="color:#94A3B8;">AI video generation and editing</td></tr>
+    <tr><td style="color:#FCD34D;font-weight:700;">Suno</td><td><a href="https://suno.com" target="_blank" style="color:#38BDF8;">suno.com</a></td><td class="check">✓ Free tier</td><td style="color:#94A3B8;">AI music generation from text</td></tr>
+  </table>
+</div>
+
+<!-- Recommended stack -->
+<div class="stage">
+  <div class="stage-label">Your Recommended AI Stack</div>
+  <h2>Where to start and how to grow</h2>
+  <div class="tier-card tier-1">
+    <div class="tier-label">Tier 1 — Start Here This Week · $0</div>
+    <div class="tier-title">Free Foundation Stack</div>
+    <div class="tier-tools">ChatGPT (free) · Claude (free) · Perplexity (free) · NotebookLM (free) · Canva AI (free) · Otter.ai (free) · Google AI Studio (free)</div>
+    <div class="tier-budget">Action: Create accounts for all 7 today. Use each for one real work task this week. See which ones feel most natural to you.</div>
+  </div>
+  <div class="tier-card tier-2">
+    <div class="tier-label">Tier 2 — Power User · ~$40/mo</div>
+    <div class="tier-title">Upgrade the Two You Use Daily</div>
+    <div class="tier-tools">ChatGPT Plus ($20) + Claude Pro ($20) — OR swap one for Gemini Advanced ($20)</div>
+    <div class="tier-budget">This is the sweet spot for most professionals. You get frontier models, file analysis, bigger context, and priority access.</div>
+  </div>
+  <div class="tier-card tier-3">
+    <div class="tier-label">Tier 3 — Full Suite · ~$100/mo</div>
+    <div class="tier-title">Complete Professional Stack</div>
+    <div class="tier-tools">Copilot M365 ($30) + Claude Pro ($20) + Perplexity Pro ($20) + Midjourney ($10) + specialty tool ($10)</div>
+    <div class="tier-budget">Worth it if AI is core to your work. You'll save far more time than you spend in monthly fees.</div>
+  </div>
+</div>
+
+<div class="info-box">
+  <p>🎯 <strong>Completion!</strong> You've just completed the Applied AI mini-lesson series. You now understand how AI works (tokenization → neural networks → LLMs), how to prompt effectively (CRAFT framework), and which tools to use for which tasks. The next step is simple: open one tool right now and try it on a real task from your work. The best way to learn AI is to use AI.</p>
+</div>
+
+<div class="nav">
+  <a href="video_3_how_to_prompt.html" class="btn btn-secondary">← Back: Prompting</a>
+  <a href="video_1_tokenization.html" class="btn btn-secondary">↩ Restart Lessons</a>
+</div>
+
+<p style="color:#334155;font-size:12px;margin-top:30px;text-align:center;">Applied AI Class · Cornell 2026 · Mini Lesson 4 of 4<br>joselfernandezwork@gmail.com</p>
+</body>
+</html>

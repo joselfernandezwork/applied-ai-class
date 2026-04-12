@@ -12,7 +12,7 @@
   .lesson-tag{background:rgba(168,85,247,0.15);border:1px solid #A855F7;color:#A855F7;padding:6px 18px;border-radius:20px;font-size:13px;font-weight:600;letter-spacing:1px;display:inline-block;margin-bottom:16px;}
   h1{font-size:2.2rem;font-weight:900;background:linear-gradient(135deg,#A855F7,#FB923C);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:8px;}
   .subtitle{color:#94A3B8;font-size:1rem;}
-  .stage{background:#1E293B;border:1px solid #334155;border-radius:16px;padding:32px;max-width:900px;width:100%;margin-bottom:28px;position:relative;overflow:hidden;}
+  .stage{background:#1E293B;border:1px solid #334155;border-radius:16px;padding:32px;max-width:900px;width:100%;margin-bottom:28px;position:relative;overflow:hidden;transition:transform 0.08s ease-out, box-shadow 0.3s ease-out;will-change:transform;}
   .stage-num{position:absolute;top:16px;right:20px;font-size:4rem;font-weight:900;color:rgba(255,255,255,0.04);line-height:1;}
   .stage-label{font-size:11px;font-weight:700;letter-spacing:2px;color:#A855F7;text-transform:uppercase;margin-bottom:12px;}
   .stage h2{font-size:1.3rem;font-weight:700;margin-bottom:18px;}
@@ -32,7 +32,7 @@
 
   /* Transformer block */
   .transformer-block{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-top:16px;}
-  .tf-part{background:#0F172A;border:1px solid #334155;border-radius:10px;padding:16px;position:relative;overflow:hidden;}
+  .tf-part{background:#0F172A;border:1px solid #334155;border-radius:10px;padding:16px;position:relative;overflow:hidden;transition:transform 0.08s ease-out, box-shadow 0.3s ease-out;will-change:transform;}
   .tf-part::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:3px 3px 0 0;}
   .tf-part:nth-child(1)::before{background:#38BDF8;}
   .tf-part:nth-child(2)::before{background:#34D399;}
@@ -60,7 +60,7 @@
   .scale-bar.llama{width:4%;background:#34D399;animation-delay:0.6s;}
   .scale-val{font-family:'JetBrains Mono',monospace;font-size:0.82rem;color:#94A3B8;width:80px;text-align:right;flex-shrink:0;}
 
-  .info-box{background:rgba(252,211,77,0.08);border:1px solid rgba(252,211,77,0.3);border-radius:10px;padding:16px 20px;margin-bottom:28px;max-width:900px;width:100%;}
+  .info-box{background:rgba(252,211,77,0.08);border:1px solid rgba(252,211,77,0.3);border-radius:10px;padding:16px 20px;margin-bottom:28px;max-width:900px;width:100%;transition:transform 0.08s ease-out, box-shadow 0.3s ease-out;will-change:transform;cursor:grab;}
 
   @keyframes fadeIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
   @keyframes fadeInDown{from{opacity:0;transform:translateY(-20px);}to{opacity:1;transform:translateY(0);}}
@@ -306,7 +306,129 @@
 <p style="color:#334155;font-size:12px;margin-top:30px;">Applied Ai Class EMBA-A 27 · Mini Lesson 2 of 5</p>
 
 <script>
-// Parallax scrolling effect
+// ===== MOUSE TRACKING INTERACTIVITY =====
+let mouseX = 0;
+let mouseY = 0;
+let targetX = 0;
+let targetY = 0;
+const smoothness = 0.15; // Lower = smoother lag effect
+
+// Track mouse movement
+document.addEventListener('mousemove', (e) => {
+  targetX = e.clientX;
+  targetY = e.clientY;
+});
+
+// Smooth mouse following animation
+function updateMousePosition() {
+  mouseX += (targetX - mouseX) * smoothness;
+  mouseY += (targetY - mouseY) * smoothness;
+  
+  // Make interactive elements follow mouse with parallax
+  document.querySelectorAll('.stage').forEach((stage, index) => {
+    const rect = stage.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+    
+    // Distance from mouse to element center
+    const distX = (mouseX - centerX) * 0.02;
+    const distY = (mouseY - centerY) * 0.02;
+    
+    // Apply subtle movement with depth based on index
+    const depth = (index + 1) * 0.3;
+    stage.style.transform = `translate(${distX * depth}px, ${distY * depth}px)`;
+  });
+  
+  // Make info boxes interactive
+  document.querySelectorAll('.info-box').forEach((box, index) => {
+    const rect = box.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+    
+    const distX = (mouseX - centerX) * 0.015;
+    const distY = (mouseY - centerY) * 0.015;
+    
+    box.style.transform = `translate(${distX}px, ${distY}px)`;
+  });
+  
+  // Interactive transformer blocks
+  document.querySelectorAll('.tf-part').forEach((part, index) => {
+    const rect = part.getBoundingClientRect();
+    const distX = (mouseX - rect.left - rect.width / 2) * 0.008;
+    const distY = (mouseY - rect.top - rect.height / 2) * 0.008;
+    
+    part.style.transform = `translate(${distX}px, ${distY}px) scale(1)`;
+  });
+  
+  requestAnimationFrame(updateMousePosition);
+});
+
+updateMousePosition();
+
+// ===== DRAGGABLE ELEMENTS =====
+let draggingElement = null;
+let dragOffsetX = 0;
+let dragOffsetY = 0;
+
+document.querySelectorAll('.stage, .info-box').forEach(element => {
+  element.style.cursor = 'grab';
+  
+  element.addEventListener('mousedown', (e) => {
+    // Check if clicking on a button or link
+    if (e.target.closest('.btn') || e.target.closest('a')) {
+      return;
+    }
+    
+    draggingElement = element;
+    element.style.cursor = 'grabbing';
+    element.style.zIndex = '1000';
+    
+    const rect = element.getBoundingClientRect();
+    dragOffsetX = e.clientX - rect.left;
+    dragOffsetY = e.clientY - rect.top;
+    
+    element.style.position = 'relative';
+  });
+});
+
+document.addEventListener('mousemove', (e) => {
+  if (draggingElement) {
+    const deltaX = e.clientX - mouseX;
+    const deltaY = e.clientY - mouseY;
+    
+    draggingElement.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
+  }
+});
+
+document.addEventListener('mouseup', () => {
+  if (draggingElement) {
+    draggingElement.style.cursor = 'grab';
+    draggingElement.style.zIndex = 'auto';
+    
+    // Smoothly animate back to original position
+    draggingElement.style.transition = 'transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1)';
+    draggingElement.style.transform = 'translate(0, 0)';
+    
+    setTimeout(() => {
+      draggingElement.style.transition = 'none';
+    }, 600);
+    
+    draggingElement = null;
+  }
+});
+
+// ===== HOVER GLOW EFFECT =====
+document.querySelectorAll('.stage').forEach(stage => {
+  stage.addEventListener('mouseenter', function() {
+    this.style.boxShadow = '0 0 30px rgba(168, 85, 247, 0.4)';
+  });
+  
+  stage.addEventListener('mouseleave', function() {
+    this.style.boxShadow = '0 0 0px rgba(168, 85, 247, 0)';
+  });
+});
+
+// ===== PARALLAX SCROLLING EFFECT =====
 window.addEventListener('scroll', function() {
   const scrolled = window.pageYOffset;
   const parallaxLayers = document.querySelectorAll('.parallax-layer');
@@ -315,7 +437,7 @@ window.addEventListener('scroll', function() {
   });
 });
 
-// Scroll-triggered animations
+// ===== SCROLL-TRIGGERED ANIMATIONS =====
 const observerOptions = {
   threshold: 0.1,
   rootMargin: '0px 0px -100px 0px'

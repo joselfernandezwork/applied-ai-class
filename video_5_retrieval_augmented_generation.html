@@ -309,6 +309,39 @@
 
   .parallax-layer{position:absolute;width:100%;height:200%;background:linear-gradient(180deg,rgba(168,85,247,0.05),transparent);will-change:transform;}
 
+  @keyframes slideInLeft {
+    from { opacity: 0; transform: translateX(-50px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+
+  @keyframes slideInRight {
+    from { opacity: 0; transform: translateX(50px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+
+  @keyframes popIn {
+    from { opacity: 0; transform: scale(0.8); }
+    to { opacity: 1; transform: scale(1); }
+  }
+
+  .explanation-box { animation: fadeInUp 0.8s ease-out; animation-fill-mode: forwards; }
+  .explanation-box:nth-child(1) { animation-delay: 0.1s; }
+  .explanation-box:nth-child(2) { animation-delay: 0.3s; }
+  .explanation-box:nth-child(3) { animation-delay: 0.5s; }
+
+  .section-title { animation: slideInLeft 0.7s ease-out; animation-fill-mode: forwards; }
+
+  .use-case-grid > div { animation: slideInRight 0.7s ease-out; animation-fill-mode: forwards; }
+  .use-case-grid > div:nth-child(1) { animation-delay: 0.1s; }
+  .use-case-grid > div:nth-child(2) { animation-delay: 0.3s; }
+  .use-case-grid > div:nth-child(3) { animation-delay: 0.5s; }
+  .use-case-grid > div:nth-child(4) { animation-delay: 0.7s; }
+
+  .comparison-table { animation: fadeInUp 0.8s ease-out 0.2s both; }
+
+  .nav-buttons { animation: popIn 0.6s ease-out 0.3s both; }
+
+
   @media(max-width: 600px) {
     h1 { font-size: 1.8rem; }
     .section-title { font-size: 1.3rem; }
@@ -337,20 +370,20 @@
   </div>
 
   <div class="section">
-    <h2 class="section-title">🤔 What is RAG?</h2>
-    <div class="explanation-box">
+    <h2 class="section-title animate-on-scroll">🤔 What is RAG?</h2>
+    <div class="explanation-box animate-on-scroll">
       <h3>The Core Idea</h3>
       <p>Retrieval-Augmented Generation (RAG) is a technique that combines two superpowers: the ability to retrieve relevant information from external sources (like your company's documents, databases, or the web) and the ability to generate intelligent answers based on that information. Instead of an AI model relying only on what it learned during training, RAG lets it look up current, accurate information first—then answer your question grounded in that real data.</p>
     </div>
 
-    <div class="explanation-box">
+    <div class="explanation-box animate-on-scroll">
       <h3>Why RAG Matters</h3>
       <p><strong>The Problem:</strong> Large language models are trained on static data from the past. They can hallucinate (make up false facts) and can't access new information, proprietary documents, or real-time data. <strong>The Solution:</strong> RAG plugs an LLM into a knowledge base. When you ask a question, RAG first retrieves the most relevant documents or information, then feeds those to the LLM to generate an answer grounded in facts. This eliminates hallucination and makes answers current, accurate, and traceable.</p>
     </div>
   </div>
 
   <div class="section">
-    <h2 class="section-title">⚙️ How RAG Works (The Process)</h2>
+    <h2 class="section-title animate-on-scroll">⚙️ How RAG Works (The Process)</h2>
     
     <div class="flow-diagram">
       <div class="flow-step">1. User Asks Question</div>
@@ -366,24 +399,24 @@
       <div class="flow-step">6. Generate Answer</div>
     </div>
 
-    <div class="explanation-box">
+    <div class="explanation-box animate-on-scroll">
       <h3>Step 1: Vectorization</h3>
       <p>Your question is converted into a numerical representation called a "vector" (a list of numbers that captures meaning). So "What is machine learning?" becomes something like [0.23, 0.91, 0.44, ...]. The key insight: similar ideas have similar vectors.</p>
     </div>
 
-    <div class="explanation-box">
+    <div class="explanation-box animate-on-scroll">
       <h3>Step 2: Retrieval</h3>
       <p>The system searches a database (called a vector database) for documents whose vectors are closest to your question's vector. For example, if you ask about machine learning, it retrieves articles on ML, not recipes. The system returns the top-N most relevant documents (usually 3–10).</p>
     </div>
 
-    <div class="explanation-box">
+    <div class="explanation-box animate-on-scroll">
       <h3>Step 3: Augmentation & Generation</h3>
       <p>Those retrieved documents are inserted into the LLM's prompt as context: "Here are some relevant documents: [documents]. Now answer this question: [question]". The LLM reads the context and generates an answer grounded in those sources. You can even trace each fact back to the original document.</p>
     </div>
   </div>
 
   <div class="section">
-    <h2 class="section-title">💼 Real-World Use Cases</h2>
+    <h2 class="section-title animate-on-scroll">💼 Real-World Use Cases</h2>
     
     <div class="use-case-grid">
       <div class="use-case-card">
@@ -419,7 +452,7 @@
   </div>
 
   <div class="section">
-    <h2 class="section-title">📊 RAG vs. Fine-Tuning: When to Use Each</h2>
+    <h2 class="section-title animate-on-scroll">📊 RAG vs. Fine-Tuning: When to Use Each</h2>
     
     <table class="comparison-table">
       <tr>
@@ -461,26 +494,26 @@
   </div>
 
   <div class="section">
-    <h2 class="section-title">🛠️ Tools & Platforms for RAG</h2>
+    <h2 class="section-title animate-on-scroll">🛠️ Tools & Platforms for RAG</h2>
     
-    <div class="explanation-box">
+    <div class="explanation-box animate-on-scroll">
       <h3>Vector Databases (Storage & Retrieval)</h3>
       <p><strong>Pinecone:</strong> Managed vector database optimized for RAG. <strong>Weaviate:</strong> Open-source alternative. <strong>Milvus:</strong> Scalable, enterprise-grade. <strong>Qdrant:</strong> Fast, vectorized search. <strong>Chroma:</strong> Lightweight for developers.</p>
     </div>
 
-    <div class="explanation-box">
+    <div class="explanation-box animate-on-scroll">
       <h3>RAG Frameworks</h3>
       <p><strong>LlamaIndex:</strong> Simplifies RAG pipelines with abstractions for indexing, retrieval, and generation. <strong>LangChain:</strong> Full toolkit for building LLM apps including RAG. <strong>Haystack:</strong> End-to-end framework by deepset. <strong>Verba:</strong> Open-source RAG chatbot.</p>
     </div>
 
-    <div class="explanation-box">
+    <div class="explanation-box animate-on-scroll">
       <h3>Embedding Models</h3>
       <p><strong>OpenAI Embeddings:</strong> State-of-the-art, closed. <strong>Sentence Transformers:</strong> Open-source, free. <strong>Cohere Embed:</strong> Production-grade embeddings. <strong>Google Vertex Embeddings:</strong> Integrated with Google Cloud.</p>
     </div>
   </div>
 
   <div class="section">
-    <h2 class="section-title">💡 Key Takeaways</h2>
+    <h2 class="section-title animate-on-scroll">💡 Key Takeaways</h2>
     
     <div class="pro-tip">
       <p><strong>1. RAG eliminates hallucination:</strong> By grounding answers in retrieved documents, RAG dramatically reduces AI's tendency to make up facts.</p>
@@ -504,9 +537,9 @@
   </div>
 
   <div class="section">
-    <h2 class="section-title">🚀 Getting Started with RAG</h2>
+    <h2 class="section-title animate-on-scroll">🚀 Getting Started with RAG</h2>
     
-    <div class="explanation-box">
+    <div class="explanation-box animate-on-scroll">
       <h3>Your First RAG Project: 3 Steps</h3>
       <p><strong>Step 1 - Pick Your Documents:</strong> Gather PDFs, websites, or documents you want to make searchable (e.g., your employee handbook, product docs).</p>
       <p style="margin-top: 10px;"><strong>Step 2 - Choose Tools:</strong> Use LlamaIndex or LangChain to build your pipeline. Start with free tools like Sentence Transformers and Chroma.</p>

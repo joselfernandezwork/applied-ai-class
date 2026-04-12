@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mini-Lesson 5: Retrieval-Augmented Generation (RAG) Explained</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap');
+  
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #0F172A;
+    color: #F1F5F9;
+    font-family: 'Inter', sans-serif;
+    line-height: 1.6;
+    padding: 40px 20px;
+  }
+
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .header {
+    text-align: center;
+    margin-bottom: 50px;
+    animation: fadeInDown 0.8s ease-out;
+  }
+
+  .lesson-num {
+    display: inline-block;
+    background: rgba(168,85,247,0.15);
+    border: 1px solid #A855F7;
+    color: #A855F7;
+    padding: 8px 20px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+  }
+
+  h1 {
+    font-size: 2.8rem;
+    font-weight: 900;
+    background: linear-gradient(135deg, #F1F5F9, #A855F7);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 15px;
+  }
+
+  .subtitle {
+    color: #94A3B8;
+    font-size: 1.1rem;
+    margin-bottom: 20px;
+  }
+
+  .section {
+    margin-bottom: 60px;
+    animation: fadeInUp 0.8s ease-out;
+  }
+
+  .section-title {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #F1F5F9;
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid rgba(168,85,247,0.3);
+  }
+
+  .explanation-box {
+    background: #1E293B;
+    border: 1px solid #334155;
+    border-radius: 12px;
+    padding: 25px;
+    margin-bottom: 20px;
+    transition: all 0.3s ease;
+  }
+
+  .explanation-box:hover {
+    border-color: #A855F7;
+    box-shadow: 0 8px 24px rgba(168,85,247,0.15);
+  }
+
+  .explanation-box h3 {
+    color: #A855F7;
+    font-size: 1.2rem;
+    margin-bottom: 12px;
+  }
+
+  .explanation-box p {
+    color: #CBD5E1;
+    font-size: 0.95rem;
+    line-height: 1.7;
+  }
+
+  .progress {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin-bottom: 40px;
+    justify-content: center;
+  }
+
+  .progress-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #1E293B;
+    border: 2px solid #334155;
+  }
+
+  .progress-dot.done {
+    background: #A855F7;
+    border-color: #A855F7;
+  }
+
+  .progress-dot.active {
+    background: #A855F7;
+    border-color: #A855F7;
+    box-shadow: 0 0 8px #A855F7;
+  }
+
+  .flow-diagram {
+    background: #0F172A;
+    border: 1px solid #334155;
+    border-radius: 12px;
+    padding: 30px;
+    margin: 30px 0;
+    text-align: center;
+    font-family: 'Courier New', monospace;
+  }
+
+  .flow-step {
+    display: inline-block;
+    background: rgba(168,85,247,0.15);
+    border: 1px solid #A855F7;
+    color: #A855F7;
+    padding: 12px 20px;
+    border-radius: 8px;
+    margin: 0 10px 10px 0;
+    font-weight: 700;
+    font-size: 0.9rem;
+  }
+
+  .arrow {
+    color: #A855F7;
+    font-weight: 700;
+    margin: 0 10px;
+  }
+
+  .use-case-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    margin: 30px 0;
+  }
+
+  .use-case-card {
+    background: #1E293B;
+    border: 1px solid #334155;
+    border-radius: 12px;
+    padding: 20px;
+    transition: all 0.3s ease;
+  }
+
+  .use-case-card:hover {
+    transform: translateY(-4px);
+    border-color: #A855F7;
+    box-shadow: 0 12px 30px rgba(168,85,247,0.15);
+  }
+
+  .use-case-card h4 {
+    color: #A855F7;
+    margin-bottom: 10px;
+    font-size: 1.1rem;
+  }
+
+  .use-case-card p {
+    color: #94A3B8;
+    font-size: 0.9rem;
+    line-height: 1.6;
+  }
+
+  .comparison-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 30px 0;
+    background: #1E293B;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid #334155;
+  }
+
+  .comparison-table th {
+    background: rgba(168,85,247,0.2);
+    border-bottom: 2px solid #A855F7;
+    padding: 15px;
+    text-align: left;
+    color: #A855F7;
+    font-weight: 700;
+  }
+
+  .comparison-table td {
+    padding: 15px;
+    border-bottom: 1px solid #334155;
+    color: #CBD5E1;
+  }
+
+  .comparison-table tr:last-child td {
+    border-bottom: none;
+  }
+
+  .pro-tip {
+    background: rgba(56,189,248,0.1);
+    border-left: 4px solid #38BDF8;
+    padding: 20px;
+    border-radius: 8px;
+    margin: 30px 0;
+  }
+
+  .pro-tip p {
+    color: #CBD5E1;
+    font-size: 0.95rem;
+  }
+
+  .code-block {
+    background: #0F172A;
+    border: 1px solid #334155;
+    border-radius: 8px;
+    padding: 20px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.85rem;
+    color: #38BDF8;
+    overflow-x: auto;
+    margin: 20px 0;
+  }
+
+  .nav {
+    display: flex;
+    gap: 15px;
+    margin-top: 50px;
+    flex-wrap: wrap;
+  }
+
+  .btn {
+    padding: 12px 24px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+    border: 1px solid transparent;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .btn-secondary {
+    background: #1E293B;
+    border: 1px solid #334155;
+    color: #CBD5E1;
+  }
+
+  .btn-secondary:hover {
+    border-color: #94A3B8;
+    background: #334155;
+  }
+
+  .btn-primary {
+    background: #A855F7;
+    color: #0F172A;
+    flex: 1;
+    justify-content: center;
+  }
+
+  .btn-primary:hover {
+    background: #D8B4FE;
+    box-shadow: 0 8px 20px rgba(168,85,247,0.3);
+  }
+
+  @keyframes fadeInDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Apple-style animations */
+  @keyframes fadeInDown{from{opacity:0;transform:translateY(-20px);}to{opacity:1;transform:translateY(0);}}
+  @keyframes fadeInUp{from{opacity:0;transform:translateY(30px);}to{opacity:1;transform:translateY(0);}}
+  @keyframes slideInLeft{from{opacity:0;transform:translateX(-40px);}to{opacity:1;transform:translateX(0);}}
+  @keyframes slideInRight{from{opacity:0;transform:translateX(40px);}to{opacity:1;transform:translateX(0);}}
+  @keyframes popIn{from{opacity:0;transform:scale(0.8);}to{opacity:1;transform:scale(1);}}
+
+  .header{animation:fadeInDown 0.8s ease-out;}
+  .progress{animation:fadeInUp 0.6s ease-out 0.2s both;}
+  .section{animation:fadeInUp 0.8s ease-out;animation-delay:calc(var(--section-index, 0) * 0.15s);}
+  .info-box{animation:fadeInUp 0.8s ease-out 0.3s both;}
+
+  .animate-on-scroll{opacity:0;transform:translateY(40px);}
+  .animate-on-scroll.in-view{animation:fadeInUp 0.8s ease-out forwards;}
+
+  .parallax-layer{position:absolute;width:100%;height:200%;background:linear-gradient(180deg,rgba(168,85,247,0.05),transparent);will-change:transform;}
+
+  @media(max-width: 600px) {
+    h1 { font-size: 1.8rem; }
+    .section-title { font-size: 1.3rem; }
+    .nav { flex-direction: column; }
+    .btn-primary { width: 100%; }
+    .use-case-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <div class="lesson-num">Mini Lesson 5 of 5</div>
+    <h1>Retrieval-Augmented<br>Generation (RAG)</h1>
+    <p class="subtitle">How AI Systems Use External Knowledge to Give Better Answers</p>
+  </div>
+
+  <div class="progress">
+    <div class="progress-dot done"></div>
+    <div class="progress-dot done"></div>
+    <div class="progress-dot done"></div>
+    <div class="progress-dot done"></div>
+    <div class="progress-dot active"></div>
+    <span style="font-size:12px;color:#475569;margin-left:8px;">Step 5 of 5: Retrieval-Augmented Generation</span>
+  </div>
+
+  <div class="section">
+    <h2 class="section-title">🤔 What is RAG?</h2>
+    <div class="explanation-box">
+      <h3>The Core Idea</h3>
+      <p>Retrieval-Augmented Generation (RAG) is a technique that combines two superpowers: the ability to retrieve relevant information from external sources (like your company's documents, databases, or the web) and the ability to generate intelligent answers based on that information. Instead of an AI model relying only on what it learned during training, RAG lets it look up current, accurate information first—then answer your question grounded in that real data.</p>
+    </div>
+
+    <div class="explanation-box">
+      <h3>Why RAG Matters</h3>
+      <p><strong>The Problem:</strong> Large language models are trained on static data from the past. They can hallucinate (make up false facts) and can't access new information, proprietary documents, or real-time data. <strong>The Solution:</strong> RAG plugs an LLM into a knowledge base. When you ask a question, RAG first retrieves the most relevant documents or information, then feeds those to the LLM to generate an answer grounded in facts. This eliminates hallucination and makes answers current, accurate, and traceable.</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2 class="section-title">⚙️ How RAG Works (The Process)</h2>
+    
+    <div class="flow-diagram">
+      <div class="flow-step">1. User Asks Question</div>
+      <div class="arrow">→</div>
+      <div class="flow-step">2. Convert to Vector</div>
+      <div class="arrow">→</div>
+      <div class="flow-step">3. Search Knowledge Base</div>
+      <div style="width: 100%; margin: 10px 0;"></div>
+      <div class="flow-step">4. Find Similar Documents</div>
+      <div class="arrow">→</div>
+      <div class="flow-step">5. Feed to LLM</div>
+      <div class="arrow">→</div>
+      <div class="flow-step">6. Generate Answer</div>
+    </div>
+
+    <div class="explanation-box">
+      <h3>Step 1: Vectorization</h3>
+      <p>Your question is converted into a numerical representation called a "vector" (a list of numbers that captures meaning). So "What is machine learning?" becomes something like [0.23, 0.91, 0.44, ...]. The key insight: similar ideas have similar vectors.</p>
+    </div>
+
+    <div class="explanation-box">
+      <h3>Step 2: Retrieval</h3>
+      <p>The system searches a database (called a vector database) for documents whose vectors are closest to your question's vector. For example, if you ask about machine learning, it retrieves articles on ML, not recipes. The system returns the top-N most relevant documents (usually 3–10).</p>
+    </div>
+
+    <div class="explanation-box">
+      <h3>Step 3: Augmentation & Generation</h3>
+      <p>Those retrieved documents are inserted into the LLM's prompt as context: "Here are some relevant documents: [documents]. Now answer this question: [question]". The LLM reads the context and generates an answer grounded in those sources. You can even trace each fact back to the original document.</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2 class="section-title">💼 Real-World Use Cases</h2>
+    
+    <div class="use-case-grid">
+      <div class="use-case-card">
+        <h4>📚 Internal Q&A</h4>
+        <p>Employees ask questions about company policies, products, or past decisions. RAG retrieves the relevant handbook, email thread, or wiki and answers based on that.</p>
+      </div>
+      
+      <div class="use-case-card">
+        <h4>🏥 Medical Diagnosis</h4>
+        <p>A doctor asks an AI about a symptom. RAG retrieves the latest medical research and clinical guidelines, then the AI provides an answer grounded in current medical knowledge—not outdated training data.</p>
+      </div>
+      
+      <div class="use-case-card">
+        <h4>⚖️ Legal Research</h4>
+        <p>A lawyer queries case law and statutes. RAG searches the full legal database and returns answers with citations to actual cases and laws—critical for legal work.</p>
+      </div>
+      
+      <div class="use-case-card">
+        <h4>🛍️ Customer Support</h4>
+        <p>A customer asks about a product. RAG retrieves the product manual, FAQ, and order history, then generates a personalized, accurate answer.</p>
+      </div>
+
+      <div class="use-case-card">
+        <h4>📊 Financial Analysis</h4>
+        <p>An analyst asks about Q3 earnings. RAG retrieves the latest earnings reports, market data, and financial statements, then synthesizes them into a coherent analysis.</p>
+      </div>
+
+      <div class="use-case-card">
+        <h4>🔬 Research & Academia</h4>
+        <p>A researcher asks about a topic. RAG searches millions of papers and retrieves the most relevant ones, helping researchers stay on top of their field.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2 class="section-title">📊 RAG vs. Fine-Tuning: When to Use Each</h2>
+    
+    <table class="comparison-table">
+      <tr>
+        <th>Aspect</th>
+        <th>RAG</th>
+        <th>Fine-Tuning</th>
+      </tr>
+      <tr>
+        <td><strong>Speed to Deploy</strong></td>
+        <td>Fast (days to weeks)</td>
+        <td>Slow (weeks to months)</td>
+      </tr>
+      <tr>
+        <td><strong>Knowledge Currency</strong></td>
+        <td>Real-time (updates instantly)</td>
+        <td>Static (requires retraining)</td>
+      </tr>
+      <tr>
+        <td><strong>Cost</strong></td>
+        <td>Low (just retrieval + inference)</td>
+        <td>High (GPU compute, data prep)</td>
+      </tr>
+      <tr>
+        <td><strong>Accuracy</strong></td>
+        <td>High (grounded in sources)</td>
+        <td>High (if trained well)</td>
+      </tr>
+      <tr>
+        <td><strong>Traceability</strong></td>
+        <td>Full (you can see sources)</td>
+        <td>Black box (hard to explain)</td>
+      </tr>
+      <tr>
+        <td><strong>Best For</strong></td>
+        <td>Q&A, customer support, research</td>
+        <td>Style, domain-specific language</td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="section">
+    <h2 class="section-title">🛠️ Tools & Platforms for RAG</h2>
+    
+    <div class="explanation-box">
+      <h3>Vector Databases (Storage & Retrieval)</h3>
+      <p><strong>Pinecone:</strong> Managed vector database optimized for RAG. <strong>Weaviate:</strong> Open-source alternative. <strong>Milvus:</strong> Scalable, enterprise-grade. <strong>Qdrant:</strong> Fast, vectorized search. <strong>Chroma:</strong> Lightweight for developers.</p>
+    </div>
+
+    <div class="explanation-box">
+      <h3>RAG Frameworks</h3>
+      <p><strong>LlamaIndex:</strong> Simplifies RAG pipelines with abstractions for indexing, retrieval, and generation. <strong>LangChain:</strong> Full toolkit for building LLM apps including RAG. <strong>Haystack:</strong> End-to-end framework by deepset. <strong>Verba:</strong> Open-source RAG chatbot.</p>
+    </div>
+
+    <div class="explanation-box">
+      <h3>Embedding Models</h3>
+      <p><strong>OpenAI Embeddings:</strong> State-of-the-art, closed. <strong>Sentence Transformers:</strong> Open-source, free. <strong>Cohere Embed:</strong> Production-grade embeddings. <strong>Google Vertex Embeddings:</strong> Integrated with Google Cloud.</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2 class="section-title">💡 Key Takeaways</h2>
+    
+    <div class="pro-tip">
+      <p><strong>1. RAG eliminates hallucination:</strong> By grounding answers in retrieved documents, RAG dramatically reduces AI's tendency to make up facts.</p>
+    </div>
+
+    <div class="pro-tip">
+      <p><strong>2. RAG is faster to deploy than fine-tuning:</strong> You don't need to retrain a model. Just build a retrieval system and plug your documents in.</p>
+    </div>
+
+    <div class="pro-tip">
+      <p><strong>3. RAG keeps knowledge current:</strong> Add new documents to your knowledge base, and the system immediately uses them. No retraining needed.</p>
+    </div>
+
+    <div class="pro-tip">
+      <p><strong>4. RAG is traceable:</strong> You can show users where each fact came from. This is critical for high-stakes applications (medical, legal, financial).</p>
+    </div>
+
+    <div class="pro-tip">
+      <p><strong>5. RAG is the dominant pattern in enterprise AI (2026):</strong> Every serious company building internal AI assistants uses RAG.</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2 class="section-title">🚀 Getting Started with RAG</h2>
+    
+    <div class="explanation-box">
+      <h3>Your First RAG Project: 3 Steps</h3>
+      <p><strong>Step 1 - Pick Your Documents:</strong> Gather PDFs, websites, or documents you want to make searchable (e.g., your employee handbook, product docs).</p>
+      <p style="margin-top: 10px;"><strong>Step 2 - Choose Tools:</strong> Use LlamaIndex or LangChain to build your pipeline. Start with free tools like Sentence Transformers and Chroma.</p>
+      <p style="margin-top: 10px;"><strong>Step 3 - Build & Deploy:</strong> Upload documents → Create embeddings → Test retrieval → Hook up to Claude/GPT → Deploy as a chatbot or API.</p>
+    </div>
+  </div>
+
+  <div class="section" style="text-align: center; background: rgba(168,85,247,0.1); padding: 30px; border-radius: 12px;">
+    <h2 style="color: #A855F7; margin-bottom: 15px;">🎓 Completion!</h2>
+    <p style="color: #CBD5E1; font-size: 1.05rem; line-height: 1.8;">You've completed all 5 mini-lessons! You now understand: how AI reads text (tokenization), how neural networks learn (architecture), how to prompt effectively (CRAFT framework), which tools to use (All Tools guide), and how to build systems grounded in real data (RAG).<br><br><strong>The next step:</strong> Pick one tool from the All Tools guide. Build something real with RAG—a chatbot on your company docs, a Q&A system, a research assistant. The best way to master AI is to build with it.</p>
+  </div>
+
+  <div class="nav">
+    <a href="video_4_tools_guide.html" class="btn btn-secondary">← Back: All Tools</a>
+    <a href="video_1_tokenization.html" class="btn btn-secondary">↩ Restart Lessons</a>
+    <a href="index.html" class="btn btn-primary">🏠 Return to Main Page</a>
+  </div>
+
+  <p style="color:#334155;font-size:12px;margin-top:30px;text-align:center;">Applied Ai Class EMBA-A 27 · Mini Lesson 5 of 5</p>
+</div>
+
+<script>
+// Parallax scrolling effect
+window.addEventListener('scroll', function() {
+  const scrolled = window.pageYOffset;
+  const parallaxLayers = document.querySelectorAll('.parallax-layer');
+  parallaxLayers.forEach(layer => {
+    layer.style.transform = `translateY(${scrolled * 0.5}px)`;
+  });
+});
+
+// Scroll-triggered animations
+const observerOptions = {
+  threshold: 0.1,
+  rootMargin: '0px 0px -100px 0px'
+};
+
+const observer = new IntersectionObserver(function(entries) {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('in-view');
+      observer.unobserve(entry.target);
+    }
+  });
+}, observerOptions);
+
+document.querySelectorAll('.animate-on-scroll').forEach(el => {
+  observer.observe(el);
+});
+
+// Section animation delay indexing
+document.querySelectorAll('.section').forEach((section, index) => {
+  section.style.setProperty('--section-index', index);
+});
+</script>
+</body>
+</html>

@@ -65,11 +65,29 @@
   .tier-budget{font-size:0.8rem;color:#94A3B8;}
 
   @keyframes fadeIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+  @keyframes fadeInDown{from{opacity:0;transform:translateY(-20px);}to{opacity:1;transform:translateY(0);}}
+  @keyframes fadeInUp{from{opacity:0;transform:translateY(30px);}to{opacity:1;transform:translateY(0);}}
+  @keyframes slideInLeft{from{opacity:0;transform:translateX(-40px);}to{opacity:1;transform:translateX(0);}}
+  @keyframes slideInRight{from{opacity:0;transform:translateX(40px);}to{opacity:1;transform:translateX(0);}}
+  @keyframes popIn{from{opacity:0;transform:scale(0.8);}to{opacity:1;transform:scale(1);}}
+  @keyframes growUp{from{opacity:0;height:0;}to{opacity:1;height:100%;}}
+
+  .lesson-header{animation:fadeInDown 0.8s ease-out;}
+  .progress{animation:fadeIn 0.6s ease-out 0.2s both;}
+  .stage{animation:fadeInUp 0.8s ease-out;animation-delay:calc(var(--stage-index, 0) * 0.15s);}
+  .info-box{animation:fadeInUp 0.8s ease-out 0.3s both;}
+
+  .parallax-bg{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:-1;}
+  .parallax-layer{position:absolute;width:100%;height:200%;background:linear-gradient(180deg,rgba(168,85,247,0.05),transparent);will-change:transform;}
+
+  /* Scroll animation triggers */
+  .animate-on-scroll{opacity:0;transform:translateY(40px);}
+  .animate-on-scroll.in-view{animation:fadeInUp 0.8s ease-out forwards;}
 </style>
 </head>
 <body>
 <div class="lesson-header">
-  <div class="lesson-tag">📚 MINI LESSON 4 OF 4</div>
+  <div class="lesson-tag">📚 MINI LESSON 4 OF 5</div>
   <h1>Your Complete AI Toolkit</h1>
   <p class="subtitle">Every tool, every link, every step — your live reference guide</p>
 </div>
@@ -78,8 +96,9 @@
   <div class="progress-dot done"></div>
   <div class="progress-dot done"></div>
   <div class="progress-dot done"></div>
-  <div class="progress-dot done"></div>
-  <span style="font-size:12px;color:#475569;margin-left:8px;">Final lesson: Tools & Resources</span>
+  <div class="progress-dot active"></div>
+  <div class="progress-dot"></div>
+  <span style="font-size:12px;color:#475569;margin-left:8px;">Step 4 of 5: Tools & Resources</span>
 </div>
 
 <!-- Tool Cards -->
@@ -503,6 +522,105 @@
       <a href="https://bolt.new" target="_blank" class="btn-tool" style="background:rgba(252,211,77,0.15);color:#FCD34D;border:1px solid rgba(252,211,77,0.3);">→ Open Bolt.new</a>
     </div>
 
+    <!-- Google Vertex AI -->
+    <div class="tool-card" style="border-color:rgba(56,189,248,0.3);">
+      <div class="tool-card-header">
+        <div class="tool-icon" style="background:rgba(56,189,248,0.1);">☁️</div>
+        <div>
+          <div class="tool-name" style="color:#38BDF8;">Google Vertex AI</div>
+          <div class="tool-tagline">Enterprise AI platform · Production ready</div>
+        </div>
+      </div>
+      <ul class="tool-steps">
+        <li><span class="step-num">1</span>Go to console.cloud.google.com → enable Vertex AI API</li>
+        <li><span class="step-num">2</span>Use Claude 3.5 Sonnet, Gemini Pro, or Llama 2 via API</li>
+        <li><span class="step-num">3</span>Train custom models using AutoML (no coding needed)</li>
+        <li><span class="step-num">4</span>Deploy endpoints with auto-scaling for production</li>
+        <li><span class="step-num">5</span>Monitor model performance and retrain automatically</li>
+      </ul>
+      <div>
+        <span class="tool-tag" style="background:rgba(56,189,248,0.15);color:#38BDF8;">Enterprise</span>
+        <span class="tool-tag" style="background:rgba(56,189,248,0.15);color:#38BDF8;">ML</span>
+        <span class="tool-tag" style="background:rgba(56,189,248,0.15);color:#38BDF8;">API</span>
+        <span class="tool-tag" style="background:rgba(56,189,248,0.15);color:#38BDF8;">AutoML</span>
+      </div>
+      <a href="https://vertex.ai" target="_blank" class="btn-tool" style="background:rgba(56,189,248,0.15);color:#38BDF8;border:1px solid rgba(56,189,248,0.3);">→ Open Vertex AI</a>
+    </div>
+
+    <!-- Mistral AI -->
+    <div class="tool-card" style="border-color:rgba(255,107,107,0.3);">
+      <div class="tool-card-header">
+        <div class="tool-icon" style="background:rgba(255,107,107,0.1);">🚀</div>
+        <div>
+          <div class="tool-name" style="color:#FF6B6B;">Mistral AI</div>
+          <div class="tool-tagline">Fast, efficient open models · Competitive pricing</div>
+        </div>
+      </div>
+      <ul class="tool-steps">
+        <li><span class="step-num">1</span>Go to console.mistral.ai (free tier available)</li>
+        <li><span class="step-num">2</span>Try Mistral 2 Large (70B) or Mistral Nemo (12B lightweight)</li>
+        <li><span class="step-num">3</span>100+ free tokens to explore — chat, code, or analysis</li>
+        <li><span class="step-num">4</span>Deploy on-premise or via API at competitive rates</li>
+        <li><span class="step-num">5</span>Excellent for cost-sensitive, performance-critical tasks</li>
+      </ul>
+      <div>
+        <span class="tool-tag" style="background:rgba(255,107,107,0.15);color:#FF6B6B;">Open Source</span>
+        <span class="tool-tag" style="background:rgba(255,107,107,0.15);color:#FF6B6B;">Fast</span>
+        <span class="tool-tag" style="background:rgba(255,107,107,0.15);color:#FF6B6B;">Cheap</span>
+        <span class="tool-tag" style="background:rgba(255,107,107,0.15);color:#FF6B6B;">Enterprise</span>
+      </div>
+      <a href="https://mistral.ai" target="_blank" class="btn-tool" style="background:rgba(255,107,107,0.15);color:#FF6B6B;border:1px solid rgba(255,107,107,0.3);">→ Open Mistral</a>
+    </div>
+
+    <!-- Grok -->
+    <div class="tool-card" style="border-color:rgba(236,72,153,0.3);">
+      <div class="tool-card-header">
+        <div class="tool-icon" style="background:rgba(236,72,153,0.1);">⚡</div>
+        <div>
+          <div class="tool-name" style="color:#EC4899;">Grok 4.2</div>
+          <div class="tool-tagline">Real-time data access · Humorous outputs · xAI</div>
+        </div>
+      </div>
+      <ul class="tool-steps">
+        <li><span class="step-num">1</span>Access via X.com (formerly Twitter) or xai.com</li>
+        <li><span class="step-num">2</span>Real-time web access — current news, prices, trends</li>
+        <li><span class="step-num">3</span>Conversational and witty responses with personality</li>
+        <li><span class="step-num">4</span>Fast reasoning for complex problems</li>
+        <li><span class="step-num">5</span>Free preview available, premium for advanced features</li>
+      </ul>
+      <div>
+        <span class="tool-tag" style="background:rgba(236,72,153,0.15);color:#EC4899;">Real-Time</span>
+        <span class="tool-tag" style="background:rgba(236,72,153,0.15);color:#EC4899;">Reasoning</span>
+        <span class="tool-tag" style="background:rgba(236,72,153,0.15);color:#EC4899;">Humor</span>
+      </div>
+      <a href="https://x.com/i/grok" target="_blank" class="btn-tool" style="background:rgba(236,72,153,0.15);color:#EC4899;border:1px solid rgba(236,72,153,0.3);">→ Open Grok</a>
+    </div>
+
+    <!-- AlphaFold 3 -->
+    <div class="tool-card" style="border-color:rgba(99,102,241,0.3);">
+      <div class="tool-card-header">
+        <div class="tool-icon" style="background:rgba(99,102,241,0.1);">🧬</div>
+        <div>
+          <div class="tool-name" style="color:#6366F1;">AlphaFold 3</div>
+          <div class="tool-tagline">Protein structure prediction · Life sciences · DeepMind</div>
+        </div>
+      </div>
+      <ul class="tool-steps">
+        <li><span class="step-num">1</span>Use at alphafold.isomorphiclabs.com (free web interface)</li>
+        <li><span class="step-num">2</span>Predict 3D structures of proteins, RNA, DNA interactions</li>
+        <li><span class="step-num">3</span>Upload amino acid sequences or genetic data</li>
+        <li><span class="step-num">4</span>Get high-confidence structure predictions in minutes</li>
+        <li><span class="step-num">5</span>Download structures for research, drug discovery, biotech</li>
+      </ul>
+      <div>
+        <span class="tool-tag" style="background:rgba(99,102,241,0.15);color:#6366F1;">Science</span>
+        <span class="tool-tag" style="background:rgba(99,102,241,0.15);color:#6366F1;">Biology</span>
+        <span class="tool-tag" style="background:rgba(99,102,241,0.15);color:#6366F1;">Predictions</span>
+        <span class="tool-tag" style="background:rgba(99,102,241,0.15);color:#6366F1;">Free</span>
+      </div>
+      <a href="https://alphafold.isomorphiclabs.com" target="_blank" class="btn-tool" style="background:rgba(99,102,241,0.15);color:#6366F1;border:1px solid rgba(99,102,241,0.3);">→ Open AlphaFold 3</a>
+    </div>
+
   </div>
 </div>
 
@@ -534,6 +652,10 @@
     <tr><td style="color:#FCD34D;font-weight:700;">ElevenLabs</td><td><a href="https://elevenlabs.io" target="_blank" style="color:#38BDF8;">elevenlabs.io</a></td><td class="partial">~ Free tier</td><td style="color:#94A3B8;">AI voice cloning, text-to-speech</td></tr>
     <tr><td style="color:#F472B6;font-weight:700;">Runway ML</td><td><a href="https://runwayml.com" target="_blank" style="color:#38BDF8;">runwayml.com</a></td><td class="partial">~ Free tier</td><td style="color:#94A3B8;">AI video generation and editing</td></tr>
     <tr><td style="color:#FCD34D;font-weight:700;">Suno</td><td><a href="https://suno.com" target="_blank" style="color:#38BDF8;">suno.com</a></td><td class="check">✓ Free tier</td><td style="color:#94A3B8;">AI music generation from text</td></tr>
+    <tr><td style="color:#38BDF8;font-weight:700;">Vertex AI</td><td><a href="https://vertex.ai" target="_blank" style="color:#38BDF8;">vertex.ai</a></td><td class="check">✓ Free tier</td><td style="color:#94A3B8;">Enterprise ML platform, AutoML, API access</td></tr>
+    <tr><td style="color:#FF6B6B;font-weight:700;">Mistral AI</td><td><a href="https://mistral.ai" target="_blank" style="color:#38BDF8;">mistral.ai</a></td><td class="check">✓ Free tier</td><td style="color:#94A3B8;">Fast open models, competitive pricing, Nemo</td></tr>
+    <tr><td style="color:#EC4899;font-weight:700;">Grok 4.2</td><td><a href="https://x.com/i/grok" target="_blank" style="color:#38BDF8;">x.com/i/grok</a></td><td class="check">✓ Free preview</td><td style="color:#94A3B8;">Real-time reasoning, current web data, witty</td></tr>
+    <tr><td style="color:#6366F1;font-weight:700;">AlphaFold 3</td><td><a href="https://alphafold.isomorphiclabs.com" target="_blank" style="color:#38BDF8;">alphafold.isomorphiclabs.com</a></td><td class="check">✓ Free</td><td style="color:#94A3B8;">Protein & RNA structure prediction, DeepMind</td></tr>
   </table>
 </div>
 
@@ -567,10 +689,46 @@
 
 <div class="nav">
   <a href="video_3_how_to_prompt.html" class="btn btn-secondary">← Back: Prompting</a>
+  <a href="video_5_retrieval_augmented_generation.html" class="btn btn-primary">Next: RAG →</a>
   <a href="video_1_tokenization.html" class="btn btn-secondary">↩ Restart Lessons</a>
   <a href="index.html" class="btn btn-primary" style="background:#38BDF8;color:#0F172A;">🏠 Return to Main Page</a>
 </div>
 
-<p style="color:#334155;font-size:12px;margin-top:30px;text-align:center;">Applied Ai Class EMBA-A 27 · Mini Lesson 4 of 4</p>
+<p style="color:#334155;font-size:12px;margin-top:30px;text-align:center;">Applied Ai Class EMBA-A 27 · Mini Lesson 4 of 5</p>
+
+<script>
+// Parallax scrolling effect
+window.addEventListener('scroll', function() {
+  const scrolled = window.pageYOffset;
+  const parallaxLayers = document.querySelectorAll('.parallax-layer');
+  parallaxLayers.forEach(layer => {
+    layer.style.transform = `translateY(${scrolled * 0.5}px)`;
+  });
+});
+
+// Scroll-triggered animations
+const observerOptions = {
+  threshold: 0.1,
+  rootMargin: '0px 0px -100px 0px'
+};
+
+const observer = new IntersectionObserver(function(entries) {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('in-view');
+      observer.unobserve(entry.target);
+    }
+  });
+}, observerOptions);
+
+document.querySelectorAll('.animate-on-scroll').forEach(el => {
+  observer.observe(el);
+});
+
+// Stage animation delay indexing
+document.querySelectorAll('.stage').forEach((stage, index) => {
+  stage.style.setProperty('--stage-index', index);
+});
+</script>
 </body>
 </html>

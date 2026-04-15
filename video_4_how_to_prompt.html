@@ -164,6 +164,142 @@
   </div>
 </div>
 
+<!-- Interactive Diagram -->
+<div class="stage animate-on-scroll">
+  <div class="stage-num">03</div>
+  <div class="stage-label">Interactive Diagram</div>
+  <h2>How a great prompt is built — and why iteration wins</h2>
+
+  <style>
+    .pt-tab{padding:8px 18px;border-radius:20px;font-size:0.8rem;font-weight:700;border:1px solid #334155;background:transparent;color:#64748B;cursor:pointer;transition:all 0.2s;margin-right:8px;}
+    .pt-tab.ta{background:rgba(252,211,77,0.15);border-color:#FCD34D;color:#FCD34D;}
+    @keyframes ptDash{to{stroke-dashoffset:-26;}}
+    .pt-flow{stroke-dasharray:8 5;animation:ptDash 1.4s linear infinite;}
+    @keyframes ptlDash{to{stroke-dashoffset:-32;}}
+    .ptlf{stroke-dasharray:10 6;animation:ptlDash 1.6s linear infinite;}
+    .pt-node,.pt-loop-node{cursor:pointer;transition:opacity 0.25s;}
+    .pt-info{margin-top:12px;padding:12px 18px;background:#0F172A;border-radius:8px;font-size:0.82rem;color:#64748B;line-height:1.65;min-height:48px;border-left:3px solid #FCD34D;transition:border-color 0.3s,color 0.3s;}
+  </style>
+
+  <div style="margin-bottom:16px;">
+    <button class="pt-tab ta" id="ptt1" onclick="ptSwitch('builder')">🔧 Prompt Builder</button>
+    <button class="pt-tab" id="ptt2" onclick="ptSwitch('loop')">🔄 Refine Loop</button>
+  </div>
+
+  <!-- Tab 1: Prompt Builder -->
+  <div id="pt-builder">
+    <svg viewBox="0 0 760 280" style="width:100%;border-radius:12px;background:#0A1120;display:block;" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <filter id="ptGlow"><feGaussianBlur stdDeviation="3" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+        <marker id="ptArr" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 Z" fill="#475569"/></marker>
+      </defs>
+      <!-- C node -->
+      <g class="pt-node" id="pbn0" onclick="pbClick(0)">
+        <rect x="14" y="20" width="126" height="40" rx="8" fill="rgba(56,189,248,0.12)" stroke="#38BDF8" stroke-width="1.5"/>
+        <text x="77" y="45" fill="#38BDF8" font-size="12" font-weight="700" font-family="Inter,sans-serif" text-anchor="middle">C — Context</text>
+      </g>
+      <!-- R node -->
+      <g class="pt-node" id="pbn1" onclick="pbClick(1)">
+        <rect x="14" y="68" width="126" height="40" rx="8" fill="rgba(52,211,153,0.12)" stroke="#34D399" stroke-width="1.5"/>
+        <text x="77" y="93" fill="#34D399" font-size="12" font-weight="700" font-family="Inter,sans-serif" text-anchor="middle">R — Role</text>
+      </g>
+      <!-- A node -->
+      <g class="pt-node" id="pbn2" onclick="pbClick(2)">
+        <rect x="14" y="116" width="126" height="40" rx="8" fill="rgba(168,85,247,0.12)" stroke="#A855F7" stroke-width="1.5"/>
+        <text x="77" y="141" fill="#A855F7" font-size="12" font-weight="700" font-family="Inter,sans-serif" text-anchor="middle">A — Action</text>
+      </g>
+      <!-- F node -->
+      <g class="pt-node" id="pbn3" onclick="pbClick(3)">
+        <rect x="14" y="164" width="126" height="40" rx="8" fill="rgba(251,146,60,0.12)" stroke="#FB923C" stroke-width="1.5"/>
+        <text x="77" y="189" fill="#FB923C" font-size="12" font-weight="700" font-family="Inter,sans-serif" text-anchor="middle">F — Format</text>
+      </g>
+      <!-- T node -->
+      <g class="pt-node" id="pbn4" onclick="pbClick(4)">
+        <rect x="14" y="212" width="126" height="40" rx="8" fill="rgba(244,114,182,0.12)" stroke="#F472B6" stroke-width="1.5"/>
+        <text x="77" y="237" fill="#F472B6" font-size="12" font-weight="700" font-family="Inter,sans-serif" text-anchor="middle">T — Tone</text>
+      </g>
+      <!-- Converging lines: CRAFT → Prompt -->
+      <line x1="140" y1="40"  x2="290" y2="132" stroke="#38BDF8" stroke-width="1.2" class="pt-flow" marker-end="url(#ptArr)" opacity="0.6"/>
+      <line x1="140" y1="88"  x2="290" y2="133" stroke="#34D399" stroke-width="1.2" class="pt-flow" marker-end="url(#ptArr)" opacity="0.6"/>
+      <line x1="140" y1="136" x2="290" y2="136" stroke="#A855F7" stroke-width="1.2" class="pt-flow" marker-end="url(#ptArr)" opacity="0.6"/>
+      <line x1="140" y1="184" x2="290" y2="139" stroke="#FB923C" stroke-width="1.2" class="pt-flow" marker-end="url(#ptArr)" opacity="0.6"/>
+      <line x1="140" y1="232" x2="290" y2="140" stroke="#F472B6" stroke-width="1.2" class="pt-flow" marker-end="url(#ptArr)" opacity="0.6"/>
+      <!-- Prompt node -->
+      <g class="pt-node" id="pbn5" onclick="pbClick(5)" filter="url(#ptGlow)">
+        <rect x="290" y="107" width="160" height="58" rx="10" fill="rgba(252,211,77,0.15)" stroke="#FCD34D" stroke-width="2"/>
+        <text x="370" y="131" fill="#FCD34D" font-size="13" font-weight="900" font-family="Inter,sans-serif" text-anchor="middle">Complete</text>
+        <text x="370" y="150" fill="#FCD34D" font-size="13" font-weight="900" font-family="Inter,sans-serif" text-anchor="middle">Prompt</text>
+      </g>
+      <!-- Prompt → AI -->
+      <line x1="450" y1="136" x2="510" y2="136" stroke="#FCD34D" stroke-width="1.5" class="pt-flow" marker-end="url(#ptArr)"/>
+      <!-- AI Model node -->
+      <g class="pt-node" id="pbn6" onclick="pbClick(6)" filter="url(#ptGlow)">
+        <rect x="510" y="107" width="110" height="58" rx="10" fill="rgba(168,85,247,0.15)" stroke="#A855F7" stroke-width="2"/>
+        <text x="565" y="131" fill="#A855F7" font-size="12" font-weight="700" font-family="Inter,sans-serif" text-anchor="middle">AI Model</text>
+        <text x="565" y="150" fill="#7C3AED" font-size="10" font-family="Inter,sans-serif" text-anchor="middle">(LLM)</text>
+      </g>
+      <!-- AI → Output -->
+      <line x1="620" y1="136" x2="682" y2="136" stroke="#10B981" stroke-width="1.5" class="pt-flow" marker-end="url(#ptArr)"/>
+      <!-- Output node -->
+      <g class="pt-node" id="pbn7" onclick="pbClick(7)" filter="url(#ptGlow)">
+        <rect x="682" y="107" width="68" height="58" rx="10" fill="rgba(16,185,129,0.15)" stroke="#10B981" stroke-width="2"/>
+        <text x="716" y="131" fill="#10B981" font-size="12" font-weight="700" font-family="Inter,sans-serif" text-anchor="middle">Out-</text>
+        <text x="716" y="150" fill="#10B981" font-size="12" font-weight="700" font-family="Inter,sans-serif" text-anchor="middle">put</text>
+      </g>
+    </svg>
+    <div class="pt-info" id="pt-info">Click any element to learn how it shapes the final output.</div>
+  </div>
+
+  <!-- Tab 2: Refine Loop -->
+  <div id="pt-loop" style="display:none;">
+    <svg viewBox="0 0 760 280" style="width:100%;border-radius:12px;background:#0A1120;display:block;" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="plArr" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 Z" fill="#475569"/></marker>
+      </defs>
+      <!-- 1: Draft (top-left) -->
+      <g class="pt-loop-node" id="pln0" onclick="plClick(0)">
+        <rect x="14" y="56" width="130" height="48" rx="10" fill="rgba(252,211,77,0.12)" stroke="#FCD34D" stroke-width="1.5"/>
+        <text x="79" y="76" fill="#FCD34D" font-size="11" font-weight="700" font-family="Inter,sans-serif" text-anchor="middle">1. Draft</text>
+        <text x="79" y="94" fill="#FCD34D" font-size="11" font-weight="700" font-family="Inter,sans-serif" text-anchor="middle">Prompt</text>
+      </g>
+      <!-- 2: Submit (top-right) -->
+      <g class="pt-loop-node" id="pln1" onclick="plClick(1)">
+        <rect x="616" y="56" width="130" height="48" rx="10" fill="rgba(168,85,247,0.12)" stroke="#A855F7" stroke-width="1.5"/>
+        <text x="681" y="76" fill="#A855F7" font-size="11" font-weight="700" font-family="Inter,sans-serif" text-anchor="middle">2. Submit</text>
+        <text x="681" y="94" fill="#A855F7" font-size="11" font-weight="700" font-family="Inter,sans-serif" text-anchor="middle">to AI</text>
+      </g>
+      <!-- 3: Review (bottom-right) -->
+      <g class="pt-loop-node" id="pln2" onclick="plClick(2)">
+        <rect x="616" y="176" width="130" height="48" rx="10" fill="rgba(52,211,153,0.12)" stroke="#34D399" stroke-width="1.5"/>
+        <text x="681" y="196" fill="#34D399" font-size="11" font-weight="700" font-family="Inter,sans-serif" text-anchor="middle">3. Review</text>
+        <text x="681" y="214" fill="#34D399" font-size="11" font-weight="700" font-family="Inter,sans-serif" text-anchor="middle">Output</text>
+      </g>
+      <!-- 4: Spot Gaps (bottom-center) -->
+      <g class="pt-loop-node" id="pln3" onclick="plClick(3)">
+        <rect x="315" y="176" width="130" height="48" rx="10" fill="rgba(251,146,60,0.12)" stroke="#FB923C" stroke-width="1.5"/>
+        <text x="380" y="196" fill="#FB923C" font-size="11" font-weight="700" font-family="Inter,sans-serif" text-anchor="middle">4. Spot</text>
+        <text x="380" y="214" fill="#FB923C" font-size="11" font-weight="700" font-family="Inter,sans-serif" text-anchor="middle">Gaps</text>
+      </g>
+      <!-- 5: Refine (bottom-left) -->
+      <g class="pt-loop-node" id="pln4" onclick="plClick(4)">
+        <rect x="14" y="176" width="130" height="48" rx="10" fill="rgba(56,189,248,0.12)" stroke="#38BDF8" stroke-width="1.5"/>
+        <text x="79" y="196" fill="#38BDF8" font-size="11" font-weight="700" font-family="Inter,sans-serif" text-anchor="middle">5. Refine</text>
+        <text x="79" y="214" fill="#38BDF8" font-size="11" font-weight="700" font-family="Inter,sans-serif" text-anchor="middle">&amp; Add</text>
+      </g>
+      <!-- Arrows forming the loop -->
+      <line x1="144" y1="80"  x2="616" y2="80"  stroke="#334155" stroke-width="1.5" class="ptlf" marker-end="url(#plArr)"/>
+      <line x1="681" y1="104" x2="681" y2="176" stroke="#334155" stroke-width="1.5" class="ptlf" marker-end="url(#plArr)"/>
+      <line x1="616" y1="200" x2="445" y2="200" stroke="#334155" stroke-width="1.5" class="ptlf" marker-end="url(#plArr)"/>
+      <line x1="315" y1="200" x2="144" y2="200" stroke="#334155" stroke-width="1.5" class="ptlf" marker-end="url(#plArr)"/>
+      <line x1="79"  y1="176" x2="79"  y2="104" stroke="#334155" stroke-width="1.5" class="ptlf" marker-end="url(#plArr)"/>
+      <!-- Center label -->
+      <text x="380" y="132" fill="#334155" font-size="15" font-weight="900" text-anchor="middle" font-family="Inter,sans-serif">&#8635; ITERATE</text>
+      <text x="380" y="152" fill="#1E293B" font-size="11" text-anchor="middle" font-family="Inter,sans-serif">until the output is right</text>
+    </svg>
+    <div class="pt-info" id="pt-loop-info">Click any step to learn why it matters.</div>
+  </div>
+</div>
+
 <!-- Before / After examples for 3 real scenarios -->
 <div class="stage">
   <div class="stage-num">03</div>
@@ -311,6 +447,65 @@ document.querySelectorAll('.animate-on-scroll').forEach(el => {
 document.querySelectorAll('.stage').forEach((stage, index) => {
   stage.style.setProperty('--stage-index', index);
 });
+
+// ── Prompt Diagram ──────────────────────────────────────────────
+const pbData = [
+  {label:'C — Context', color:'#38BDF8', desc:'Set the scene: who you are, what project this is for, any constraints the model needs. Context narrows the probability space immediately.'},
+  {label:'R — Role',    color:'#34D399', desc:'"You are a senior financial analyst" activates a different register and knowledge cluster than no persona at all. Role is the most underused CRAFT element.'},
+  {label:'A — Action',  color:'#A855F7', desc:'The specific verb drives the output type. Write / Analyze / Compare / Debug / Summarize all produce fundamentally different responses.'},
+  {label:'F — Format',  color:'#FB923C', desc:'Tell the model exactly how to structure output: bullet list, 3-paragraph email, JSON object, table with 4 columns, under 200 words.'},
+  {label:'T — Tone',    color:'#F472B6', desc:'Formal, casual, executive-friendly, brutally honest, encouraging. Tone affects word choice, hedging, and depth of detail.'},
+  {label:'Complete Prompt', color:'#FCD34D', desc:'All five CRAFT elements combined. Each element eliminates a class of wrong outputs. More constraints = less guessing = better results.'},
+  {label:'AI Model (LLM)', color:'#A855F7', desc:'The transformer processes your prompt tokens and generates a probability distribution over possible next tokens, decoded into a response.'},
+  {label:'Output',      color:'#10B981', desc:'Shaped entirely by the quality of your prompt. A vague prompt gets a generic output. A CRAFT prompt gets precision.'},
+];
+
+const loopData = [
+  {label:'1. Draft Prompt', color:'#FCD34D', desc:'Write your first attempt using CRAFT. Don\'t aim for perfect — aim for clear. A good first prompt takes ~90 seconds with intention.'},
+  {label:'2. Submit to AI', color:'#A855F7', desc:'Send it. Resist the urge to refine before seeing the output. The model\'s response is your best diagnostic tool.'},
+  {label:'3. Review Output', color:'#34D399', desc:'Read critically. Did it answer the right question? Is the format right? Is the depth right? Note what\'s missing or off.'},
+  {label:'4. Spot Gaps',    color:'#FB923C', desc:'Identify why the output fell short. Usually: missing context, wrong format, wrong role, or ambiguous action verb.'},
+  {label:'5. Refine & Add', color:'#38BDF8', desc:'Add what was missing. Don\'t start over — build on the conversation. "That\'s good, now also include X" or "Rewrite with Y constraint."'},
+];
+
+let ptBuilderActive = 0, ptBuilderTimer;
+let ptLoopActive = 0, ptLoopTimer;
+
+function ptSwitch(tab) {
+  document.getElementById('pt-builder').style.display = tab === 'builder' ? 'block' : 'none';
+  document.getElementById('pt-loop').style.display    = tab === 'loop'    ? 'block' : 'none';
+  document.getElementById('ptt1').classList.toggle('ta', tab === 'builder');
+  document.getElementById('ptt2').classList.toggle('ta', tab === 'loop');
+}
+
+function pbClick(i) {
+  clearInterval(ptBuilderTimer);
+  ptBuilderActive = i;
+  document.querySelectorAll('.pt-node').forEach((g, idx) => { g.style.opacity = idx === i ? '1' : '0.4'; });
+  const d = pbData[i];
+  const box = document.getElementById('pt-info');
+  box.style.borderColor = d.color;
+  box.style.color = '#CBD5E1';
+  box.innerHTML = '<strong style="color:' + d.color + '">' + d.label + '</strong> — ' + d.desc;
+  ptBuilderTimer = setInterval(() => { ptBuilderActive = (ptBuilderActive + 1) % 8; pbClick(ptBuilderActive); }, 2200);
+}
+
+function plClick(i) {
+  clearInterval(ptLoopTimer);
+  ptLoopActive = i;
+  document.querySelectorAll('.pt-loop-node').forEach((g, idx) => { g.style.opacity = idx === i ? '1' : '0.4'; });
+  const d = loopData[i];
+  const box = document.getElementById('pt-loop-info');
+  box.style.borderColor = d.color;
+  box.style.color = '#CBD5E1';
+  box.innerHTML = '<strong style="color:' + d.color + '">' + d.label + '</strong> — ' + d.desc;
+  ptLoopTimer = setInterval(() => { ptLoopActive = (ptLoopActive + 1) % 5; plClick(ptLoopActive); }, 2200);
+}
+
+pbClick(0);
+ptBuilderTimer = setInterval(() => { ptBuilderActive = (ptBuilderActive + 1) % 8; pbClick(ptBuilderActive); }, 2200);
+plClick(0);
+ptLoopTimer = setInterval(() => { ptLoopActive = (ptLoopActive + 1) % 5; plClick(ptLoopActive); }, 2200);
 </script>
 </body>
 </html>

@@ -399,6 +399,227 @@
       <div class="flow-step">6. Generate Answer</div>
     </div>
 
+    <!-- RAG PIPELINE VISUAL DIAGRAM -->
+    <style>
+      .rag-flow{stroke-dasharray:8 5;animation:ragDash 1.5s linear infinite;}
+      .rag-flow-slow{stroke-dasharray:8 5;animation:ragDash 2.2s linear infinite;}
+      @keyframes ragDash{to{stroke-dashoffset:-26;}}
+      .rag-node{cursor:pointer;transition:opacity 0.2s;}
+      .rag-node:hover{opacity:0.85;}
+      .rag-dtab{padding:7px 18px;border-radius:7px;border:1px solid #334155;background:transparent;color:#64748B;font-size:0.8rem;font-weight:600;cursor:pointer;font-family:Inter,sans-serif;transition:all 0.2s;margin-bottom:16px;}
+      .rag-dtab.ra{background:rgba(168,85,247,0.15);border-color:#A855F7;color:#A855F7;}
+      .rag-dtab:hover{color:#F1F5F9;border-color:#475569;}
+      .rag-info{margin-top:10px;padding:12px 18px;background:#0F172A;border-radius:8px;font-size:0.81rem;color:#64748B;line-height:1.65;min-height:48px;border-left:3px solid #A855F7;transition:border-color 0.3s,color 0.3s;}
+    </style>
+    <div style="background:#1E293B;border:1px solid #334155;border-radius:16px;padding:28px;margin-bottom:28px;">
+      <div style="font-size:11px;font-weight:700;letter-spacing:2px;color:#A855F7;text-transform:uppercase;margin-bottom:12px;">Visual Diagram</div>
+      <h2 style="font-size:1.3rem;font-weight:700;margin-bottom:10px;">The RAG pipeline — from documents to answer</h2>
+      <p style="color:#94A3B8;font-size:0.9rem;margin-bottom:18px;">Two phases working together: documents are indexed once into a vector database, then retrieved on demand when a user asks a question. Click any node to explore what happens at that step.</p>
+
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px;">
+        <button class="rag-dtab ra" id="rdt1" onclick="ragSwitch('pipeline')">🔄 Full Pipeline</button>
+        <button class="rag-dtab" id="rdt2" onclick="ragSwitch('space')">📊 Vector Space</button>
+      </div>
+
+      <!-- TAB 1: Full Pipeline SVG -->
+      <div id="rag-pipeline" style="background:#07101E;border-radius:12px;padding:16px 12px 10px;overflow:hidden;">
+        <svg viewBox="0 0 760 310" style="width:100%;display:block;" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <filter id="fgr" x="-25%" y="-25%" width="150%" height="150%"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+            <marker id="rArP" markerWidth="7" markerHeight="7" refX="5" refY="3.5" orient="auto"><polygon points="0 0,7 3.5,0 7" fill="#A855F7"/></marker>
+            <marker id="rArB" markerWidth="7" markerHeight="7" refX="5" refY="3.5" orient="auto"><polygon points="0 0,7 3.5,0 7" fill="#38BDF8"/></marker>
+            <marker id="rArG" markerWidth="7" markerHeight="7" refX="5" refY="3.5" orient="auto"><polygon points="0 0,7 3.5,0 7" fill="#10B981"/></marker>
+            <marker id="rArS" markerWidth="7" markerHeight="7" refX="5" refY="3.5" orient="auto"><polygon points="0 0,7 3.5,0 7" fill="#334155"/></marker>
+          </defs>
+
+          <!-- ── PHASE LABELS ── -->
+          <rect x="8" y="10" width="118" height="22" rx="6" fill="rgba(168,85,247,0.12)" stroke="#A855F7" stroke-width="1"/>
+          <text x="67" y="25" text-anchor="middle" fill="#A855F7" font-size="9.5" font-weight="700" font-family="Inter,sans-serif">INDEXING PHASE</text>
+          <rect x="8" y="168" width="118" height="22" rx="6" fill="rgba(56,189,248,0.1)" stroke="#38BDF8" stroke-width="1"/>
+          <text x="67" y="183" text-anchor="middle" fill="#38BDF8" font-size="9.5" font-weight="700" font-family="Inter,sans-serif">QUERY PHASE</text>
+
+          <!-- ── PHASE 1: INDEXING (top row y=46–116) ── -->
+          <!-- Docs → Chunker arrow -->
+          <line x1="186" y1="81" x2="212" y2="81" stroke="#A855F7" stroke-width="2" class="rag-flow" marker-end="url(#rArP)" opacity="0.8"/>
+          <!-- Chunker → Embedder -->
+          <line x1="308" y1="81" x2="334" y2="81" stroke="#A855F7" stroke-width="2" class="rag-flow" marker-end="url(#rArP)" opacity="0.8"/>
+          <!-- Embedder → Vector DB -->
+          <line x1="430" y1="81" x2="456" y2="81" stroke="#A855F7" stroke-width="2" class="rag-flow" marker-end="url(#rArP)" opacity="0.8"/>
+
+          <!-- Documents -->
+          <rect id="rn0" class="rag-node" x="130" y="46" width="56" height="70" rx="9" fill="#0D0620" stroke="#A855F7" stroke-width="1.8" onclick="ragClick(0)"/>
+          <text x="158" y="70" text-anchor="middle" font-size="18">📄</text>
+          <text x="158" y="88" text-anchor="middle" fill="#CBD5E1" font-size="9" font-weight="700" font-family="Inter,sans-serif">Docs</text>
+          <text x="158" y="101" text-anchor="middle" fill="#475569" font-size="7.5" font-family="Inter,sans-serif">PDFs, wikis</text>
+          <text x="158" y="112" text-anchor="middle" fill="#475569" font-size="7.5" font-family="Inter,sans-serif">emails, DBs</text>
+
+          <!-- Chunker -->
+          <rect id="rn1" class="rag-node" x="212" y="46" width="96" height="70" rx="9" fill="#0D0620" stroke="#A855F7" stroke-width="1.8" onclick="ragClick(1)"/>
+          <text x="260" y="70" text-anchor="middle" font-size="18">✂️</text>
+          <text x="260" y="90" text-anchor="middle" fill="#CBD5E1" font-size="9.5" font-weight="700" font-family="Inter,sans-serif">Chunker</text>
+          <text x="260" y="104" text-anchor="middle" fill="#475569" font-size="7.5" font-family="Inter,sans-serif">splits into ~512</text>
+          <text x="260" y="114" text-anchor="middle" fill="#475569" font-size="7.5" font-family="Inter,sans-serif">token segments</text>
+
+          <!-- Embedder (indexing) -->
+          <rect id="rn2" class="rag-node" x="334" y="46" width="96" height="70" rx="9" fill="#0D0620" stroke="#A855F7" stroke-width="1.8" onclick="ragClick(2)"/>
+          <text x="382" y="70" text-anchor="middle" font-size="18">🔢</text>
+          <text x="382" y="90" text-anchor="middle" fill="#CBD5E1" font-size="9.5" font-weight="700" font-family="Inter,sans-serif">Embedder</text>
+          <text x="382" y="104" text-anchor="middle" fill="#475569" font-size="7.5" font-family="Inter,sans-serif">converts each</text>
+          <text x="382" y="114" text-anchor="middle" fill="#475569" font-size="7.5" font-family="Inter,sans-serif">chunk to vector</text>
+
+          <!-- Vector DB -->
+          <rect id="rn3" class="rag-node" x="456" y="36" width="100" height="90" rx="9" fill="#061218" stroke="#10B981" stroke-width="2.2" filter="url(#fgr)" onclick="ragClick(3)"/>
+          <text x="506" y="66" text-anchor="middle" font-size="22">📦</text>
+          <text x="506" y="88" text-anchor="middle" fill="#F1F5F9" font-size="10.5" font-weight="700" font-family="Inter,sans-serif">Vector DB</text>
+          <text x="506" y="103" text-anchor="middle" fill="#475569" font-size="7.5" font-family="Inter,sans-serif">Pinecone, Weaviate</text>
+          <text x="506" y="114" text-anchor="middle" fill="#475569" font-size="7.5" font-family="Inter,sans-serif">pgvector, Chroma</text>
+
+          <!-- Vertical connector: Vector DB → Search (query phase) -->
+          <line x1="506" y1="126" x2="506" y2="196" stroke="#334155" stroke-width="1.5" stroke-dasharray="4,4" marker-end="url(#rArS)" opacity="0.6"/>
+          <text x="518" y="162" fill="#334155" font-size="8" font-family="Inter,sans-serif">queried at</text>
+          <text x="518" y="172" fill="#334155" font-size="8" font-family="Inter,sans-serif">query time</text>
+
+          <!-- ── PHASE 2: QUERY (bottom row y=200–270) ── -->
+          <!-- User → Embedder -->
+          <line x1="186" y1="234" x2="212" y2="234" stroke="#38BDF8" stroke-width="2" class="rag-flow" marker-end="url(#rArB)" opacity="0.8"/>
+          <!-- Embedder → Search -->
+          <line x1="308" y1="234" x2="456" y2="234" stroke="#38BDF8" stroke-width="2" class="rag-flow" marker-end="url(#rArB)" opacity="0.8"/>
+          <!-- Search → Retrieved docs -->
+          <line x1="556" y1="234" x2="582" y2="234" stroke="#10B981" stroke-width="2" class="rag-flow" marker-end="url(#rArG)" opacity="0.8"/>
+          <!-- Retrieved → LLM -->
+          <line x1="650" y1="210" x2="680" y2="188" stroke="#10B981" stroke-width="2" class="rag-flow" marker-end="url(#rArG)" opacity="0.8"/>
+          <!-- User query → LLM (direct) -->
+          <line x1="158" y1="200" x2="700" y2="178" stroke="#334155" stroke-width="1.2" stroke-dasharray="3,4" opacity="0.45"/>
+
+          <!-- User Query -->
+          <rect id="rn4" class="rag-node" x="120" y="200" width="66" height="68" rx="9" fill="#050D1A" stroke="#38BDF8" stroke-width="1.8" onclick="ragClick(4)"/>
+          <text x="153" y="224" text-anchor="middle" font-size="18">👤</text>
+          <text x="153" y="242" text-anchor="middle" fill="#CBD5E1" font-size="9" font-weight="700" font-family="Inter,sans-serif">Query</text>
+          <text x="153" y="255" text-anchor="middle" fill="#475569" font-size="7.5" font-family="Inter,sans-serif">"What is…?"</text>
+
+          <!-- Embedder (query) -->
+          <rect id="rn5" class="rag-node" x="212" y="204" width="96" height="60" rx="9" fill="#050D1A" stroke="#38BDF8" stroke-width="1.8" onclick="ragClick(5)"/>
+          <text x="260" y="226" text-anchor="middle" font-size="16">🔢</text>
+          <text x="260" y="244" text-anchor="middle" fill="#CBD5E1" font-size="9.5" font-weight="700" font-family="Inter,sans-serif">Embedder</text>
+          <text x="260" y="257" text-anchor="middle" fill="#475569" font-size="7.5" font-family="Inter,sans-serif">same model as above</text>
+
+          <!-- Vector Search (aligned with Vector DB) -->
+          <rect id="rn6" class="rag-node" x="456" y="204" width="100" height="60" rx="9" fill="#050D1A" stroke="#38BDF8" stroke-width="1.8" onclick="ragClick(6)"/>
+          <text x="506" y="226" text-anchor="middle" font-size="16">🔍</text>
+          <text x="506" y="244" text-anchor="middle" fill="#CBD5E1" font-size="9.5" font-weight="700" font-family="Inter,sans-serif">Vector Search</text>
+          <text x="506" y="257" text-anchor="middle" fill="#475569" font-size="7.5" font-family="Inter,sans-serif">cosine similarity</text>
+
+          <!-- Retrieved Docs -->
+          <rect id="rn7" class="rag-node" x="556" y="204" width="94" height="60" rx="9" fill="#031612" stroke="#10B981" stroke-width="1.8" onclick="ragClick(7)"/>
+          <text x="603" y="226" text-anchor="middle" font-size="16">📋</text>
+          <text x="603" y="244" text-anchor="middle" fill="#CBD5E1" font-size="9.5" font-weight="700" font-family="Inter,sans-serif">Top-K Docs</text>
+          <text x="603" y="257" text-anchor="middle" fill="#475569" font-size="7.5" font-family="Inter,sans-serif">most relevant chunks</text>
+
+          <!-- LLM -->
+          <rect id="rn8" class="rag-node" x="670" y="148" width="78" height="102" rx="9" fill="#0A0518" stroke="#FB923C" stroke-width="2" filter="url(#fgr)" onclick="ragClick(8)"/>
+          <text x="709" y="178" text-anchor="middle" font-size="20">🧠</text>
+          <text x="709" y="197" text-anchor="middle" fill="#F1F5F9" font-size="10" font-weight="700" font-family="Inter,sans-serif">LLM</text>
+          <text x="709" y="212" text-anchor="middle" fill="#475569" font-size="7.5" font-family="Inter,sans-serif">reads query +</text>
+          <text x="709" y="222" text-anchor="middle" fill="#475569" font-size="7.5" font-family="Inter,sans-serif">context docs</text>
+          <text x="709" y="238" text-anchor="middle" fill="#475569" font-size="7.5" font-family="Inter,sans-serif">→ generates</text>
+
+          <!-- Answer output -->
+          <line x1="748" y1="200" x2="756" y2="200" stroke="#FB923C" stroke-width="2" class="rag-flow-slow" opacity="0.8"/>
+          <text x="745" y="285" text-anchor="middle" fill="#10B981" font-size="10" font-weight="700" font-family="Inter,sans-serif">✅ Grounded</text>
+          <text x="745" y="298" text-anchor="middle" fill="#10B981" font-size="10" font-weight="700" font-family="Inter,sans-serif">Answer</text>
+          <line x1="709" y1="250" x2="709" y2="278" stroke="#10B981" stroke-width="2" class="rag-flow-slow" marker-end="url(#rArG)" opacity="0.8"/>
+          <rect x="670" y="278" width="78" height="26" rx="7" fill="rgba(16,185,129,0.12)" stroke="#10B981" stroke-width="1.5"/>
+          <text x="709" y="295" text-anchor="middle" fill="#10B981" font-size="9.5" font-weight="700" font-family="Inter,sans-serif">✅ Answer</text>
+        </svg>
+        <div id="rag-info" class="rag-info">Click any node above to learn what happens at that step →</div>
+      </div>
+
+      <!-- TAB 2: Vector Space Visualization -->
+      <div id="rag-space" style="display:none;background:#07101E;border-radius:12px;padding:16px 12px 10px;overflow:hidden;">
+        <p style="font-size:0.75rem;color:#475569;text-align:center;margin-bottom:12px;text-transform:uppercase;letter-spacing:0.5px;font-weight:600;">2D projection of a vector database — similar topics cluster together</p>
+        <svg viewBox="0 0 760 310" style="width:100%;display:block;" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <filter id="fgq" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+          </defs>
+
+          <!-- Axis lines -->
+          <line x1="40" y1="270" x2="720" y2="270" stroke="#1E293B" stroke-width="1.5"/>
+          <line x1="40" y1="270" x2="40" y2="20" stroke="#1E293B" stroke-width="1.5"/>
+          <text x="380" y="295" text-anchor="middle" fill="#334155" font-size="9" font-family="Inter,sans-serif">← semantic dimension 1 (simplified 2D projection) →</text>
+          <text x="18" y="145" text-anchor="middle" fill="#334155" font-size="9" font-family="Inter,sans-serif" transform="rotate(-90,18,145)">dimension 2</text>
+
+          <!-- Finance cluster -->
+          <circle cx="180" cy="210" r="42" fill="rgba(251,146,60,0.06)" stroke="#FB923C" stroke-width="1" stroke-dasharray="4,3"/>
+          <text x="180" y="258" text-anchor="middle" fill="#FB923C" font-size="9" font-family="Inter,sans-serif" font-weight="700">Finance</text>
+          <circle cx="162" cy="218" r="5" fill="#FB923C" opacity="0.8"/>
+          <circle cx="178" cy="198" r="4" fill="#FB923C" opacity="0.7"/>
+          <circle cx="196" cy="222" r="5" fill="#FB923C" opacity="0.8"/>
+          <circle cx="170" cy="236" r="3.5" fill="#FB923C" opacity="0.6"/>
+          <circle cx="192" cy="206" r="4" fill="#FB923C" opacity="0.75"/>
+          <text x="156" y="216" fill="#475569" font-size="7.5" font-family="Inter,sans-serif">Q3 earnings</text>
+          <text x="174" y="196" fill="#475569" font-size="7.5" font-family="Inter,sans-serif">budget</text>
+          <text x="193" y="238" fill="#475569" font-size="7.5" font-family="Inter,sans-serif">invoice</text>
+
+          <!-- Medical cluster -->
+          <circle cx="380" cy="110" r="48" fill="rgba(52,211,153,0.06)" stroke="#34D399" stroke-width="1" stroke-dasharray="4,3"/>
+          <text x="380" y="162" text-anchor="middle" fill="#34D399" font-size="9" font-family="Inter,sans-serif" font-weight="700">Medical</text>
+          <circle cx="358" cy="108" r="5" fill="#34D399" opacity="0.8"/>
+          <circle cx="382" cy="90" r="4.5" fill="#34D399" opacity="0.75"/>
+          <circle cx="400" cy="115" r="5" fill="#34D399" opacity="0.8"/>
+          <circle cx="370" cy="128" r="4" fill="#34D399" opacity="0.7"/>
+          <circle cx="394" cy="96" r="3.5" fill="#34D399" opacity="0.65"/>
+          <text x="340" y="106" fill="#475569" font-size="7.5" font-family="Inter,sans-serif">diagnosis</text>
+          <text x="382" y="88" fill="#475569" font-size="7.5" font-family="Inter,sans-serif">symptoms</text>
+          <text x="398" y="130" fill="#475569" font-size="7.5" font-family="Inter,sans-serif">treatment</text>
+
+          <!-- Legal cluster -->
+          <circle cx="580" cy="190" r="44" fill="rgba(56,189,248,0.06)" stroke="#38BDF8" stroke-width="1" stroke-dasharray="4,3"/>
+          <text x="580" y="238" text-anchor="middle" fill="#38BDF8" font-size="9" font-family="Inter,sans-serif" font-weight="700">Legal</text>
+          <circle cx="560" cy="188" r="5" fill="#38BDF8" opacity="0.8"/>
+          <circle cx="582" cy="172" r="4.5" fill="#38BDF8" opacity="0.75"/>
+          <circle cx="598" cy="198" r="5" fill="#38BDF8" opacity="0.8"/>
+          <circle cx="570" cy="208" r="3.5" fill="#38BDF8" opacity="0.65"/>
+          <circle cx="594" cy="178" r="4" fill="#38BDF8" opacity="0.7"/>
+          <text x="543" y="186" fill="#475569" font-size="7.5" font-family="Inter,sans-serif">contract</text>
+          <text x="583" y="170" fill="#475569" font-size="7.5" font-family="Inter,sans-serif">case law</text>
+          <text x="598" y="214" fill="#475569" font-size="7.5" font-family="Inter,sans-serif">statute</text>
+
+          <!-- HR cluster (small) -->
+          <circle cx="270" cy="60" r="34" fill="rgba(244,114,182,0.06)" stroke="#F472B6" stroke-width="1" stroke-dasharray="4,3"/>
+          <text x="270" y="98" text-anchor="middle" fill="#F472B6" font-size="9" font-family="Inter,sans-serif" font-weight="700">HR</text>
+          <circle cx="258" cy="58" r="4" fill="#F472B6" opacity="0.8"/>
+          <circle cx="276" cy="44" r="3.5" fill="#F472B6" opacity="0.7"/>
+          <circle cx="288" cy="66" r="4" fill="#F472B6" opacity="0.75"/>
+          <text x="250" y="56" fill="#475569" font-size="7.5" font-family="Inter,sans-serif">policies</text>
+          <text x="276" y="42" fill="#475569" font-size="7.5" font-family="Inter,sans-serif">PTO</text>
+
+          <!-- User query vector (animated pulsing star) -->
+          <circle cx="540" cy="178" r="10" fill="rgba(255,255,255,0.05)" stroke="#FFFFFF" stroke-width="2" filter="url(#fgq)" style="animation:pulse 1.8s ease-in-out infinite;"/>
+          <text x="540" y="182" text-anchor="middle" fill="#FFFFFF" font-size="10" font-weight="900">Q</text>
+          <text x="540" y="156" text-anchor="middle" fill="#FFFFFF" font-size="8.5" font-family="Inter,sans-serif" font-weight="700">Your query</text>
+
+          <!-- Nearest-neighbor lines from query to retrieved docs -->
+          <line x1="540" y1="178" x2="560" y2="188" stroke="#FFFFFF" stroke-width="1.5" stroke-dasharray="3,3" opacity="0.7"/>
+          <line x1="540" y1="178" x2="582" y2="172" stroke="#FFFFFF" stroke-width="1.5" stroke-dasharray="3,3" opacity="0.6"/>
+          <line x1="540" y1="178" x2="598" y2="198" stroke="#FFFFFF" stroke-width="1" stroke-dasharray="3,3" opacity="0.4"/>
+
+          <!-- Distance labels -->
+          <text x="548" y="170" fill="#FFFFFF" font-size="7" font-family="Inter,sans-serif" opacity="0.7">d=0.12</text>
+          <text x="548" y="180" fill="#FFFFFF" font-size="7" font-family="Inter,sans-serif" opacity="0.6">d=0.18</text>
+
+          <!-- Legend -->
+          <rect x="44" y="22" width="168" height="72" rx="8" fill="rgba(15,23,42,0.95)" stroke="#1E293B" stroke-width="1"/>
+          <text x="56" y="38" fill="#F1F5F9" font-size="9.5" font-weight="700" font-family="Inter,sans-serif">How retrieval works:</text>
+          <circle cx="60" cy="50" r="4" fill="#FFFFFF"/><text x="70" y="53" fill="#94A3B8" font-size="8.5" font-family="Inter,sans-serif">Q = your query vector</text>
+          <circle cx="60" cy="64" r="4" fill="#38BDF8"/><text x="70" y="67" fill="#94A3B8" font-size="8.5" font-family="Inter,sans-serif">Document vectors</text>
+          <line x1="54" y1="78" x2="68" y2="78" stroke="#FFFFFF" stroke-width="1.5" stroke-dasharray="3,2"/><text x="72" y="81" fill="#94A3B8" font-size="8.5" font-family="Inter,sans-serif">Closest = retrieved</text>
+        </svg>
+        <div class="rag-info" style="border-left-color:#10B981;color:#CBD5E1;">
+          📊 <strong style="color:#10B981;">Vector space intuition:</strong> Every document chunk and every user query is converted into a point in high-dimensional space (768–3072 dimensions). <strong>Similar meaning = nearby points.</strong> RAG retrieval finds the document chunks whose vectors are <em>closest</em> to your query vector using cosine similarity — no keyword matching needed. The query <strong style="color:#FFFFFF;">Q</strong> lands near the Legal cluster because that's semantically what it's asking about.
+        </div>
+      </div>
+    </div>
+
     <div class="explanation-box animate-on-scroll">
       <h3>Step 1: Vectorization</h3>
       <p>Your question is converted into a numerical representation called a "vector" (a list of numbers that captures meaning). So "What is machine learning?" becomes something like [0.23, 0.91, 0.44, ...]. The key insight: similar ideas have similar vectors.</p>
@@ -595,6 +816,39 @@ document.querySelectorAll('.animate-on-scroll').forEach(el => {
 document.querySelectorAll('.section').forEach((section, index) => {
   section.style.setProperty('--section-index', index);
 });
+
+// ── RAG Pipeline Diagram ────────────────────────────────────────
+const ragData = [
+  { label:'Documents',        color:'#FCD34D', desc:'Raw source documents — PDFs, web pages, internal wikis. The knowledge base the LLM will be able to reference at query time.' },
+  { label:'Chunker',          color:'#38BDF8', desc:'Splits documents into overlapping chunks (e.g., 512 tokens, 64-token overlap) so context boundaries don\'t cut off meaning.' },
+  { label:'Embedder (index)', color:'#A855F7', desc:'An embedding model (e.g., text-embedding-3-small) converts each chunk into a high-dimensional vector capturing semantic meaning.' },
+  { label:'Vector DB',        color:'#34D399', desc:'Stores all chunk vectors. At query time it performs approximate nearest-neighbor (ANN) search in milliseconds across millions of vectors.' },
+  { label:'User Query',       color:'#FCD34D', desc:'The user\'s natural-language question — "What is our refund policy?" The starting point of the retrieval phase.' },
+  { label:'Embedder (query)', color:'#A855F7', desc:'The same embedding model encodes the query into the same vector space so distances are meaningful.' },
+  { label:'Vector Search',    color:'#38BDF8', desc:'Computes cosine similarity between the query vector and all stored chunk vectors. Returns the top-K most similar chunks.' },
+  { label:'Top-K Docs',       color:'#FB923C', desc:'The K retrieved chunks (typically 3–10) are injected into the prompt as context, giving the LLM grounding it needs to answer accurately.' },
+  { label:'LLM',              color:'#10B981', desc:'Generates the final answer using both the retrieved context and its own parametric knowledge. Citation of sources is possible from the metadata.' },
+];
+
+function ragSwitch(tab) {
+  document.getElementById('rag-pipeline').style.display = tab === 'pipeline' ? 'block' : 'none';
+  document.getElementById('rag-space').style.display    = tab === 'space'    ? 'block' : 'none';
+  document.getElementById('rdt1').classList.toggle('ra', tab === 'pipeline');
+  document.getElementById('rdt2').classList.toggle('ra', tab === 'space');
+}
+
+function ragClick(i) {
+  document.querySelectorAll('.rag-node').forEach((g, idx) => { g.style.opacity = idx === i ? '1' : '0.35'; });
+  const d = ragData[i];
+  const box = document.getElementById('rag-info');
+  box.style.borderColor = d.color;
+  box.style.color = '#CBD5E1';
+  box.innerHTML = '<strong style="color:' + d.color + '">' + d.label + '</strong> — ' + d.desc;
+}
+
+let ragIdx = 0;
+const ragTimer = setInterval(() => { ragClick(ragIdx); ragIdx = (ragIdx + 1) % ragData.length; }, 2000);
+ragClick(0);
 </script>
 </body>
 </html>

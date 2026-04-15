@@ -241,6 +241,150 @@
   </div>
 </div>
 
+<!-- TRANSFORMER BLOCK + ATTENTION VISUAL DIAGRAM -->
+<style>
+  .tf-flow{stroke-dasharray:6 4;animation:tfDash 1.4s linear infinite;}
+  @keyframes tfDash{to{stroke-dashoffset:-20;}}
+  .tf-node-r{cursor:pointer;transition:opacity 0.2s;}
+  .tf-node-r:hover{opacity:0.85;}
+  .tf-dtab{padding:7px 18px;border-radius:7px;border:1px solid #334155;background:transparent;color:#64748B;font-size:0.8rem;font-weight:600;cursor:pointer;font-family:Inter,sans-serif;transition:all 0.2s;}
+  .tf-dtab.ta{background:rgba(168,85,247,0.15);border-color:#A855F7;color:#A855F7;}
+  .tf-dtab:hover{color:#F1F5F9;border-color:#475569;}
+  .tf-info{margin-top:10px;padding:12px 18px;background:#0F172A;border-radius:8px;font-size:0.81rem;color:#64748B;line-height:1.65;min-height:48px;border-left:3px solid #A855F7;transition:border-color 0.3s,color 0.3s;}
+</style>
+<div class="stage">
+  <div class="stage-num">✦</div>
+  <div class="stage-label" style="color:#A855F7;">Visual Architecture</div>
+  <h2>Inside one Transformer Block — and how attention works</h2>
+  <p style="color:#94A3B8;font-size:0.9rem;margin-bottom:18px;">Two views: the layered architecture repeated dozens of times inside every LLM, and how self-attention lets each word "see" every other word simultaneously.</p>
+
+  <div style="display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap;">
+    <button class="tf-dtab ta" id="tft1" onclick="tfSwitch('block')">🔁 Transformer Block</button>
+    <button class="tf-dtab" id="tft2" onclick="tfSwitch('attn')">👁️ Self-Attention</button>
+  </div>
+
+  <!-- TAB 1: Transformer Block Architecture -->
+  <div id="tf-block" style="background:#07101E;border-radius:12px;padding:16px 12px 10px;overflow:hidden;">
+    <svg viewBox="0 0 760 360" style="width:100%;display:block;" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <filter id="fg2" x="-25%" y="-25%" width="150%" height="150%"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+        <marker id="tfArr" markerWidth="7" markerHeight="7" refX="5" refY="3.5" orient="auto"><polygon points="0 0,7 3.5,0 7" fill="#475569"/></marker>
+      </defs>
+
+      <!-- Main vertical flow lines -->
+      <line x1="380" y1="54" x2="380" y2="72" stroke="#475569" stroke-width="2" class="tf-flow" marker-end="url(#tfArr)"/>
+      <line x1="380" y1="148" x2="380" y2="162" stroke="#475569" stroke-width="2" class="tf-flow" marker-end="url(#tfArr)"/>
+      <line x1="380" y1="202" x2="380" y2="218" stroke="#475569" stroke-width="2" class="tf-flow" marker-end="url(#tfArr)"/>
+      <line x1="380" y1="292" x2="380" y2="308" stroke="#475569" stroke-width="2" class="tf-flow" marker-end="url(#tfArr)"/>
+
+      <!-- Residual bypass ① -->
+      <path d="M 520,32 L 590,32 L 590,182 L 520,182" fill="none" stroke="#14B8A6" stroke-width="1.8" stroke-dasharray="5,4" opacity="0.75"/>
+      <circle cx="514" cy="182" r="7" fill="#07101E" stroke="#14B8A6" stroke-width="1.8"/>
+      <text x="514" y="186" text-anchor="middle" fill="#14B8A6" font-size="10" font-family="Inter,sans-serif" font-weight="900">+</text>
+      <text x="608" y="108" fill="#14B8A6" font-size="8" font-family="Inter,sans-serif" font-weight="600" transform="rotate(90,608,108)">Residual ①</text>
+
+      <!-- Residual bypass ② -->
+      <path d="M 520,200 L 590,200 L 590,322 L 520,322" fill="none" stroke="#14B8A6" stroke-width="1.8" stroke-dasharray="5,4" opacity="0.75"/>
+      <circle cx="514" cy="322" r="7" fill="#07101E" stroke="#14B8A6" stroke-width="1.8"/>
+      <text x="514" y="326" text-anchor="middle" fill="#14B8A6" font-size="10" font-family="Inter,sans-serif" font-weight="900">+</text>
+      <text x="608" y="262" fill="#14B8A6" font-size="8" font-family="Inter,sans-serif" font-weight="600" transform="rotate(90,608,262)">Residual ②</text>
+
+      <!-- Input box -->
+      <rect id="tfn0" class="tf-node-r" x="240" y="10" width="280" height="44" rx="10" fill="#0A0F1A" stroke="#94A3B8" stroke-width="1.8" onclick="tfClick('input')"/>
+      <text x="380" y="29" text-anchor="middle" fill="#CBD5E1" font-size="11.5" font-weight="700" font-family="Inter,sans-serif">📥  Input Token Embeddings</text>
+      <text x="380" y="45" text-anchor="middle" fill="#475569" font-size="9" font-family="Inter,sans-serif">position-encoded vectors, one per token</text>
+
+      <!-- Multi-Head Self-Attention -->
+      <rect id="tfn1" class="tf-node-r" x="220" y="72" width="320" height="76" rx="11" fill="#050D1C" stroke="#38BDF8" stroke-width="2" filter="url(#fg2)" onclick="tfClick('attention')"/>
+      <text x="380" y="99" text-anchor="middle" font-size="19">🔍</text>
+      <text x="380" y="120" text-anchor="middle" fill="#F1F5F9" font-size="13" font-weight="700" font-family="Inter,sans-serif">Multi-Head Self-Attention</text>
+      <text x="380" y="137" text-anchor="middle" fill="#334155" font-size="9.5" font-family="Inter,sans-serif">each token attends to every other token simultaneously</text>
+
+      <!-- Add & Norm ① -->
+      <rect id="tfn2" class="tf-node-r" x="258" y="162" width="244" height="40" rx="9" fill="#12080A" stroke="#FB923C" stroke-width="1.8" onclick="tfClick('norm1')"/>
+      <text x="380" y="178" text-anchor="middle" fill="#FB923C" font-size="11.5" font-weight="700" font-family="Inter,sans-serif">⊕  Add &amp; Layer Normalize</text>
+      <text x="380" y="194" text-anchor="middle" fill="#475569" font-size="9" font-family="Inter,sans-serif">residual + attention → normalize activations</text>
+
+      <!-- Feed-Forward Network -->
+      <rect id="tfn3" class="tf-node-r" x="220" y="218" width="320" height="74" rx="11" fill="#0C0618" stroke="#A855F7" stroke-width="2" filter="url(#fg2)" onclick="tfClick('ffn')"/>
+      <text x="380" y="244" text-anchor="middle" font-size="19">🔢</text>
+      <text x="380" y="265" text-anchor="middle" fill="#F1F5F9" font-size="13" font-weight="700" font-family="Inter,sans-serif">Feed-Forward Network</text>
+      <text x="380" y="281" text-anchor="middle" fill="#334155" font-size="9.5" font-family="Inter,sans-serif">two linear layers + non-linear activation (ReLU / GELU)</text>
+
+      <!-- Add & Norm ② -->
+      <rect id="tfn4" class="tf-node-r" x="258" y="308" width="244" height="40" rx="9" fill="#12080A" stroke="#FB923C" stroke-width="1.8" onclick="tfClick('norm2')"/>
+      <text x="380" y="324" text-anchor="middle" fill="#FB923C" font-size="11.5" font-weight="700" font-family="Inter,sans-serif">⊕  Add &amp; Layer Normalize</text>
+      <text x="380" y="340" text-anchor="middle" fill="#475569" font-size="9" font-family="Inter,sans-serif">residual + FFN output → normalize activations</text>
+
+      <!-- Output -->
+      <line x1="380" y1="348" x2="380" y2="358" stroke="#475569" stroke-width="2" marker-end="url(#tfArr)"/>
+      <text x="380" y="373" text-anchor="middle" fill="#475569" font-size="9.5" font-family="Inter,sans-serif">Enriched representations → feed into next block (×32–120 total)</text>
+
+      <!-- Repeat badge -->
+      <rect x="618" y="148" width="118" height="26" rx="8" fill="rgba(168,85,247,0.12)" stroke="#A855F7" stroke-width="1"/>
+      <text x="677" y="165" text-anchor="middle" fill="#A855F7" font-size="10" font-family="Inter,sans-serif" font-weight="700">× 32–120 blocks</text>
+    </svg>
+    <div id="tf-info" class="tf-info">Click any component above to see what it does →</div>
+  </div>
+
+  <!-- TAB 2: Self-Attention Visualization -->
+  <div id="tf-attn" style="display:none;background:#07101E;border-radius:12px;padding:16px 12px 10px;overflow:hidden;">
+    <p style="font-size:0.75rem;color:#475569;text-align:center;margin-bottom:12px;text-transform:uppercase;letter-spacing:0.5px;font-weight:600;">How "bank" knows it means a riverbank — not a financial institution</p>
+    <svg viewBox="0 0 760 260" style="width:100%;display:block;" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <filter id="fg3" x="-25%" y="-25%" width="150%" height="150%"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+      </defs>
+      <!-- Attention arc: bank → river (strong) -->
+      <path d="M 228,172 Q 430,42 608,172" fill="none" stroke="#10B981" stroke-width="4" opacity="0.9" stroke-linecap="round"/>
+      <text x="418" y="80" text-anchor="middle" fill="#10B981" font-size="9.5" font-family="Inter,sans-serif" font-weight="700">strong attention → disambiguates meaning</text>
+      <!-- Arc: the(4) → river -->
+      <path d="M 495,172 Q 550,124 608,172" fill="none" stroke="#38BDF8" stroke-width="2" opacity="0.7"/>
+      <!-- Arc: by → bank -->
+      <path d="M 342,172 Q 286,132 228,172" fill="none" stroke="#38BDF8" stroke-width="2" opacity="0.7"/>
+      <!-- Arc: The(1) → bank -->
+      <path d="M 95,172 Q 162,118 228,172" fill="none" stroke="#A855F7" stroke-width="1.5" opacity="0.6"/>
+      <!-- Arc: river → bank (reverse, dashed) -->
+      <path d="M 608,178 Q 430,62 228,178" fill="none" stroke="#10B981" stroke-width="1.8" opacity="0.45" stroke-dasharray="5,3"/>
+
+      <!-- Token boxes -->
+      <rect x="52" y="176" width="86" height="54" rx="9" fill="#0F172A" stroke="#A855F7" stroke-width="1.5"/>
+      <text x="95" y="199" text-anchor="middle" fill="#A855F7" font-size="12" font-weight="700" font-family="Inter,sans-serif">The</text>
+      <text x="95" y="215" text-anchor="middle" fill="#475569" font-size="8.5" font-family="Inter,sans-serif">token 1</text>
+      <text x="95" y="226" text-anchor="middle" fill="#334155" font-size="8" font-family="monospace">ID: 464</text>
+
+      <rect x="182" y="168" width="92" height="64" rx="9" fill="#051610" stroke="#10B981" stroke-width="2.5" filter="url(#fg3)"/>
+      <text x="228" y="195" text-anchor="middle" fill="#10B981" font-size="14" font-weight="900" font-family="Inter,sans-serif">bank</text>
+      <text x="228" y="211" text-anchor="middle" fill="#475569" font-size="8" font-family="Inter,sans-serif">token 2 · ambiguous</text>
+      <text x="228" y="222" text-anchor="middle" fill="#334155" font-size="8" font-family="monospace">ID: 3331</text>
+
+      <rect x="299" y="176" width="86" height="54" rx="9" fill="#0F172A" stroke="#334155" stroke-width="1.5"/>
+      <text x="342" y="199" text-anchor="middle" fill="#94A3B8" font-size="12" font-weight="700" font-family="Inter,sans-serif">by</text>
+      <text x="342" y="215" text-anchor="middle" fill="#475569" font-size="8.5" font-family="Inter,sans-serif">token 3</text>
+      <text x="342" y="226" text-anchor="middle" fill="#334155" font-size="8" font-family="monospace">ID: 416</text>
+
+      <rect x="452" y="176" width="86" height="54" rx="9" fill="#0F172A" stroke="#334155" stroke-width="1.5"/>
+      <text x="495" y="199" text-anchor="middle" fill="#94A3B8" font-size="12" font-weight="700" font-family="Inter,sans-serif">the</text>
+      <text x="495" y="215" text-anchor="middle" fill="#475569" font-size="8.5" font-family="Inter,sans-serif">token 4</text>
+      <text x="495" y="226" text-anchor="middle" fill="#334155" font-size="8" font-family="monospace">ID: 262</text>
+
+      <rect x="561" y="168" width="94" height="64" rx="9" fill="#050D1A" stroke="#38BDF8" stroke-width="2" filter="url(#fg3)"/>
+      <text x="608" y="195" text-anchor="middle" fill="#38BDF8" font-size="14" font-weight="900" font-family="Inter,sans-serif">river</text>
+      <text x="608" y="211" text-anchor="middle" fill="#475569" font-size="8" font-family="Inter,sans-serif">token 5 · context clue</text>
+      <text x="608" y="222" text-anchor="middle" fill="#334155" font-size="8" font-family="monospace">ID: 9304</text>
+
+      <!-- Legend -->
+      <rect x="10" y="10" width="282" height="72" rx="8" fill="rgba(15,23,42,0.95)" stroke="#1E293B" stroke-width="1"/>
+      <text x="22" y="28" fill="#F1F5F9" font-size="10" font-weight="700" font-family="Inter,sans-serif">How self-attention resolves "bank":</text>
+      <line x1="22" y1="40" x2="56" y2="40" stroke="#10B981" stroke-width="3.5"/><text x="62" y="44" fill="#94A3B8" font-size="9" font-family="Inter,sans-serif">Strong → "river" nearby → riverbank meaning</text>
+      <line x1="22" y1="54" x2="56" y2="54" stroke="#38BDF8" stroke-width="2"/><text x="62" y="58" fill="#94A3B8" font-size="9" font-family="Inter,sans-serif">Medium → grammatical / positional context</text>
+      <line x1="22" y1="68" x2="56" y2="68" stroke="#475569" stroke-width="1.5" stroke-dasharray="4,2"/><text x="62" y="72" fill="#94A3B8" font-size="9" font-family="Inter,sans-serif">Weak / dashed → low-relevance attention</text>
+    </svg>
+    <div class="tf-info" style="border-left-color:#10B981;color:#CBD5E1;">
+      👁️ <strong style="color:#10B981;">Self-attention in action:</strong> When processing <strong style="color:#10B981;">"bank"</strong>, each of the 12–96 attention heads computes a relevance score against every other token. Because <strong style="color:#38BDF8;">"river"</strong> scores highest, the model embeds a <em>geographic</em> meaning — not a <em>financial</em> one. This whole process runs in parallel for every token at once, which is why Transformers are so fast.
+    </div>
+  </div>
+</div>
+
 <!-- Scale -->
 <div class="stage">
   <div class="stage-num">03</div>
@@ -460,6 +604,46 @@ document.querySelectorAll('.animate-on-scroll').forEach(el => {
 document.querySelectorAll('.stage').forEach((stage, index) => {
   stage.style.setProperty('--stage-index', index);
 });
+
+// ── Transformer Diagram ─────────────────────────────────────────
+const tfData = {
+  input:     { color:'#38BDF8', label:'Input Token Embeddings', desc:'Each token ID is looked up in a learned embedding matrix producing a vector (e.g., 768 dims). Positional encodings are added so the model knows token order.' },
+  attention: { color:'#A855F7', label:'Multi-Head Self-Attention', desc:'Every token queries every other token simultaneously. Multiple "heads" learn different relationship types — syntax, coreference, semantics — in parallel.' },
+  norm1:     { color:'#34D399', label:'Add & Norm ①', desc:'The attention output is added to the original input (residual connection), then layer-normalized. This stabilizes training and preserves gradient flow.' },
+  ffn:       { color:'#FB923C', label:'Feed-Forward Network', desc:'Two linear layers with a GELU activation applied independently to each token position. This is where most of the model\'s "knowledge" is stored.' },
+  norm2:     { color:'#34D399', label:'Add & Norm ②', desc:'Same residual + LayerNorm pattern applied after the FFN. After N stacked blocks the final vectors are projected to vocabulary logits for next-token prediction.' },
+};
+let tfAutoTimer;
+
+function tfSwitch(tab) {
+  document.getElementById('tf-block').style.display = tab === 'block' ? 'block' : 'none';
+  document.getElementById('tf-attn').style.display  = tab === 'attn'  ? 'block' : 'none';
+  document.getElementById('tft1').classList.toggle('ta', tab === 'block');
+  document.getElementById('tft2').classList.toggle('ta', tab === 'attn');
+}
+
+const tfKeyMap = { tfn0:'input', tfn1:'attention', tfn2:'norm1', tfn3:'ffn', tfn4:'norm2' };
+
+function tfClick(key) {
+  clearInterval(tfAutoTimer);
+  const d = tfData[key];
+  document.querySelectorAll('.tf-node-r').forEach(el => {
+    el.style.opacity = (tfKeyMap[el.id] === key) ? '1' : '0.35';
+  });
+  const box = document.getElementById('tf-info');
+  box.style.borderColor = d.color;
+  box.style.color = '#CBD5E1';
+  box.innerHTML = '<strong style="color:' + d.color + '">' + d.label + '</strong> — ' + d.desc;
+  const keys = Object.keys(tfData);
+  let idx = keys.indexOf(key);
+  tfAutoTimer = setInterval(() => { idx = (idx + 1) % keys.length; tfClick(keys[idx]); }, 2500);
+}
+
+const tfKeys = ['input','attention','norm1','ffn','norm2'];
+let tfIdx = 0;
+function tfAutoStep() { tfClick(tfKeys[tfIdx]); tfIdx = (tfIdx + 1) % tfKeys.length; }
+tfAutoStep();
+tfAutoTimer = setInterval(tfAutoStep, 2500);
 </script>
 </body>
 </html>

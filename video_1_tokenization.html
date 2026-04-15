@@ -180,6 +180,76 @@
   </div>
 </div>
 
+<!-- TOKENIZATION PIPELINE VISUAL DIAGRAM -->
+<style>
+  .pipe-flow{stroke-dasharray:8 5;animation:pipeDash 1.4s linear infinite;}
+  @keyframes pipeDash{to{stroke-dashoffset:-26;}}
+  .pipe-node{cursor:pointer;transition:opacity 0.25s;}
+  .pipe-node:hover{opacity:0.85;}
+  .pipe-info{margin-top:10px;padding:12px 18px;background:#0F172A;border-radius:8px;font-size:0.81rem;color:#64748B;line-height:1.65;min-height:48px;border-left:3px solid #38BDF8;transition:border-color 0.3s,color 0.3s;}
+</style>
+<div class="stage">
+  <div class="stage-num">✦</div>
+  <div class="stage-label" style="color:#FCD34D;">Visual Pipeline</div>
+  <h2>The complete tokenization journey — end to end</h2>
+  <p style="color:#94A3B8;font-size:0.9rem;margin-bottom:18px;">Watch how <code style="background:#0A1120;padding:2px 7px;border-radius:4px;font-size:0.85em;">"Hello, how are you today?"</code> transforms step by step before the model sees it. Stages auto-advance — or click any to explore.</p>
+  <div style="background:#07101E;border-radius:12px;padding:16px 12px 10px;overflow:hidden;">
+    <svg id="psv" viewBox="0 0 760 188" style="width:100%;display:block;" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <filter id="glow-y2" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+        <filter id="glow-b2" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+        <marker id="arP" markerWidth="7" markerHeight="7" refX="5" refY="3.5" orient="auto"><polygon points="0 0, 7 3.5, 0 7" fill="#475569"/></marker>
+        <marker id="arP1" markerWidth="7" markerHeight="7" refX="5" refY="3.5" orient="auto"><polygon points="0 0, 7 3.5, 0 7" fill="#38BDF8"/></marker>
+        <marker id="arP2" markerWidth="7" markerHeight="7" refX="5" refY="3.5" orient="auto"><polygon points="0 0, 7 3.5, 0 7" fill="#A855F7"/></marker>
+        <marker id="arP3" markerWidth="7" markerHeight="7" refX="5" refY="3.5" orient="auto"><polygon points="0 0, 7 3.5, 0 7" fill="#34D399"/></marker>
+        <marker id="arP4" markerWidth="7" markerHeight="7" refX="5" refY="3.5" orient="auto"><polygon points="0 0, 7 3.5, 0 7" fill="#FB923C"/></marker>
+      </defs>
+
+      <!-- Animated flow arrows between stages -->
+      <line x1="138" y1="90" x2="165" y2="90" stroke="#38BDF8" stroke-width="2" class="pipe-flow" marker-end="url(#arP1)" opacity="0.8"/>
+      <line x1="292" y1="90" x2="319" y2="90" stroke="#A855F7" stroke-width="2" class="pipe-flow" marker-end="url(#arP2)" opacity="0.8"/>
+      <line x1="446" y1="90" x2="473" y2="90" stroke="#34D399" stroke-width="2" class="pipe-flow" marker-end="url(#arP3)" opacity="0.8"/>
+      <line x1="600" y1="90" x2="627" y2="90" stroke="#FB923C" stroke-width="2" class="pipe-flow" marker-end="url(#arP4)" opacity="0.8"/>
+
+      <!-- Step 1: Your Text -->
+      <rect id="pn0" class="pipe-node" x="14" y="50" width="124" height="80" rx="11" fill="#0B1208" stroke="#FCD34D" stroke-width="2" filter="url(#glow-y2)" onclick="pClick(0)"/>
+      <text x="76" y="80" text-anchor="middle" font-size="20">📝</text>
+      <text x="76" y="100" text-anchor="middle" fill="#F1F5F9" font-size="11.5" font-weight="700" font-family="Inter,sans-serif">Your Text</text>
+      <text x="76" y="116" text-anchor="middle" fill="#475569" font-size="9" font-family="Inter,sans-serif">"Hello, how are…"</text>
+      <text x="76" y="150" text-anchor="middle" fill="#334155" font-size="8" font-family="Inter,sans-serif">Step 1</text>
+
+      <!-- Step 2: Tokenizer -->
+      <rect id="pn1" class="pipe-node" x="168" y="50" width="124" height="80" rx="11" fill="#050E1C" stroke="#38BDF8" stroke-width="2" filter="url(#glow-b2)" onclick="pClick(1)"/>
+      <text x="230" y="80" text-anchor="middle" font-size="20">✂️</text>
+      <text x="230" y="100" text-anchor="middle" fill="#F1F5F9" font-size="11.5" font-weight="700" font-family="Inter,sans-serif">Tokenizer</text>
+      <text x="230" y="116" text-anchor="middle" fill="#475569" font-size="9" font-family="Inter,sans-serif">BPE / WordPiece</text>
+      <text x="230" y="150" text-anchor="middle" fill="#334155" font-size="8" font-family="Inter,sans-serif">Step 2</text>
+
+      <!-- Step 3: Token IDs -->
+      <rect id="pn2" class="pipe-node" x="322" y="50" width="124" height="80" rx="11" fill="#0F0A1E" stroke="#A855F7" stroke-width="2" filter="url(#glow-b2)" onclick="pClick(2)"/>
+      <text x="384" y="80" text-anchor="middle" font-size="20">🔢</text>
+      <text x="384" y="100" text-anchor="middle" fill="#F1F5F9" font-size="11.5" font-weight="700" font-family="Inter,sans-serif">Token IDs</text>
+      <text x="384" y="116" text-anchor="middle" fill="#475569" font-size="9" font-family="Inter,sans-serif">15496 · 11 · 4919…</text>
+      <text x="384" y="150" text-anchor="middle" fill="#334155" font-size="8" font-family="Inter,sans-serif">Step 3</text>
+
+      <!-- Step 4: Embeddings -->
+      <rect id="pn3" class="pipe-node" x="476" y="50" width="124" height="80" rx="11" fill="#031310" stroke="#34D399" stroke-width="2" filter="url(#glow-b2)" onclick="pClick(3)"/>
+      <text x="538" y="80" text-anchor="middle" font-size="20">📐</text>
+      <text x="538" y="100" text-anchor="middle" fill="#F1F5F9" font-size="11.5" font-weight="700" font-family="Inter,sans-serif">Embeddings</text>
+      <text x="538" y="116" text-anchor="middle" fill="#475569" font-size="9" font-family="Inter,sans-serif">[0.23,−0.45…]×768</text>
+      <text x="538" y="150" text-anchor="middle" fill="#334155" font-size="8" font-family="Inter,sans-serif">Step 4</text>
+
+      <!-- Step 5: LLM -->
+      <rect id="pn4" class="pipe-node" x="630" y="50" width="124" height="80" rx="11" fill="#160D04" stroke="#FB923C" stroke-width="2" filter="url(#glow-b2)" onclick="pClick(4)"/>
+      <text x="692" y="80" text-anchor="middle" font-size="20">🧠</text>
+      <text x="692" y="100" text-anchor="middle" fill="#F1F5F9" font-size="11.5" font-weight="700" font-family="Inter,sans-serif">LLM / Model</text>
+      <text x="692" y="116" text-anchor="middle" fill="#475569" font-size="9" font-family="Inter,sans-serif">Transformer blocks</text>
+      <text x="692" y="150" text-anchor="middle" fill="#334155" font-size="8" font-family="Inter,sans-serif">Step 5</text>
+    </svg>
+    <div id="pipe-info" class="pipe-info">Click any stage above to see what happens at that step →</div>
+  </div>
+</div>
+
 <!-- STAGE 4 -->
 <div class="stage">
   <div class="stage-num">04</div>
@@ -254,6 +324,38 @@ document.querySelectorAll('.animate-on-scroll').forEach(el => {
 document.querySelectorAll('.stage').forEach((stage, index) => {
   stage.style.setProperty('--stage-index', index);
 });
+
+// ── Tokenization Pipeline Diagram ──────────────────────────────
+const pipeSteps = [
+  { label:'Your Text',   color:'#FCD34D', desc:'Raw text you type — sentences, code, or any string of characters the model will process.' },
+  { label:'Tokenizer',   color:'#38BDF8', desc:'Splits text into tokens using byte-pair encoding (BPE). "unbelievable" → ["un","believ","able"]. Every model ships its own vocabulary.' },
+  { label:'Token IDs',   color:'#A855F7', desc:'Each token maps to an integer ID in the vocabulary (e.g., "able" → 1234). This is the model\'s actual input — just a list of numbers.' },
+  { label:'Embeddings',  color:'#34D399', desc:'Each ID is looked up in an embedding table to produce a dense 768-to-4096 dimensional vector capturing semantic meaning.' },
+  { label:'LLM / Model', color:'#FB923C', desc:'The transformer processes all token embeddings together through attention layers, then predicts the next token distribution.' },
+];
+let pipeActive = -1, pipeTimer;
+
+function setPipeStage(i) {
+  pipeActive = i;
+  document.querySelectorAll('.pipe-node').forEach((g, idx) => {
+    g.style.opacity = (i === -1 || idx === i) ? '1' : '0.35';
+  });
+  const box = document.getElementById('pipe-info');
+  if (i === -1) { box.style.color='#64748B'; box.style.borderColor='#38BDF8'; box.textContent='Click any stage to learn what happens there.'; return; }
+  const s = pipeSteps[i];
+  box.style.borderColor = s.color;
+  box.style.color = '#CBD5E1';
+  box.innerHTML = '<strong style="color:' + s.color + '">' + s.label + '</strong> — ' + s.desc;
+}
+
+function pClick(i) {
+  clearInterval(pipeTimer);
+  setPipeStage(i);
+  pipeTimer = setInterval(() => { setPipeStage((pipeActive + 1) % 5); }, 2200);
+}
+
+setPipeStage(0);
+pipeTimer = setInterval(() => { setPipeStage((pipeActive + 1) % 5); }, 2200);
 </script>
 </body>
 </html>

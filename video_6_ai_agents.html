@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mini Lesson 6: AI Agents — The Next Frontier</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&family=JetBrains+Mono:wght@400;700&display=swap');
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:#0F172A;color:#F1F5F9;font-family:'Inter',sans-serif;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:30px 20px;}
+
+  /* Header */
+  .lesson-header{text-align:center;margin-bottom:40px;animation:fadeInDown 0.8s ease-out;}
+  .lesson-tag{background:rgba(16,185,129,0.15);border:1px solid #10B981;color:#10B981;padding:6px 18px;border-radius:20px;font-size:13px;font-weight:600;letter-spacing:1px;display:inline-block;margin-bottom:16px;}
+  h1{font-size:2.2rem;font-weight:900;background:linear-gradient(135deg,#10B981,#38BDF8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:8px;}
+  .subtitle{color:#94A3B8;font-size:1rem;}
+
+  /* Progress */
+  .progress{display:flex;gap:8px;align-items:center;margin-bottom:32px;animation:fadeIn 0.6s ease-out 0.2s both;}
+  .progress-dot{width:10px;height:10px;border-radius:50%;background:#1E293B;border:2px solid #334155;}
+  .progress-dot.active{background:#10B981;border-color:#10B981;box-shadow:0 0 8px #10B981;}
+  .progress-dot.done{background:#34D399;border-color:#34D399;}
+
+  /* Stages */
+  .stage{background:#1E293B;border:1px solid #334155;border-radius:16px;padding:32px;max-width:900px;width:100%;margin-bottom:28px;position:relative;overflow:hidden;animation:fadeInUp 0.8s ease-out;animation-delay:calc(var(--stage-index, 0) * 0.15s);}
+  .stage-num{position:absolute;top:16px;right:20px;font-size:4rem;font-weight:900;color:rgba(255,255,255,0.04);line-height:1;}
+  .stage-label{font-size:11px;font-weight:700;letter-spacing:2px;color:#10B981;text-transform:uppercase;margin-bottom:12px;}
+  .stage h2{font-size:1.3rem;font-weight:700;margin-bottom:18px;}
+  .stage p{color:#94A3B8;font-size:0.9rem;line-height:1.7;margin-bottom:14px;}
+
+  /* Definition box */
+  .definition-box{font-family:'JetBrains Mono',monospace;font-size:1rem;color:#10B981;background:#0A1120;padding:20px 28px;border-radius:10px;border-left:4px solid #10B981;line-height:1.7;animation:fadeIn 0.8s ease;}
+
+  /* Stats grid */
+  .stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:8px;}
+  .stat-card{background:#0F172A;border:1px solid #334155;border-radius:12px;padding:20px;text-align:center;}
+  .stat-number{font-size:2.2rem;font-weight:900;line-height:1;margin-bottom:6px;}
+  .stat-label{font-size:0.78rem;color:#94A3B8;line-height:1.4;}
+
+  /* Use cases grid */
+  .usecase-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-top:8px;}
+  .usecase-card{background:#0F172A;border:1px solid #334155;border-radius:10px;padding:18px;border-left:3px solid;}
+  .usecase-card-icon{font-size:1.4rem;margin-bottom:8px;}
+  .usecase-card-title{font-size:0.9rem;font-weight:700;color:#F1F5F9;margin-bottom:6px;}
+  .usecase-card-text{font-size:0.8rem;color:#94A3B8;line-height:1.5;}
+
+  /* Evolution timeline */
+  .timeline{margin-top:8px;display:flex;flex-direction:column;gap:16px;}
+  .timeline-item{display:flex;gap:16px;align-items:flex-start;}
+  .timeline-dot{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;margin-top:2px;}
+  .timeline-content{flex:1;}
+  .timeline-title{font-size:0.95rem;font-weight:700;color:#F1F5F9;margin-bottom:4px;}
+  .timeline-text{font-size:0.82rem;color:#94A3B8;line-height:1.5;}
+  .timeline-connector{width:2px;height:16px;background:#334155;margin-left:17px;}
+
+  /* Vendor tags */
+  .vendor-section{margin-top:8px;}
+  .vendor-category{margin-bottom:18px;}
+  .vendor-category-title{font-size:0.82rem;font-weight:700;color:#F1F5F9;margin-bottom:8px;text-transform:uppercase;letter-spacing:1px;}
+  .vendor-tags{display:flex;flex-wrap:wrap;gap:8px;}
+  .vendor-tag{padding:6px 14px;border-radius:20px;font-size:0.78rem;font-weight:600;border:1px solid;}
+
+  /* Risk cards */
+  .risk-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-top:8px;}
+  .risk-card{background:#0F172A;border:1px solid rgba(239,68,68,0.2);border-radius:10px;padding:16px;}
+  .risk-card-icon{font-size:1.3rem;margin-bottom:8px;}
+  .risk-card-title{font-size:0.88rem;font-weight:700;color:#FCA5A5;margin-bottom:6px;}
+  .risk-card-text{font-size:0.8rem;color:#94A3B8;line-height:1.5;}
+
+  /* Recommendations */
+  .rec-list{display:flex;flex-direction:column;gap:12px;margin-top:8px;}
+  .rec-item{display:flex;gap:14px;align-items:flex-start;background:#0F172A;border-radius:10px;padding:16px;border:1px solid #334155;}
+  .rec-num{width:28px;height:28px;border-radius:50%;background:rgba(16,185,129,0.2);border:2px solid #10B981;display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:900;color:#10B981;flex-shrink:0;}
+  .rec-text{font-size:0.88rem;color:#94A3B8;line-height:1.6;}
+  .rec-text strong{color:#F1F5F9;}
+
+  /* Info boxes */
+  .info-box{background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.3);border-radius:10px;padding:16px 20px;margin-bottom:28px;max-width:900px;width:100%;animation:fadeInUp 0.8s ease-out 0.3s both;}
+  .info-box p{color:#6EE7B7;font-size:0.9rem;line-height:1.6;}
+
+  /* Nav */
+  .nav{display:flex;gap:14px;margin-top:10px;flex-wrap:wrap;justify-content:center;}
+  .btn{padding:12px 24px;border-radius:8px;font-size:0.9rem;font-weight:600;cursor:pointer;text-decoration:none;transition:all 0.2s;}
+  .btn-primary{background:linear-gradient(135deg,#10B981,#38BDF8);color:#0F172A;border:none;}
+  .btn-secondary{background:transparent;color:#94A3B8;border:1px solid #334155;}
+  .btn:hover{transform:translateY(-2px);filter:brightness(1.1);}
+
+  /* Animations */
+  @keyframes fadeIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+  @keyframes fadeInDown{from{opacity:0;transform:translateY(-20px);}to{opacity:1;transform:translateY(0);}}
+  @keyframes fadeInUp{from{opacity:0;transform:translateY(30px);}to{opacity:1;transform:translateY(0);}}
+  @keyframes popIn{from{opacity:0;transform:scale(0.8);}to{opacity:1;transform:scale(1);}}
+  @keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.5;}}
+
+  /* Scroll animation */
+  .animate-on-scroll{opacity:0;transform:translateY(40px);}
+  .animate-on-scroll.in-view{animation:fadeInUp 0.8s ease-out forwards;}
+
+  /* Gartner source note */
+  .source-note{font-size:0.72rem;color:#475569;margin-top:14px;font-style:italic;}
+
+  @media(max-width:700px){
+    h1{font-size:1.8rem;}
+    .stats-grid{grid-template-columns:1fr;}
+    .usecase-grid{grid-template-columns:1fr;}
+    .risk-grid{grid-template-columns:1fr;}
+    .nav{flex-direction:column;align-items:stretch;}
+    .btn{text-align:center;}
+  }
+</style>
+</head>
+<body>
+
+<div class="lesson-header">
+  <div class="lesson-tag">🤖 MINI LESSON 6 OF 6</div>
+  <h1>AI Agents: The Next Frontier</h1>
+  <p class="subtitle">From chatbots to autonomous systems that act, decide, and deliver</p>
+</div>
+
+<div class="progress">
+  <div class="progress-dot done"></div>
+  <div class="progress-dot done"></div>
+  <div class="progress-dot done"></div>
+  <div class="progress-dot done"></div>
+  <div class="progress-dot done"></div>
+  <div class="progress-dot active"></div>
+  <span style="font-size:12px;color:#475569;margin-left:8px;">Step 6 of 6: AI Agents</span>
+</div>
+
+<!-- STAGE 1: What Are AI Agents -->
+<div class="stage">
+  <div class="stage-num">01</div>
+  <div class="stage-label">What Are AI Agents</div>
+  <h2>Beyond chatbots: AI that acts</h2>
+  <p>You've used ChatGPT to draft an email. An AI agent doesn't just draft it — it researches the recipient, pulls context from your CRM, writes the email, schedules the send, and logs the outcome. Here's the official definition:</p>
+  <div class="definition-box">
+    AI agents are autonomous or semi-autonomous software entities<br>
+    that use AI techniques to <strong>perceive → decide → act → achieve goals</strong><br>
+    in their digital or physical environments.
+  </div>
+  <p style="margin-top:16px;">When multiple agents coordinate to complete a shared goal, this forms a <strong style="color:#38BDF8;">Multi-Agent System (MAS)</strong> — the architecture powering the most advanced enterprise deployments today.</p>
+  <p class="source-note">Source: Gartner Innovation Guide for AI Agents, January 2026</p>
+</div>
+
+<!-- STAGE 2: Market Reality Check -->
+<div class="stage animate-on-scroll">
+  <div class="stage-num">02</div>
+  <div class="stage-label">Market Reality — Gartner 2026 Survey</div>
+  <h2>The gap between ambition and deployment</h2>
+  <p>Enterprise excitement around AI agents is high — but real-world deployment is still early. Here's where organizations actually stand:</p>
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-number" style="color:#10B981;">17%</div>
+      <div class="stat-label">of enterprises have deployed AI agents in production</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number" style="color:#38BDF8;">42%</div>
+      <div class="stat-label">plan to deploy within the next year</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number" style="color:#FB923C;">80%+</div>
+      <div class="stat-label">of IT leaders say their enterprise data is not ready for agentic AI</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number" style="color:#F472B6;">70%+</div>
+      <div class="stat-label">worry about AI governance with agent proliferation</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number" style="color:#A855F7;">100s</div>
+      <div class="stat-label">of open-source and commercial agentic frameworks have emerged</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number" style="color:#FCD34D;">$$$</div>
+      <div class="stat-label">Cost, latency, and SaaS pricing models are still bottlenecks</div>
+    </div>
+  </div>
+  <div style="margin-top:18px;padding:12px 16px;background:#0F172A;border-radius:8px;font-size:0.82rem;color:#94A3B8;">
+    💡 <strong style="color:#FCD34D;">The takeaway:</strong> Most organizations are still in <strong style="color:#F1F5F9;">pilot or experimentation phase</strong>. The window to build expertise before agentic AI becomes standard is right now.
+  </div>
+</div>
+
+<!-- STAGE 3: Market Evolution -->
+<div class="stage animate-on-scroll">
+  <div class="stage-num">03</div>
+  <div class="stage-label">How the Market Is Evolving</div>
+  <h2>Four major shifts reshaping the industry</h2>
+  <div class="timeline">
+    <div class="timeline-item">
+      <div class="timeline-dot" style="background:rgba(16,185,129,0.2);border:2px solid #10B981;">💬</div>
+      <div class="timeline-content">
+        <div class="timeline-title">Chatbots → Task-Automating Agents</div>
+        <div class="timeline-text">Enterprises are moving beyond chat interfaces toward agents that perform tasks end-to-end. ROI pressure is driving this — stakeholders want measurable business outcomes, not just AI conversations.</div>
+      </div>
+    </div>
+    <div class="timeline-connector"></div>
+    <div class="timeline-item">
+      <div class="timeline-dot" style="background:rgba(56,189,248,0.2);border:2px solid #38BDF8;">🏢</div>
+      <div class="timeline-content">
+        <div class="timeline-title">General → Domain-Specific Agents</div>
+        <div class="timeline-text">Agentic AI is verticalizing fast: IT/DevOps agents (incident management), Sales agents (cold outreach, proposals), Finance agents (expense audit, invoice matching), and Customer service agents (intent-based resolution).</div>
+      </div>
+    </div>
+    <div class="timeline-connector"></div>
+    <div class="timeline-item">
+      <div class="timeline-dot" style="background:rgba(168,85,247,0.2);border:2px solid #A855F7;">🔗</div>
+      <div class="timeline-content">
+        <div class="timeline-title">Single Agents → Multi-Agent Systems</div>
+        <div class="timeline-text">Agent groups with specialized roles collaborate on complex workflows. Anthropic, Google, Cisco, and others are building model-agnostic control planes. Open standards like MCP, A2A, and ACP are emerging to enable interoperability.</div>
+      </div>
+    </div>
+    <div class="timeline-connector"></div>
+    <div class="timeline-item">
+      <div class="timeline-dot" style="background:rgba(251,146,60,0.2);border:2px solid #FB923C;">🤖</div>
+      <div class="timeline-content">
+        <div class="timeline-title">Digital → Industrial AI</div>
+        <div class="timeline-text">The convergence of AI agents with robotics and physical systems is opening new use cases — combining natural language understanding with computer vision and real-world actions.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- STAGE 4: Business Use Cases -->
+<div class="stage animate-on-scroll">
+  <div class="stage-num">04</div>
+  <div class="stage-label">Business Benefits & Use Cases</div>
+  <h2>Where AI agents deliver real value today</h2>
+  <p>The key benefits: productivity gains, always-on 24/7 execution, lower total cost of operations, and enhanced customer and employee experience. Here's where it's happening now:</p>
+  <div class="usecase-grid">
+    <div class="usecase-card" style="border-left-color:#10B981;">
+      <div class="usecase-card-icon">⚙️</div>
+      <div class="usecase-card-title">IT & DevOps</div>
+      <div class="usecase-card-text">Self-healing IT operations: detects incidents, performs root cause analysis, generates remediation runbooks, and executes automated fixes — without waiting for a human on-call.</div>
+    </div>
+    <div class="usecase-card" style="border-left-color:#38BDF8;">
+      <div class="usecase-card-icon">🎧</div>
+      <div class="usecase-card-title">Customer Service</div>
+      <div class="usecase-card-text">Triages incoming requests, pulls context from CRM records, and resolves support issues end-to-end. Seamless handoff to human agents when needed.</div>
+    </div>
+    <div class="usecase-card" style="border-left-color:#A855F7;">
+      <div class="usecase-card-icon">💰</div>
+      <div class="usecase-card-title">Finance & Accounting</div>
+      <div class="usecase-card-text">Expense reporting, real-time cash-flow forecasting, scenario analyses, and budget adjustments — all with limited human orchestration.</div>
+    </div>
+    <div class="usecase-card" style="border-left-color:#FCD34D;">
+      <div class="usecase-card-icon">👥</div>
+      <div class="usecase-card-title">HR & Talent Management</div>
+      <div class="usecase-card-text">Schedules interviews, coordinates calendars, triggers training modules, and flags retention risks based on employee feedback and performance data.</div>
+    </div>
+    <div class="usecase-card" style="border-left-color:#FB923C;">
+      <div class="usecase-card-icon">📈</div>
+      <div class="usecase-card-title">Sales & Marketing</div>
+      <div class="usecase-card-text">Identifies high-value leads, executes personalized outreach sequences, and continuously optimizes campaigns by analyzing engagement metrics.</div>
+    </div>
+    <div class="usecase-card" style="border-left-color:#F472B6;">
+      <div class="usecase-card-icon">💻</div>
+      <div class="usecase-card-title">Software Development</div>
+      <div class="usecase-card-text">AI coding agents generate production-ready code, review pull requests, run test suites, triage bugs, and reduce time-to-market significantly.</div>
+    </div>
+    <div class="usecase-card" style="border-left-color:#34D399;">
+      <div class="usecase-card-icon">🔒</div>
+      <div class="usecase-card-title">Compliance & Security</div>
+      <div class="usecase-card-text">Continuously monitors logs and network traffic, detects anomalies or policy violations, and triggers investigation workflows or automated containment.</div>
+    </div>
+    <div class="usecase-card" style="border-left-color:#6366F1;">
+      <div class="usecase-card-icon">🔬</div>
+      <div class="usecase-card-title">Deep Research</div>
+      <div class="usecase-card-text">Rapidly synthesizes complex data and insights across sources to help decision-makers make faster, more informed strategic decisions.</div>
+    </div>
+  </div>
+</div>
+
+<!-- STAGE 5: Vendor Landscape -->
+<div class="stage animate-on-scroll">
+  <div class="stage-num">05</div>
+  <div class="stage-label">The AI Agent Technology Landscape</div>
+  <h2>A rapidly growing — and fragmented — ecosystem</h2>
+  <p>The AI agent vendor market is broad and evolving quickly, characterized by tall claims and rapid iteration. Here's a bird's-eye view of key players by category:</p>
+  <div class="vendor-section">
+    <div class="vendor-category">
+      <div class="vendor-category-title">🏥 Vertical Agents (Industry-Specific)</div>
+      <div class="vendor-tags">
+        <span class="vendor-tag" style="background:rgba(16,185,129,0.1);color:#10B981;border-color:rgba(16,185,129,0.3);">Hippocratic AI (Healthcare)</span>
+        <span class="vendor-tag" style="background:rgba(16,185,129,0.1);color:#10B981;border-color:rgba(16,185,129,0.3);">Thoughtful AI (Healthcare)</span>
+        <span class="vendor-tag" style="background:rgba(56,189,248,0.1);color:#38BDF8;border-color:rgba(56,189,248,0.3);">Harvey AI (Legal)</span>
+        <span class="vendor-tag" style="background:rgba(56,189,248,0.1);color:#38BDF8;border-color:rgba(56,189,248,0.3);">Spellbook (Legal)</span>
+        <span class="vendor-tag" style="background:rgba(168,85,247,0.1);color:#A855F7;border-color:rgba(168,85,247,0.3);">Fleetworks (Logistics)</span>
+        <span class="vendor-tag" style="background:rgba(168,85,247,0.1);color:#A855F7;border-color:rgba(168,85,247,0.3);">Happy Robot (Logistics)</span>
+      </div>
+    </div>
+    <div class="vendor-category">
+      <div class="vendor-category-title">💼 Business Function Agents</div>
+      <div class="vendor-tags">
+        <span class="vendor-tag" style="background:rgba(251,146,60,0.1);color:#FB923C;border-color:rgba(251,146,60,0.3);">Apriora (HR)</span>
+        <span class="vendor-tag" style="background:rgba(251,146,60,0.1);color:#FB923C;border-color:rgba(251,146,60,0.3);">Moonhub (HR)</span>
+        <span class="vendor-tag" style="background:rgba(244,114,182,0.1);color:#F472B6;border-color:rgba(244,114,182,0.3);">ScrunchAI (Marketing)</span>
+        <span class="vendor-tag" style="background:rgba(244,114,182,0.1);color:#F472B6;border-color:rgba(244,114,182,0.3);">AbilityAI (Marketing)</span>
+        <span class="vendor-tag" style="background:rgba(252,211,77,0.1);color:#FCD34D;border-color:rgba(252,211,77,0.3);">AiSDR (Sales)</span>
+      </div>
+    </div>
+    <div class="vendor-category">
+      <div class="vendor-category-title">🔍 Search, Knowledge & Productivity</div>
+      <div class="vendor-tags">
+        <span class="vendor-tag" style="background:rgba(16,185,129,0.1);color:#10B981;border-color:rgba(16,185,129,0.3);">Anthropic (Claude)</span>
+        <span class="vendor-tag" style="background:rgba(16,185,129,0.1);color:#10B981;border-color:rgba(16,185,129,0.3);">OpenAI (ChatGPT)</span>
+        <span class="vendor-tag" style="background:rgba(56,189,248,0.1);color:#38BDF8;border-color:rgba(56,189,248,0.3);">Microsoft (Copilot)</span>
+        <span class="vendor-tag" style="background:rgba(56,189,248,0.1);color:#38BDF8;border-color:rgba(56,189,248,0.3);">Google (Gemini)</span>
+        <span class="vendor-tag" style="background:rgba(168,85,247,0.1);color:#A855F7;border-color:rgba(168,85,247,0.3);">Perplexity</span>
+        <span class="vendor-tag" style="background:rgba(168,85,247,0.1);color:#A855F7;border-color:rgba(168,85,247,0.3);">Glean</span>
+        <span class="vendor-tag" style="background:rgba(168,85,247,0.1);color:#A855F7;border-color:rgba(168,85,247,0.3);">Notion</span>
+        <span class="vendor-tag" style="background:rgba(168,85,247,0.1);color:#A855F7;border-color:rgba(168,85,247,0.3);">Salesforce (Agentforce)</span>
+      </div>
+    </div>
+    <div class="vendor-category">
+      <div class="vendor-category-title">🏗️ No-Code / Low-Code Agent Builders</div>
+      <div class="vendor-tags">
+        <span class="vendor-tag" style="background:rgba(99,102,241,0.1);color:#818CF8;border-color:rgba(99,102,241,0.3);">Microsoft Copilot Studio</span>
+        <span class="vendor-tag" style="background:rgba(99,102,241,0.1);color:#818CF8;border-color:rgba(99,102,241,0.3);">Asana</span>
+        <span class="vendor-tag" style="background:rgba(99,102,241,0.1);color:#818CF8;border-color:rgba(99,102,241,0.3);">Dify AI</span>
+        <span class="vendor-tag" style="background:rgba(99,102,241,0.1);color:#818CF8;border-color:rgba(99,102,241,0.3);">Ema AI</span>
+        <span class="vendor-tag" style="background:rgba(99,102,241,0.1);color:#818CF8;border-color:rgba(99,102,241,0.3);">Zapier</span>
+        <span class="vendor-tag" style="background:rgba(99,102,241,0.1);color:#818CF8;border-color:rgba(99,102,241,0.3);">Boomi</span>
+        <span class="vendor-tag" style="background:rgba(99,102,241,0.1);color:#818CF8;border-color:rgba(99,102,241,0.3);">Appian</span>
+        <span class="vendor-tag" style="background:rgba(99,102,241,0.1);color:#818CF8;border-color:rgba(99,102,241,0.3);">UiPath</span>
+        <span class="vendor-tag" style="background:rgba(99,102,241,0.1);color:#818CF8;border-color:rgba(99,102,241,0.3);">Automation Anywhere</span>
+      </div>
+    </div>
+    <div class="vendor-category">
+      <div class="vendor-category-title">⚡ Developer Frameworks</div>
+      <div class="vendor-tags">
+        <span class="vendor-tag" style="background:rgba(52,211,153,0.1);color:#34D399;border-color:rgba(52,211,153,0.3);">AWS Strands Agents</span>
+        <span class="vendor-tag" style="background:rgba(52,211,153,0.1);color:#34D399;border-color:rgba(52,211,153,0.3);">Databricks Mosaic AI</span>
+        <span class="vendor-tag" style="background:rgba(52,211,153,0.1);color:#34D399;border-color:rgba(52,211,153,0.3);">LangChain</span>
+        <span class="vendor-tag" style="background:rgba(52,211,153,0.1);color:#34D399;border-color:rgba(52,211,153,0.3);">AutoGen</span>
+        <span class="vendor-tag" style="background:rgba(52,211,153,0.1);color:#34D399;border-color:rgba(52,211,153,0.3);">CrewAI</span>
+      </div>
+    </div>
+  </div>
+  <div style="margin-top:18px;padding:12px 16px;background:#0F172A;border-radius:8px;font-size:0.82rem;color:#94A3B8;">
+    🔑 <strong style="color:#10B981;">Open standards to know:</strong> <strong style="color:#F1F5F9;">MCP</strong> (Model Context Protocol by Anthropic), <strong style="color:#F1F5F9;">A2A</strong> (Agent-to-Agent), and <strong style="color:#F1F5F9;">ACP</strong> — these protocols allow agents from different vendors to work together. Choosing vendors that adopt open protocols avoids deep ecosystem lock-in.
+  </div>
+</div>
+
+<!-- STAGE 6: Managing Risks -->
+<div class="stage animate-on-scroll">
+  <div class="stage-num">06</div>
+  <div class="stage-label">Managing Risks</div>
+  <h2>AI agents introduce a new, broader threat landscape</h2>
+  <p>Unlike traditional AI that simply responds, agents initiate sequences of events — activities that can be invisible to and uncontrollable by human operators. These are the key risks enterprises must manage:</p>
+  <div class="risk-grid">
+    <div class="risk-card">
+      <div class="risk-card-icon">💾</div>
+      <div class="risk-card-title">End-to-End Data Exposure</div>
+      <div class="risk-card-text">Data can be unintentionally exposed or exfiltrated at any stage of an agent's lifecycle. Holistic security monitoring across every agent action is essential.</div>
+    </div>
+    <div class="risk-card">
+      <div class="risk-card-icon">🌐</div>
+      <div class="risk-card-title">Agent Sprawl</div>
+      <div class="risk-card-text">Low-code platforms make it easy to spin up agents — but ungoverned, unmanaged agent sprawl is a real enterprise risk without proper lifecycle management.</div>
+    </div>
+    <div class="risk-card">
+      <div class="risk-card-icon">🎭</div>
+      <div class="risk-card-title">Agent Hijacking & Misuse</div>
+      <div class="risk-card-text">Agents can be manipulated by external threats or prompt injection attacks — reprogrammed by malicious actors or via poisoned RAG pipelines to take harmful actions.</div>
+    </div>
+    <div class="risk-card">
+      <div class="risk-card-icon">🔮</div>
+      <div class="risk-card-title">Hallucinations at Scale</div>
+      <div class="risk-card-text">When an AI chatbot hallucinates, a human catches it. When an agent hallucinates and executes actions autonomously, the consequences compound quickly across workflows.</div>
+    </div>
+    <div class="risk-card">
+      <div class="risk-card-icon">⚖️</div>
+      <div class="risk-card-title">Embedded & Amplified Bias</div>
+      <div class="risk-card-text">Agents can inherit or amplify biases from training data, causing unfair or unethical behavior — especially critical in HR, finance, and legal advisory functions.</div>
+    </div>
+    <div class="risk-card">
+      <div class="risk-card-icon">🔄</div>
+      <div class="risk-card-title">Unintended Decision Loops</div>
+      <div class="risk-card-text">Flawed reasoning can cause agents to pursue erroneous goals, escalate issues unnecessarily, or initiate chains of inappropriate actions creating operational disruptions.</div>
+    </div>
+  </div>
+</div>
+
+<!-- STAGE 7: Recommendations -->
+<div class="stage animate-on-scroll">
+  <div class="stage-num">07</div>
+  <div class="stage-label">Gartner's Recommendations for CIOs & Leaders</div>
+  <h2>How to build a robust agentic AI strategy</h2>
+  <div class="rec-list">
+    <div class="rec-item">
+      <div class="rec-num">1</div>
+      <div class="rec-text"><strong>Use open protocols to avoid lock-in.</strong> Choose vendors that adopt open standards like MCP, A2A, and ACP to ensure interoperability across agent providers — not proprietary walled gardens.</div>
+    </div>
+    <div class="rec-item">
+      <div class="rec-num">2</div>
+      <div class="rec-text"><strong>Target measurable ROI, not hype.</strong> Avoid ad hoc, technology-driven deployments. Focus agents on specific pain points with clear ROI: software engineering, DevOps, customer service, and sales operations.</div>
+    </div>
+    <div class="rec-item">
+      <div class="rec-num">3</div>
+      <div class="rec-text"><strong>Demand proof, not vision.</strong> Don't buy solutions based on a vendor's roadmap. Buy based on their ability to deliver production-ready solutions today and demonstrate clear value through a proof-of-concept.</div>
+    </div>
+    <div class="rec-item">
+      <div class="rec-num">4</div>
+      <div class="rec-text"><strong>Treat agents as accountable entities.</strong> Deploy agents with clearly defined permissions, access boundaries, and human oversight. Implement tools to guard against prompt injection, goal misalignment, and rogue actions.</div>
+    </div>
+    <div class="rec-item">
+      <div class="rec-num">5</div>
+      <div class="rec-text"><strong>Build your governance framework first.</strong> Agents must be trustworthy, traceable, auditable, and interpretable. Define compliance and data privacy requirements before deploying, not after an incident.</div>
+    </div>
+  </div>
+</div>
+
+<div class="info-box">
+  <p>🎯 <strong>Key Takeaway:</strong> AI agents represent the most significant shift in enterprise software since the cloud. The companies building agent fluency today — understanding what agents can do, where they fail, and how to govern them — will have a decisive advantage. You don't need to build agents, but you need to know how to use, evaluate, and manage them. That window is open right now.</p>
+</div>
+
+<div class="nav">
+  <a href="video_5_tools_guide.html" class="btn btn-secondary">← Back: AI Toolkit</a>
+  <a href="START_HERE.html" class="btn btn-primary">🏠 Back to All Materials</a>
+</div>
+
+<p style="color:#334155;font-size:12px;margin-top:30px;text-align:center;">Applied Ai Class EMBA-A 27 · Mini Lesson 6 of 6 · Source: Gartner Innovation Guide for AI Agents, January 2026</p>
+
+<script>
+// Scroll-triggered animations
+const observerOptions = {
+  threshold: 0.1,
+  rootMargin: '0px 0px -80px 0px'
+};
+
+const observer = new IntersectionObserver(function(entries) {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('in-view');
+      observer.unobserve(entry.target);
+    }
+  });
+}, observerOptions);
+
+document.querySelectorAll('.animate-on-scroll').forEach(el => {
+  observer.observe(el);
+});
+
+// Stage animation delay indexing
+document.querySelectorAll('.stage').forEach((stage, index) => {
+  stage.style.setProperty('--stage-index', index);
+});
+
+// Stat number counter animation
+function animateCounter(el, target, suffix) {
+  let start = 0;
+  const duration = 1500;
+  const step = target / (duration / 16);
+  const timer = setInterval(() => {
+    start += step;
+    if (start >= target) {
+      start = target;
+      clearInterval(timer);
+    }
+    el.textContent = Math.floor(start) + suffix;
+  }, 16);
+}
+
+// Trigger counter animation when stats section is visible
+const statsObserver = new IntersectionObserver(function(entries) {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      statsObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.5 });
+
+document.querySelectorAll('.stat-card').forEach(card => {
+  statsObserver.observe(card);
+});
+</script>
+</body>
+</html>

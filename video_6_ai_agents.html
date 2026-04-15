@@ -99,6 +99,35 @@
   /* Gartner source note */
   .source-note{font-size:0.72rem;color:#475569;margin-top:14px;font-style:italic;}
 
+  /* ===== DIAGRAM STYLES ===== */
+  .dtab-btn{padding:8px 20px;border-radius:8px;border:1px solid #334155;background:transparent;color:#64748B;font-size:0.82rem;font-weight:600;cursor:pointer;transition:all 0.2s;font-family:'Inter',sans-serif;}
+  .dtab-btn.active-tab{background:rgba(16,185,129,0.15);border-color:#10B981;color:#10B981;}
+  .dtab-btn:hover{color:#F1F5F9;border-color:#475569;}
+  .diag-canvas{background:#07101E;border-radius:12px;padding:16px 12px 12px;overflow:hidden;}
+  .flow-line{stroke-dasharray:8 5;animation:flowDash 1.6s linear infinite;}
+  @keyframes flowDash{to{stroke-dashoffset:-26;}}
+  .arch-node-el{cursor:pointer;transition:opacity 0.15s;}
+  .arch-node-el:hover{opacity:0.85;}
+  .node-info-box{margin-top:8px;padding:11px 16px;background:#0F172A;border-radius:8px;font-size:0.8rem;color:#64748B;line-height:1.6;min-height:40px;border-left:3px solid #334155;transition:border-color 0.3s,color 0.3s;}
+
+  /* Execution loop */
+  .loop-wrap{display:flex;align-items:flex-start;gap:0;overflow-x:auto;padding:4px 0 8px;}
+  .loop-step-cell{display:flex;align-items:center;flex-shrink:0;}
+  .loop-box{width:108px;padding:13px 8px 11px;border-radius:10px;border:2px solid #334155;background:#0F172A;text-align:center;transition:all 0.45s;flex-shrink:0;}
+  .loop-box.s-active{border-color:#10B981;background:rgba(16,185,129,0.1);box-shadow:0 0 20px rgba(16,185,129,0.22);}
+  .loop-box.s-done{border-color:#1E293B;opacity:0.45;}
+  .loop-box-icon{font-size:1.5rem;margin-bottom:5px;}
+  .loop-box-label{font-size:0.67rem;font-weight:700;color:#94A3B8;line-height:1.3;text-transform:uppercase;letter-spacing:0.5px;}
+  .loop-conn{color:#334155;font-size:1rem;margin:0 3px;flex-shrink:0;transition:color 0.45s;margin-top:22px;}
+  .loop-conn.c-active{color:#10B981;}
+  .loop-detail-box{margin-top:14px;padding:11px 16px;background:#0F172A;border-radius:8px;font-size:0.8rem;color:#94A3B8;line-height:1.6;min-height:42px;text-align:center;border-left:3px solid #10B981;}
+  .loop-ctrl{display:flex;gap:8px;justify-content:center;margin-top:14px;}
+  .loop-btn{padding:5px 16px;border-radius:6px;border:1px solid #334155;background:transparent;color:#64748B;font-size:0.75rem;cursor:pointer;font-family:'Inter',sans-serif;transition:all 0.2s;}
+  .loop-btn:hover{color:#F1F5F9;border-color:#475569;}
+  /* Loop-back SVG arrow */
+  .loopback-svg{display:block;width:100%;overflow:visible;margin-top:-2px;}
+  @keyframes loopPulse{0%,100%{opacity:0.25;}50%{opacity:0.9;}}
+
   @media(max-width:700px){
     h1{font-size:1.8rem;}
     .stats-grid{grid-template-columns:1fr;}
@@ -140,6 +169,130 @@
   </div>
   <p style="margin-top:16px;">When multiple agents coordinate to complete a shared goal, this forms a <strong style="color:#38BDF8;">Multi-Agent System (MAS)</strong> — the architecture powering the most advanced enterprise deployments today.</p>
   <p class="source-note">Source: Gartner Innovation Guide for AI Agents, January 2026</p>
+</div>
+
+<!-- VISUAL DIAGRAMS -->
+<div class="stage animate-on-scroll">
+  <div class="stage-num">✦</div>
+  <div class="stage-label">Visual Architecture</div>
+  <h2>How an AI Agent is built — and how it runs</h2>
+  <p style="margin-bottom:20px;">Two views of the same system: the internal components of an agent, and the real-time reasoning loop it runs through to complete any task.</p>
+
+  <div style="display:flex;gap:8px;margin-bottom:22px;flex-wrap:wrap;">
+    <button class="dtab-btn active-tab" id="tb-arch" onclick="switchDiag('arch')">🏗️ Agent Anatomy</button>
+    <button class="dtab-btn" id="tb-loop" onclick="switchDiag('loop')">🔄 Execution Loop</button>
+  </div>
+
+  <!-- ── DIAGRAM 1: AGENT ANATOMY ── -->
+  <div id="diag-arch" class="diag-canvas">
+    <svg viewBox="0 0 760 370" style="width:100%;display:block;" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <filter id="fg" x="-30%" y="-30%" width="160%" height="160%">
+          <feGaussianBlur stdDeviation="5" result="b"/>
+          <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+        <filter id="fb" x="-30%" y="-30%" width="160%" height="160%">
+          <feGaussianBlur stdDeviation="4" result="b"/>
+          <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+        <marker id="ah-g" markerWidth="7" markerHeight="7" refX="5" refY="3.5" orient="auto"><polygon points="0 0, 7 3.5, 0 7" fill="#10B981"/></marker>
+        <marker id="ah-b" markerWidth="7" markerHeight="7" refX="5" refY="3.5" orient="auto"><polygon points="0 0, 7 3.5, 0 7" fill="#38BDF8"/></marker>
+        <marker id="ah-p" markerWidth="7" markerHeight="7" refX="5" refY="3.5" orient="auto"><polygon points="0 0, 7 3.5, 0 7" fill="#A855F7"/></marker>
+        <marker id="ah-o" markerWidth="7" markerHeight="7" refX="5" refY="3.5" orient="auto"><polygon points="0 0, 7 3.5, 0 7" fill="#FB923C"/></marker>
+        <marker id="ah-sl" markerWidth="7" markerHeight="7" refX="5" refY="3.5" orient="auto"><polygon points="0 0, 7 3.5, 0 7" fill="#475569"/></marker>
+      </defs>
+
+      <!-- Environment band (left) -->
+      <rect x="8" y="18" width="72" height="334" rx="10" fill="rgba(30,41,59,0.35)" stroke="#1E293B" stroke-width="1.5" stroke-dasharray="5,4"/>
+      <text x="44" y="186" text-anchor="middle" fill="#334155" font-size="10.5" font-family="Inter,sans-serif" font-weight="700" transform="rotate(-90,44,186)">ENVIRONMENT</text>
+
+      <!-- Env ↔ Perception (top dashed) -->
+      <line x1="80" y1="62" x2="322" y2="62" stroke="#334155" stroke-width="1.2" stroke-dasharray="4,4" marker-end="url(#ah-sl)" opacity="0.55"/>
+      <!-- Actions → Env (bottom dashed) -->
+      <line x1="322" y1="318" x2="80" y2="318" stroke="#334155" stroke-width="1.2" stroke-dasharray="4,4" marker-end="url(#ah-sl)" opacity="0.55"/>
+
+      <!-- Perception → Brain (animated flow) -->
+      <line x1="382" y1="92" x2="382" y2="150" stroke="#38BDF8" stroke-width="2.2" class="flow-line" marker-end="url(#ah-b)" opacity="0.85"/>
+      <!-- Memory → Brain -->
+      <line x1="207" y1="192" x2="300" y2="192" stroke="#A855F7" stroke-width="2.2" class="flow-line" marker-end="url(#ah-p)" opacity="0.85"/>
+      <!-- Brain → Tools -->
+      <line x1="464" y1="192" x2="552" y2="192" stroke="#FB923C" stroke-width="2.2" class="flow-line" marker-end="url(#ah-o)" opacity="0.85"/>
+      <!-- Brain → Actions -->
+      <line x1="382" y1="238" x2="382" y2="292" stroke="#10B981" stroke-width="2.2" class="flow-line" marker-end="url(#ah-g)" opacity="0.85"/>
+
+      <!-- Arrow labels -->
+      <text x="394" y="124" fill="#38BDF8" font-size="9" font-family="Inter,sans-serif" font-weight="600" opacity="0.9">perceives</text>
+      <text x="394" y="269" fill="#10B981" font-size="9" font-family="Inter,sans-serif" font-weight="600" opacity="0.9">executes</text>
+      <text x="222" y="183" fill="#A855F7" font-size="9" font-family="Inter,sans-serif" font-weight="600" opacity="0.9">recalls / stores</text>
+      <text x="468" y="183" fill="#FB923C" font-size="9" font-family="Inter,sans-serif" font-weight="600" opacity="0.9">invokes</text>
+
+      <!-- ── NODE: LLM Brain (center) ── -->
+      <rect id="nb-brain" class="arch-node-el" x="300" y="150" width="164" height="84" rx="14" fill="#071A10" stroke="#10B981" stroke-width="2.5" filter="url(#fg)" onclick="arcClick('brain')"/>
+      <text x="382" y="183" text-anchor="middle" font-size="22">🧠</text>
+      <text x="382" y="206" text-anchor="middle" fill="#F1F5F9" font-size="12.5" font-weight="700" font-family="Inter,sans-serif">LLM / Reasoning Core</text>
+      <text x="382" y="224" text-anchor="middle" fill="#475569" font-size="9.5" font-family="Inter,sans-serif">Plans · Decides · Generates</text>
+
+      <!-- ── NODE: Perception (top) ── -->
+      <rect id="nb-perc" class="arch-node-el" x="310" y="28" width="144" height="64" rx="11" fill="#050F1C" stroke="#38BDF8" stroke-width="1.8" filter="url(#fb)" onclick="arcClick('perception')"/>
+      <text x="382" y="56" text-anchor="middle" font-size="19">👁️</text>
+      <text x="382" y="74" text-anchor="middle" fill="#CBD5E1" font-size="12" font-weight="600" font-family="Inter,sans-serif">Perception / Input</text>
+      <text x="382" y="87" text-anchor="middle" fill="#334155" font-size="9" font-family="Inter,sans-serif">text · files · data · images</text>
+
+      <!-- ── NODE: Memory (left) ── -->
+      <rect id="nb-mem" class="arch-node-el" x="62" y="160" width="145" height="64" rx="11" fill="#100A1F" stroke="#A855F7" stroke-width="1.8" filter="url(#fb)" onclick="arcClick('memory')"/>
+      <text x="134" y="187" text-anchor="middle" font-size="19">💾</text>
+      <text x="134" y="206" text-anchor="middle" fill="#CBD5E1" font-size="12" font-weight="600" font-family="Inter,sans-serif">Memory</text>
+      <text x="134" y="218" text-anchor="middle" fill="#334155" font-size="9" font-family="Inter,sans-serif">Short-term · Long-term · RAG</text>
+
+      <!-- ── NODE: Tools (right) ── -->
+      <rect id="nb-tools" class="arch-node-el" x="552" y="160" width="148" height="64" rx="11" fill="#1A0E05" stroke="#FB923C" stroke-width="1.8" filter="url(#fb)" onclick="arcClick('tools')"/>
+      <text x="626" y="187" text-anchor="middle" font-size="19">🔧</text>
+      <text x="626" y="206" text-anchor="middle" fill="#CBD5E1" font-size="12" font-weight="600" font-family="Inter,sans-serif">Tools</text>
+      <text x="626" y="218" text-anchor="middle" fill="#334155" font-size="9" font-family="Inter,sans-serif">Search · Code · APIs · DB</text>
+
+      <!-- ── NODE: Actions (bottom) ── -->
+      <rect id="nb-act" class="arch-node-el" x="310" y="292" width="144" height="60" rx="11" fill="#031209" stroke="#34D399" stroke-width="1.8" filter="url(#fg)" onclick="arcClick('actions')"/>
+      <text x="382" y="318" text-anchor="middle" font-size="19">⚡</text>
+      <text x="382" y="337" text-anchor="middle" fill="#CBD5E1" font-size="12" font-weight="600" font-family="Inter,sans-serif">Actions / Output</text>
+      <text x="382" y="348" text-anchor="middle" fill="#334155" font-size="9" font-family="Inter,sans-serif">emails · decisions · API calls · code</text>
+
+      <!-- Planning layer label -->
+      <rect x="292" y="356" width="180" height="1" fill="#1E293B"/>
+    </svg>
+
+    <div id="node-info" class="node-info-box">
+      Click any component above to see what it does →
+    </div>
+  </div>
+
+  <!-- ── DIAGRAM 2: EXECUTION LOOP ── -->
+  <div id="diag-loop" class="diag-canvas" style="display:none;">
+    <p style="font-size:0.75rem;color:#475569;text-align:center;margin-bottom:16px;letter-spacing:0.5px;text-transform:uppercase;font-weight:600;">The ReAct Loop — Reason + Act until the goal is complete</p>
+
+    <div class="loop-wrap" id="loop-steps-row">
+      <!-- steps injected by JS -->
+    </div>
+
+    <!-- Loop-back arrow SVG -->
+    <svg class="loopback-svg" viewBox="0 0 720 38" height="38" xmlns="http://www.w3.org/2000/svg">
+      <path id="loopback-path" d="M 672,4 Q 672,32 648,32 L 72,32 Q 48,32 48,4"
+            fill="none" stroke="#1E3A5F" stroke-width="1.8" stroke-dasharray="6,4"
+            marker-start="url(#lb-arrow)"/>
+      <defs>
+        <marker id="lb-arrow" markerWidth="7" markerHeight="7" refX="2" refY="3.5" orient="auto">
+          <polygon points="7 0, 0 3.5, 7 7" fill="#1E3A5F"/>
+        </marker>
+      </defs>
+      <text x="360" y="29" text-anchor="middle" fill="#334155" font-size="9" font-family="Inter,sans-serif">↩ loop back if goal not yet reached</text>
+    </svg>
+
+    <div id="loop-detail" class="loop-detail-box">Initialising…</div>
+
+    <div class="loop-ctrl">
+      <button class="loop-btn" id="btn-pause" onclick="loopPause()">⏸ Pause</button>
+      <button class="loop-btn" onclick="loopReset()">↩ Restart</button>
+    </div>
+  </div>
 </div>
 
 <!-- STAGE 2: Market Reality Check -->
@@ -472,6 +625,136 @@ const statsObserver = new IntersectionObserver(function(entries) {
 document.querySelectorAll('.stat-card').forEach(card => {
   statsObserver.observe(card);
 });
+
+// ─────────────────────────────────────────
+//  DIAGRAM TAB SWITCHER
+// ─────────────────────────────────────────
+function switchDiag(which) {
+  document.getElementById('diag-arch').style.display = which === 'arch' ? 'block' : 'none';
+  document.getElementById('diag-loop').style.display = which === 'loop' ? 'block' : 'none';
+  document.getElementById('tb-arch').classList.toggle('active-tab', which === 'arch');
+  document.getElementById('tb-loop').classList.toggle('active-tab', which === 'loop');
+  if (which === 'loop' && !loopInitDone) initLoop();
+}
+
+// ─────────────────────────────────────────
+//  ANATOMY DIAGRAM — click node details
+// ─────────────────────────────────────────
+const nodeData = {
+  brain: {
+    color: '#10B981',
+    text: '🧠 <strong style="color:#10B981;">LLM / Reasoning Core</strong> — The decision-making engine. An LLM (like GPT-4o, Claude, or Gemini) reads all available context and decides: <em>What is the best next action?</em> It generates the plan, writes the response, and selects which tool to call. Everything flows through here.'
+  },
+  perception: {
+    color: '#38BDF8',
+    text: '👁️ <strong style="color:#38BDF8;">Perception / Input</strong> — The agent\'s senses. Receives and parses incoming information: user messages, uploaded files, database records, API responses, screenshots, or sensor data. Converts raw inputs into context the LLM can reason over.'
+  },
+  memory: {
+    color: '#A855F7',
+    text: '💾 <strong style="color:#A855F7;">Memory</strong> — What the agent remembers. <em>Short-term:</em> the current conversation context window. <em>Long-term:</em> a vector database or knowledge store the agent can search (RAG). Memory lets the agent recall past actions, user preferences, and domain knowledge without re-processing everything from scratch.'
+  },
+  tools: {
+    color: '#FB923C',
+    text: '🔧 <strong style="color:#FB923C;">Tools</strong> — The agent\'s hands. External capabilities the LLM can invoke: web search, code execution, database queries, sending emails, calling REST APIs, reading files, or controlling other software. Tools are what turn <em>reasoning</em> into <em>real-world action</em>.'
+  },
+  actions: {
+    color: '#34D399',
+    text: '⚡ <strong style="color:#34D399;">Actions / Output</strong> — What the agent produces. The result of one reasoning cycle: a drafted email, a block of code, a decision logged to a CRM, an API call fired, a Slack message sent. The output loops back to the environment — where it can be observed for the next iteration.'
+  }
+};
+
+function arcClick(key) {
+  const d = nodeData[key];
+  const box = document.getElementById('node-info');
+  box.style.borderLeftColor = d.color;
+  box.style.color = '#CBD5E1';
+  box.innerHTML = d.text;
+  // Pulse the clicked node rect
+  const ids = {brain:'nb-brain',perception:'nb-perc',memory:'nb-mem',tools:'nb-tools',actions:'nb-act'};
+  Object.values(ids).forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.style.opacity = '0.5';
+  });
+  const target = document.getElementById(ids[key]);
+  if (target) { target.style.opacity = '1'; setTimeout(() => Object.values(ids).forEach(id => { const e=document.getElementById(id); if(e) e.style.opacity='1'; }), 1200); }
+}
+
+// ─────────────────────────────────────────
+//  EXECUTION LOOP DIAGRAM
+// ─────────────────────────────────────────
+const loopSteps = [
+  { icon: '🎯', label: 'Goal Set',    color: '#F1F5F9', detail: '🎯 <strong style="color:#F1F5F9;">Goal Set</strong> — A user or system gives the agent a task: <em>"Research our top 5 competitors and draft a one-page summary."</em> The agent receives this as its objective and begins its reasoning loop.' },
+  { icon: '👁️', label: 'Observe',     color: '#38BDF8', detail: '👁️ <strong style="color:#38BDF8;">Observe</strong> — The agent reads its full context: the goal, the conversation history, its memory store, and the results of any prior actions. It builds a complete picture of <em>where it is</em> and <em>what it knows</em>.' },
+  { icon: '🤔', label: 'Think / Plan',color: '#A855F7', detail: '🤔 <strong style="color:#A855F7;">Think / Plan</strong> — The LLM reasons: <em>"What is the single best next action given what I know?"</em> It may decompose the goal into sub-tasks or choose a specific tool to call. This is the Reason step of the ReAct pattern.' },
+  { icon: '⚡', label: 'Act',          color: '#FB923C', detail: '⚡ <strong style="color:#FB923C;">Act</strong> — The agent executes the chosen action: calls a search API, runs a code snippet, writes a file, sends a request, or produces an output. Real-world effect happens here.' },
+  { icon: '📊', label: 'Observe Result',color:'#10B981', detail: '📊 <strong style="color:#10B981;">Observe Result</strong> — The agent reads the outcome of its action: the search results, the function output, the API response, or any error. This new information is added to its context for the next cycle.' },
+  { icon: '✅', label: 'Goal Met?',   color: '#FCD34D', detail: '✅ <strong style="color:#FCD34D;">Goal Met?</strong> — The agent evaluates: <em>Has the objective been achieved?</em> If <strong>yes</strong> → deliver the final output and stop. If <strong>no</strong> → loop back to Observe and run another cycle with the new information.' }
+];
+
+let loopInitDone = false;
+let loopIdx = 0;
+let loopTimer = null;
+let loopPaused = false;
+
+function initLoop() {
+  loopInitDone = true;
+  const row = document.getElementById('loop-steps-row');
+  row.innerHTML = '';
+  loopSteps.forEach((s, i) => {
+    const cell = document.createElement('div');
+    cell.className = 'loop-step-cell';
+    const box = document.createElement('div');
+    box.className = 'loop-box';
+    box.id = 'ls-' + i;
+    box.innerHTML = `<div class="loop-box-icon">${s.icon}</div><div class="loop-box-label">${s.label}</div>`;
+    cell.appendChild(box);
+    if (i < loopSteps.length - 1) {
+      const arr = document.createElement('div');
+      arr.className = 'loop-conn';
+      arr.id = 'lc-' + i;
+      arr.innerHTML = '›';
+      cell.appendChild(arr);
+    }
+    row.appendChild(cell);
+  });
+  setLoopStep(0);
+  loopTimer = setInterval(advanceLoop, 2200);
+}
+
+function setLoopStep(idx) {
+  loopSteps.forEach((_, i) => {
+    const box = document.getElementById('ls-' + i);
+    const conn = document.getElementById('lc-' + i);
+    if (!box) return;
+    box.className = 'loop-box' + (i === idx ? ' s-active' : (i < idx ? ' s-done' : ''));
+    if (conn) conn.className = 'loop-conn' + (i === idx ? ' c-active' : '');
+  });
+  const d = loopSteps[idx];
+  const det = document.getElementById('loop-detail');
+  det.style.borderLeftColor = d.color;
+  det.innerHTML = d.detail;
+  // On last step, flash loopback arrow
+  const lb = document.getElementById('loopback-path');
+  if (lb) lb.style.stroke = idx === loopSteps.length - 1 ? '#10B981' : '#1E3A5F';
+}
+
+function advanceLoop() {
+  if (loopPaused) return;
+  loopIdx = (loopIdx + 1) % loopSteps.length;
+  setLoopStep(loopIdx);
+}
+
+function loopPause() {
+  loopPaused = !loopPaused;
+  document.getElementById('btn-pause').textContent = loopPaused ? '▶ Resume' : '⏸ Pause';
+}
+
+function loopReset() {
+  loopPaused = false;
+  document.getElementById('btn-pause').textContent = '⏸ Pause';
+  loopIdx = 0;
+  setLoopStep(0);
+}
 </script>
 </body>
 </html>

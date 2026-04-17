@@ -169,6 +169,133 @@
     </div>
   </div>
 
+  <!-- ANIMATED VIDEO PREVIEWS -->
+  <!-- To render: cd videos && npm run render:all -->
+  <div class="section">
+    <div class="section-title">🎬 Animated Concept Videos (Remotion)</div>
+    <p style="color:#475569;font-size:13px;margin-bottom:20px;">
+      Run <code style="background:#1E293B;padding:2px 8px;border-radius:4px;color:#38BDF8;">cd videos &amp;&amp; npm run render:all</code> to generate MP4 files, then replace the placeholders below.
+    </p>
+    <div class="video-grid">
+
+      <!-- REMOTION: render TokenizationVideo → videos/out/tokenization.mp4 -->
+      <div class="video-card" style="flex-direction:column;gap:0;">
+        <div style="display:flex;gap:16px;align-items:flex-start;margin-bottom:12px;">
+          <div class="video-num" style="background:rgba(56,189,248,0.15);color:#38BDF8;">▶</div>
+          <div>
+            <div class="video-title">Tokenization Animation</div>
+            <div class="video-desc">Tokens split apart with colors, IDs appear, flow into model.</div>
+            <div class="video-time">⏱ 15s · 1280×720 · 30fps</div>
+          </div>
+        </div>
+        <video controls width="100%" style="border-radius:8px;background:#0F172A;" poster="">
+          <source src="videos/out/tokenization.mp4" type="video/mp4">
+          <!-- REMOTION: render TokenizationVideo and replace this placeholder -->
+          <div style="padding:20px;text-align:center;color:#475569;font-size:13px;">
+            🎬 Render with: <code>npm run render:tokenization</code>
+          </div>
+        </video>
+      </div>
+
+      <!-- REMOTION: render NeuralNetVideo → videos/out/neural_networks.mp4 -->
+      <div class="video-card" style="flex-direction:column;gap:0;">
+        <div style="display:flex;gap:16px;align-items:flex-start;margin-bottom:12px;">
+          <div class="video-num" style="background:rgba(168,85,247,0.15);color:#A855F7;">▶</div>
+          <div>
+            <div class="video-title">Neural Networks Animation</div>
+            <div class="video-desc">Nodes fire, data pulses layer to layer, activation highlights.</div>
+            <div class="video-time">⏱ 14s · 1280×720 · 30fps</div>
+          </div>
+        </div>
+        <video controls width="100%" style="border-radius:8px;background:#0F172A;">
+          <source src="videos/out/neural_networks.mp4" type="video/mp4">
+          <!-- REMOTION: render NeuralNetVideo and replace this placeholder -->
+        </video>
+      </div>
+
+      <!-- REMOTION: render LLMVideo → videos/out/llm_generation.mp4 -->
+      <div class="video-card" style="flex-direction:column;gap:0;">
+        <div style="display:flex;gap:16px;align-items:flex-start;margin-bottom:12px;">
+          <div class="video-num" style="background:rgba(56,189,248,0.15);color:#38BDF8;">▶</div>
+          <div>
+            <div class="video-title">LLM Token Generation</div>
+            <div class="video-desc">Probability bars animate, winning token selected step by step.</div>
+            <div class="video-time">⏱ 12s · 1280×720 · 30fps</div>
+          </div>
+        </div>
+        <video controls width="100%" style="border-radius:8px;background:#0F172A;">
+          <source src="videos/out/llm_generation.mp4" type="video/mp4">
+          <!-- REMOTION: render LLMVideo and replace this placeholder -->
+        </video>
+      </div>
+
+      <!-- REMOTION: render RAGVideo → videos/out/rag.mp4 -->
+      <div class="video-card" style="flex-direction:column;gap:0;">
+        <div style="display:flex;gap:16px;align-items:flex-start;margin-bottom:12px;">
+          <div class="video-num" style="background:rgba(168,85,247,0.15);color:#A855F7;">▶</div>
+          <div>
+            <div class="video-title">RAG Pipeline Animation</div>
+            <div class="video-desc">Query → Vector DB → chunks retrieved → LLM → answer.</div>
+            <div class="video-time">⏱ 15s · 1280×720 · 30fps</div>
+          </div>
+        </div>
+        <video controls width="100%" style="border-radius:8px;background:#0F172A;">
+          <source src="videos/out/rag.mp4" type="video/mp4">
+          <!-- REMOTION: render RAGVideo and replace this placeholder -->
+        </video>
+      </div>
+
+      <!-- REMOTION: render PromptVideo → videos/out/prompting.mp4 -->
+      <div class="video-card" style="flex-direction:column;gap:0;">
+        <div style="display:flex;gap:16px;align-items:flex-start;margin-bottom:12px;">
+          <div class="video-num" style="background:rgba(252,211,77,0.15);color:#FCD34D;">▶</div>
+          <div>
+            <div class="video-title">CRAFT Prompting Animation</div>
+            <div class="video-desc">Framework letters reveal, live finance prompt example builds.</div>
+            <div class="video-time">⏱ 15s · 1280×720 · 30fps</div>
+          </div>
+        </div>
+        <video controls width="100%" style="border-radius:8px;background:#0F172A;">
+          <source src="videos/out/prompting.mp4" type="video/mp4">
+          <!-- REMOTION: render PromptVideo and replace this placeholder -->
+        </video>
+      </div>
+
+      <!-- REMOTION: render AgentsVideo → videos/out/agents.mp4 -->
+      <div class="video-card" style="flex-direction:column;gap:0;">
+        <div style="display:flex;gap:16px;align-items:flex-start;margin-bottom:12px;">
+          <div class="video-num" style="background:rgba(16,185,129,0.15);color:#10B981;">▶</div>
+          <div>
+            <div class="video-title">AI Agent Loop Animation</div>
+            <div class="video-desc">Perceive → Think → Act → Observe loop pulses continuously.</div>
+            <div class="video-time">⏱ 15s · 1280×720 · 30fps</div>
+          </div>
+        </div>
+        <video controls width="100%" style="border-radius:8px;background:#0F172A;">
+          <source src="videos/out/agents.mp4" type="video/mp4">
+          <!-- REMOTION: render AgentsVideo and replace this placeholder -->
+        </video>
+      </div>
+
+      <!-- REMOTION: render ToolkitVideo → videos/out/toolkit.mp4 -->
+      <div class="video-card" style="flex-direction:column;gap:0;">
+        <div style="display:flex;gap:16px;align-items:flex-start;margin-bottom:12px;">
+          <div class="video-num" style="background:rgba(52,211,153,0.15);color:#34D399;">▶</div>
+          <div>
+            <div class="video-title">AI Toolkit Animation</div>
+            <div class="video-desc">9 tools card-by-card with animated hover effects.</div>
+            <div class="video-time">⏱ 15s · 1280×720 · 30fps</div>
+          </div>
+        </div>
+        <video controls width="100%" style="border-radius:8px;background:#0F172A;">
+          <source src="videos/out/toolkit.mp4" type="video/mp4">
+          <!-- REMOTION: render ToolkitVideo and replace this placeholder -->
+        </video>
+      </div>
+
+    </div>
+  </div>
+
   <!-- QUICK TOOL LINKS -->
   <div class="section">
     <div class="section-title">⚡ Quick Tool Access</div>

@@ -1,0 +1,27 @@
+{
+  "name": "applied-ai-class-videos",
+  "version": "1.0.0",
+  "description": "Remotion video compositions for Applied AI Class lessons",
+  "main": "src/index.jsx",
+  "type": "module",
+  "scripts": {
+    "studio": "npx remotion studio src/index.jsx",
+    "render:tokenization": "npx remotion render src/index.jsx TokenizationVideo out/tokenization.mp4",
+    "render:neural": "npx remotion render src/index.jsx NeuralNetVideo out/neural_networks.mp4",
+    "render:rag": "npx remotion render src/index.jsx RAGVideo out/rag.mp4",
+    "render:prompt": "npx remotion render src/index.jsx PromptVideo out/prompting.mp4",
+    "render:agents": "npx remotion render src/index.jsx AgentsVideo out/agents.mp4",
+    "render:llm": "npx remotion render src/index.jsx LLMVideo out/llm_generation.mp4",
+    "render:toolkit": "npx remotion render src/index.jsx ToolkitVideo out/toolkit.mp4",
+    "render:all": "mkdir -p out && npm run render:tokenization && npm run render:neural && npm run render:rag && npm run render:prompt && npm run render:agents && npm run render:llm && npm run render:toolkit"
+  },
+  "keywords": ["remotion", "ai", "education", "animation"],
+  "author": "Jose Luis Fernandez",
+  "license": "ISC",
+  "dependencies": {
+    "@remotion/cli": "^4.0.0",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0",
+    "remotion": "^4.0.0"
+  }
+}

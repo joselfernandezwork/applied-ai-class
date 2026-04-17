@@ -1,0 +1,35 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+._*
+.Spotlight-V100
+.Trashes
+
+# Claude/AI tools
+.claude/
+CLAUDE.md
+memory/
+*.local.json
+
+# Credentials & secrets
+.env
+.env.local
+.env.*
+*.pem
+*.key
+*.token
+.git-credentials
+*_token*
+
+# Excel/Office files with potential PII
+*Intake Form*
+*intake_form*
+*intake form*
+*student_data*
+*Student Intake*
+
+# Temporary files
+*.tmp
+~$*

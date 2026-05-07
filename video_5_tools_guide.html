@@ -625,6 +625,105 @@
   </div>
 </div>
 
+<!-- Computer-control AI tools -->
+<div class="stage">
+  <div class="stage-label">New Category — AI That Operates Your Computer</div>
+  <h2>AI tools that control your computer</h2>
+  <p style="color:#94A3B8;font-size:0.9rem;margin-bottom:18px;line-height:1.6;">A new generation of AI doesn't just chat — it actually clicks, types, scrolls, and runs apps on your machine. These "computer-use" agents can book travel, fill spreadsheets, sort email, or move files for you. They are powerful, but you are giving an AI real keyboard-and-mouse control, so always supervise them, run them in a sandbox where possible, and never give them access to passwords or accounts you cannot afford to lose.</p>
+
+  <div class="info-box" style="margin-bottom:20px;">
+    <p style="font-size:0.85rem;line-height:1.6;"><strong>⚠️ Safety first.</strong> Treat a computer-use agent like an intern with admin access: limit what it can see, watch what it does, and stop it if it goes off-script. Prefer a virtual machine, browser profile, or work-only account. Disable autofill for sensitive logins, and never let it act on your real banking, healthcare, or HR systems unattended.</p>
+  </div>
+
+  <div class="tools-grid">
+
+    <!-- OpenClaw -->
+    <div class="tool-card" style="border-color:rgba(251,146,60,0.3);">
+      <div class="tool-card-header">
+        <div class="tool-icon" style="background:rgba(251,146,60,0.1);">🦾</div>
+        <div>
+          <div class="tool-name" style="color:#FB923C;">OpenClaw</div>
+          <div class="tool-tagline">Open desktop agent that clicks for you</div>
+        </div>
+      </div>
+      <p style="font-size:0.82rem;color:#94A3B8;margin-bottom:12px;line-height:1.5;"><strong>What it is:</strong> An open computer-use agent that takes screenshots of your desktop, reasons about what's on screen, and then moves the mouse, types, and clicks to complete the task you described in plain English.</p>
+      <p style="font-size:0.82rem;color:#94A3B8;margin-bottom:12px;line-height:1.5;"><strong>Good for:</strong> Repetitive desktop chores — filling forms, tagging files, scraping a UI that has no API, automating internal apps that nobody wants to integrate.</p>
+      <ul class="tool-steps">
+        <li><span class="step-num">1</span>Go to openclaw.ai and create an account (or download the app)</li>
+        <li><span class="step-num">2</span>Install the desktop client and grant screen-recording + accessibility permissions</li>
+        <li><span class="step-num">3</span>Connect a model provider key (e.g. Claude or GPT) when prompted</li>
+        <li><span class="step-num">4</span>Pick "New Task" → describe the goal: "Open Excel, sort sheet by column B, save"</li>
+        <li><span class="step-num">5</span>Watch the live preview and click Pause/Stop the moment it does something unexpected</li>
+      </ul>
+      <div>
+        <span class="tool-tag" style="background:rgba(251,146,60,0.15);color:#FB923C;">Computer Use</span>
+        <span class="tool-tag" style="background:rgba(251,146,60,0.15);color:#FB923C;">Desktop</span>
+        <span class="tool-tag" style="background:rgba(251,146,60,0.15);color:#FB923C;">Open</span>
+      </div>
+      <a href="https://openclaw.ai" target="_blank" class="btn-tool" style="background:rgba(251,146,60,0.15);color:#FB923C;border:1px solid rgba(251,146,60,0.3);">→ Open OpenClaw</a>
+    </div>
+
+    <!-- Claude Dispatch -->
+    <div class="tool-card" style="border-color:rgba(168,85,247,0.3);">
+      <div class="tool-card-header">
+        <div class="tool-icon" style="background:rgba(168,85,247,0.1);">📡</div>
+        <div>
+          <div class="tool-name" style="color:#A855F7;">Claude Dispatch</div>
+          <div class="tool-tagline">Send tasks from your phone to your computer · Anthropic</div>
+        </div>
+      </div>
+      <p style="font-size:0.82rem;color:#94A3B8;margin-bottom:12px;line-height:1.5;"><strong>What it is:</strong> Anthropic's "dispatch" flow built on top of Claude's computer-use tool. From the Claude mobile app you hand off a task — "clean up my downloads folder", "rebook this flight", "draft replies to today's email" — and Claude carries it out on your desktop using its own keyboard and mouse, then reports back.</p>
+      <p style="font-size:0.82rem;color:#94A3B8;margin-bottom:12px;line-height:1.5;"><strong>Good for:</strong> Long-running, away-from-keyboard work: research while you commute, file cleanup overnight, batch operations across desktop apps you can't easily script.</p>
+      <ul class="tool-steps">
+        <li><span class="step-num">1</span>Install the Claude desktop app on the machine you want it to drive (claude.ai → Download)</li>
+        <li><span class="step-num">2</span>Sign in to the same Claude account on the mobile app</li>
+        <li><span class="step-num">3</span>Enable computer use / Dispatch in Settings on desktop and grant the OS permissions it requests</li>
+        <li><span class="step-num">4</span>From mobile, start a chat → "Dispatch this to my computer" → describe the task in plain English</li>
+        <li><span class="step-num">5</span>Leave the desktop unlocked; check progress on your phone and approve or interrupt as it works</li>
+      </ul>
+      <div>
+        <span class="tool-tag" style="background:rgba(168,85,247,0.15);color:#A855F7;">Phone → Desktop</span>
+        <span class="tool-tag" style="background:rgba(168,85,247,0.15);color:#A855F7;">Async</span>
+        <span class="tool-tag" style="background:rgba(168,85,247,0.15);color:#A855F7;">Anthropic</span>
+      </div>
+      <a href="https://www.oneusefulthing.org/p/claude-dispatch-and-the-power-of" target="_blank" class="btn-tool" style="background:rgba(168,85,247,0.15);color:#A855F7;border:1px solid rgba(168,85,247,0.3);">→ Read the Dispatch write-up</a>
+      <a href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/computer-use-tool" target="_blank" class="btn-tool" style="background:rgba(168,85,247,0.08);color:#A855F7;border:1px solid rgba(168,85,247,0.2);margin-left:6px;">→ Computer-use API docs</a>
+    </div>
+
+    <!-- Perplexity Computer -->
+    <div class="tool-card" style="border-color:rgba(52,211,153,0.3);">
+      <div class="tool-card-header">
+        <div class="tool-icon" style="background:rgba(52,211,153,0.1);">🖥️</div>
+        <div>
+          <div class="tool-name" style="color:#34D399;">Perplexity Computer</div>
+          <div class="tool-tagline">Personal AI assistant for your Mac · Perplexity</div>
+        </div>
+      </div>
+      <p style="font-size:0.82rem;color:#94A3B8;margin-bottom:12px;line-height:1.5;"><strong>What it is:</strong> Perplexity's desktop assistant that goes beyond search — it reads what's on your screen, answers questions in context, and can take actions for you (browse the web, fill forms, pull info between apps). Currently rolling out on Mac.</p>
+      <p style="font-size:0.82rem;color:#94A3B8;margin-bottom:12px;line-height:1.5;"><strong>Good for:</strong> Research-heavy desk work — comparing options across tabs, summarising what's on screen, kicking off small "go do this for me" tasks without leaving your current app.</p>
+      <ul class="tool-steps">
+        <li><span class="step-num">1</span>Go to perplexity.ai and download the Mac app (sign in with your Perplexity account)</li>
+        <li><span class="step-num">2</span>Grant screen-recording and accessibility permissions in System Settings → Privacy & Security</li>
+        <li><span class="step-num">3</span>Press the global hotkey to summon the assistant on top of any app</li>
+        <li><span class="step-num">4</span>Ask about what's on screen, or say "go do X" — e.g. "find three flights cheaper than this one"</li>
+        <li><span class="step-num">5</span>Review each action it proposes before approving; keep sensitive accounts logged out in that browser</li>
+      </ul>
+      <div>
+        <span class="tool-tag" style="background:rgba(52,211,153,0.15);color:#34D399;">Mac</span>
+        <span class="tool-tag" style="background:rgba(52,211,153,0.15);color:#34D399;">Screen-aware</span>
+        <span class="tool-tag" style="background:rgba(52,211,153,0.15);color:#34D399;">Research</span>
+      </div>
+      <a href="https://www.perplexity.ai/hub/blog/introducing-perplexity-computer" target="_blank" class="btn-tool" style="background:rgba(52,211,153,0.15);color:#34D399;border:1px solid rgba(52,211,153,0.3);">→ Introducing Perplexity Computer</a>
+      <a href="https://www.engadget.com/ai/perplexity-brings-its-personal-computer-ai-assistant-to-mac-202045969.html" target="_blank" class="btn-tool" style="background:rgba(52,211,153,0.08);color:#34D399;border:1px solid rgba(52,211,153,0.2);margin-left:6px;">→ Engadget overview</a>
+    </div>
+
+  </div>
+
+  <div class="info-box" style="margin-top:24px;">
+    <p style="font-size:0.85rem;line-height:1.6;"><strong>Builders' note.</strong> If you want to build your own computer-use agent, Anthropic publishes the underlying API at <a href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/computer-use-tool" target="_blank" style="color:#38BDF8;">platform.claude.com</a> and a Claude Code integration at <a href="https://code.claude.com/docs/en/computer-use" target="_blank" style="color:#38BDF8;">code.claude.com</a>. Start in a virtual machine, log every action, and require a human "approve" step before any irreversible operation (sending email, paying, deleting).</p>
+  </div>
+</div>
+
 <!-- Master links table -->
 <div class="stage">
   <div class="stage-label">Complete Resource Links</div>
@@ -657,6 +756,9 @@
     <tr><td style="color:#FF6B6B;font-weight:700;">Mistral AI</td><td><a href="https://mistral.ai" target="_blank" style="color:#38BDF8;">mistral.ai</a></td><td class="check">✓ Free tier</td><td style="color:#94A3B8;">Fast open models, Mistral Large 3 & NeMo 12B</td></tr>
     <tr><td style="color:#EC4899;font-weight:700;">Grok 4</td><td><a href="https://x.com/i/grok" target="_blank" style="color:#38BDF8;">x.com/i/grok</a></td><td class="check">✓ Free preview</td><td style="color:#94A3B8;">Real-time reasoning, 2M token context, current web data</td></tr>
     <tr><td style="color:#6366F1;font-weight:700;">AlphaFold 3</td><td><a href="https://alphafoldserver.com/welcome" target="_blank" style="color:#38BDF8;">alphafoldserver.com/welcome</a></td><td class="check">✓ Free</td><td style="color:#94A3B8;">Protein & RNA structure prediction, DeepMind</td></tr>
+    <tr><td style="color:#FB923C;font-weight:700;">OpenClaw</td><td><a href="https://openclaw.ai" target="_blank" style="color:#38BDF8;">openclaw.ai</a></td><td class="partial">~ Free tier</td><td style="color:#94A3B8;">Open computer-use agent — clicks and types on your desktop</td></tr>
+    <tr><td style="color:#A855F7;font-weight:700;">Claude Dispatch</td><td><a href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/computer-use-tool" target="_blank" style="color:#38BDF8;">platform.claude.com (computer-use)</a></td><td class="partial">~ Claude plan</td><td style="color:#94A3B8;">Hand off tasks from phone to your desktop, run by Claude</td></tr>
+    <tr><td style="color:#34D399;font-weight:700;">Perplexity Computer</td><td><a href="https://www.perplexity.ai/hub/blog/introducing-perplexity-computer" target="_blank" style="color:#38BDF8;">perplexity.ai/hub/blog/introducing-perplexity-computer</a></td><td class="partial">~ Mac app</td><td style="color:#94A3B8;">Screen-aware desktop assistant that can act for you</td></tr>
   </table>
 </div>
 

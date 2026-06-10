@@ -131,7 +131,7 @@
 </div>
 
 <div class="info-box">
-  <p><strong>Model names change quickly.</strong> Product names and API model IDs are not always the same. The update feed below reads Vercel AI Gateway's model catalog and keeps a dated fallback, while the durable lesson remains: test quality, cost, latency, and security on your own workload.</p>
+  <p><strong>Model names change quickly.</strong> Product names and API model IDs are not always the same. The update feed below refreshes from a live model catalog and keeps a dated fallback, while the durable lesson remains: test quality, cost, latency, and security on your own workload.</p>
 </div>
 
 <!-- Current Model Updates -->
@@ -146,7 +146,6 @@
   </div>
   <div class="feed-filters" id="feed-filters" aria-label="Filter model updates by company"></div>
   <div class="model-feed" id="model-feed" aria-live="polite"></div>
-  <a class="catalog-link" href="https://vercel.com/ai-gateway/models" target="_blank" rel="noopener noreferrer">Open the complete Vercel AI Gateway model catalog →</a>
 </div>
 
 <!-- Tool Cards -->
@@ -780,7 +779,7 @@
       <th>Tool</th><th>Link</th><th>Free?</th><th>Best Use</th>
     </tr>
     <tr><td style="color:#34D399;font-weight:700;">ChatGPT</td><td><a href="https://chatgpt.com" target="_blank" rel="noopener noreferrer" style="color:#38BDF8;">chatgpt.com</a></td><td class="check">✓ Free tier</td><td style="color:#94A3B8;">Writing, analysis, coding, images</td></tr>
-    <tr><td style="color:#38BDF8;font-weight:700;">Current LLM Updates</td><td><a href="#model-updates" style="color:#38BDF8;">Company news feed</a></td><td class="check">✓ Free</td><td style="color:#94A3B8;">Recent model releases and context windows from the live Vercel catalog</td></tr>
+    <tr><td style="color:#38BDF8;font-weight:700;">Current LLM Updates</td><td><a href="#model-updates" style="color:#38BDF8;">Company news feed</a></td><td class="check">✓ Free</td><td style="color:#94A3B8;">Recent model releases and context windows from the live catalog</td></tr>
     <tr><td style="color:#FB923C;font-weight:700;">Claude</td><td><a href="https://claude.ai" target="_blank" rel="noopener noreferrer" style="color:#38BDF8;">claude.ai</a></td><td class="check">✓ Free tier</td><td style="color:#94A3B8;">Long docs, reasoning, coding, agents</td></tr>
     <tr><td style="color:#38BDF8;font-weight:700;">Copilot</td><td><a href="https://copilot.microsoft.com" target="_blank" rel="noopener noreferrer" style="color:#38BDF8;">copilot.microsoft.com</a></td><td class="check">✓ Free</td><td style="color:#94A3B8;">Microsoft 365 (Word, Excel, Teams)</td></tr>
     <tr><td style="color:#A855F7;font-weight:700;">Gemini</td><td><a href="https://gemini.google.com" target="_blank" rel="noopener noreferrer" style="color:#38BDF8;">gemini.google.com</a></td><td class="check">✓ Free tier</td><td style="color:#94A3B8;">Deep research, Google Workspace, vision</td></tr>
@@ -887,7 +886,7 @@ function formatRelease(timestamp) {
 }
 
 function conciseDescription(value) {
-  const text = String(value || 'New model listing available through Vercel AI Gateway.').trim();
+  const text = String(value || 'New model listing available in the live catalog.').trim();
   if (text.length <= 260) return text;
   const shortened = text.slice(0, 257);
   const sentenceEnd = Math.max(shortened.lastIndexOf('. '), shortened.lastIndexOf('; '));
@@ -999,7 +998,7 @@ async function loadModelUpdates() {
     const latest = latestCompanyUpdates(Array.isArray(payload.data) ? payload.data : []);
     if (!latest.length) throw new Error('Catalog contained no matching models');
     modelUpdates = latest;
-    status.textContent = 'Live via Vercel';
+    status.textContent = 'Live updates';
   } catch (error) {
     status.textContent = 'Dated Jun 10, 2026';
   }
